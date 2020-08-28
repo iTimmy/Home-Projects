@@ -1,0 +1,33 @@
+        // Checks if there are enough of that particular item in stock and if the item
+        // exists in stock
+        Collection<VendingMachine> itemValues = allItems.values();
+        for (VendingMachine numItem : itemValues) {
+            if (numItem.getNumOfItems() >= itemQuantity && numItem.getItemName().equals(itemName)) {
+                System.out.println("#################################");
+                System.out.println("The item you are looking for that is " + numItem.getItemName() + " is in stock.\n");
+
+                System.out.print("Are you sure you want to buy this for $" + numItem.getItemCost() + "? (y/n): ");
+                Scanner scan = new Scanner(System.in);
+                String input = scan.nextLine();
+                if (input.equals("y")) {
+                    System.out.println("____________________________\nYour transaction has been completed.");
+                    saveItems();
+                    return allItems.get(itemName);
+                } else if (input.equals("n")) {
+                    System.out.println("____________________________\nYour transaction has been cancelled.");
+                    return allItems.get(itemName);
+                } else {
+                    System.out.println("____________________________\nYou didn't answer the question, so whatever...");
+                    return allItems.get(itemName);
+                }
+            } else if (numItem.getNumOfItems() == 0 && numItem.getItemName().equals(itemName)) {
+                num += numItem.getNumOfItems();
+            }
+        }
+        // If it ends up returning a null value, then the controller will interpret this
+        // as invalidation and will contact the view to display an error
+        System.out.println("#################################");
+        System.out.println("The item you are looking for that is " + itemName + " is not in stock.\n");
+
+        // Imports the items into the collection first to set it in stock
+        System.out.println("\n#################################\nFetching item...\n=======================");
