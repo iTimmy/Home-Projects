@@ -1,8 +1,9 @@
-package dao.*;
+package test.dao;
 
 import java.io.*;
+import org.unit.Test;
 
-public class VendingMachineDaoFileImplTest {
+public class VendingMachineDaoImplTest {
 
     VendingMachineDao testDao;
 

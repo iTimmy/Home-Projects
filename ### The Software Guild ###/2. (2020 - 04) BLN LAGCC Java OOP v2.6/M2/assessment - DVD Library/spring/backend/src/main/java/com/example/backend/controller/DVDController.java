@@ -12,8 +12,15 @@ import org.springframework.stereotype.Component;
 public class DVDController {
 
     // @Autowired
-    private DVDView view = new DVDView();
-    private DVDdao dao = new DaoImpl();
+    private DVDView view;
+    private DVDdao dao;
+
+    /*
+    public DVDController(DVDdao dao, DVDView view) {
+        this.dao = dao;
+        this.view = view;
+    }
+    */
 
     public void run() throws Exception {
         int select = 0;

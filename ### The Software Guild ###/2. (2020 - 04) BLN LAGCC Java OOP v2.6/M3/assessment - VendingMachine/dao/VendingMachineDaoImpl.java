@@ -6,16 +6,14 @@ import dto.*;
 
 public class VendingMachineDaoImpl implements VendingMachineDao {
     Map<String, VendingMachine> allItems = new HashMap<>();
-    File file = new File("VendingMachine.txt");
     private final String DELIMITER = " :: ";
-    private final String FILE;
+    private String file;
 
     public VendingMachineDaoImpl() {
-        FILE = "VendingMachine.txt";
+        this.file = "VendingMachine.txt";
     }
-
     public VendingMachineDaoImpl(String textFile) {
-        FILE = textFile;
+        this.file = textFile;
     }
 
     @Override

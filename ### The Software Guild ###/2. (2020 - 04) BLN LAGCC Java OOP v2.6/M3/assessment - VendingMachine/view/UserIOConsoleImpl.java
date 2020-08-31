@@ -12,7 +12,7 @@ public class UserIOConsoleImpl implements UserIO {
     public void println(String message) {
         System.out.println(message);
     }
-
+    
     public String readString(String prompt) {
         print(prompt);
         String msg = scan.next();

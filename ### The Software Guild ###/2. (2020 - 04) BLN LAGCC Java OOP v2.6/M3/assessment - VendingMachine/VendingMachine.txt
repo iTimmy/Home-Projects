@@ -1,4 +1,4 @@
-PRINGLES :: 2.5 :: 12
-PIZZA :: 1.0 :: 6
+PRINGLES :: 2.5 :: 10
+PIZZA :: 1.0 :: 4
 JUST FOOD :: 1000.0 :: 10
-SODA :: 1.0 :: 2
+SODA :: 1.25 :: 1

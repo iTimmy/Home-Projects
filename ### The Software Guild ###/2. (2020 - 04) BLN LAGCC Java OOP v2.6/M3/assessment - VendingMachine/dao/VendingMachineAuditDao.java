@@ -1,5 +1,7 @@
 package dao;
 
+import java.math.BigDecimal;
+
 public interface VendingMachineAuditDao {
-    void writeAuditEntry(String entry) throws Exception;
+    void orderDate(String userInputItemName, BigDecimal userChange) throws Exception;
 }

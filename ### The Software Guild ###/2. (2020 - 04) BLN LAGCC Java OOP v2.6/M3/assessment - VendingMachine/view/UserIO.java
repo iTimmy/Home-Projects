@@ -3,7 +3,7 @@ package view;
 public interface UserIO {
     void print(String message);
 
-    void println(String message);
+    void println(String string);
 
     String readString(String prompt);
 

@@ -7,12 +7,15 @@ import dto.*;
 
 public class VendingMachineController {
 
+    // private VendingMachineView view = new VendingMachineView();
+    // private VendingMachineService service = new VendingMachineServiceImpl();
+
     private VendingMachineView view;
     private VendingMachineService service;
 
-    public VendingMachineController(VendingMachineService dao, VendingMachineView view) {
-    this.service = service;
-    this.view = view;
+    public VendingMachineController(VendingMachineView view, VendingMachineService service) {
+        this.view = view;
+        this.service = service;
     }
 
     public void run() throws Exception {

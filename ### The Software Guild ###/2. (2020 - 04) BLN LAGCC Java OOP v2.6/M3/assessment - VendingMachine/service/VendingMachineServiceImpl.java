@@ -2,13 +2,22 @@ package service;
 
 import java.util.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import controller.*;
 import dao.*;
 import dto.*;
 
 public class VendingMachineServiceImpl implements VendingMachineService {
-    private VendingMachineDao dao = new VendingMachineDaoImpl();
-    private int VendingMachine;
+    // private VendingMachineDao dao = new VendingMachineDaoImpl();
+    
+    private VendingMachineDao dao;
+    private VendingMachineAuditDao auditDao;
+
+    public VendingMachineServiceImpl(VendingMachineDao dao, VendingMachineAuditDao auditDao) {
+        this.dao = dao;
+        this.auditDao = auditDao;
+    }
 
     @Override
     public List<VendingMachine> getAllItems() {
@@ -42,19 +51,17 @@ public class VendingMachineServiceImpl implements VendingMachineService {
 
     @Override
     public BigDecimal moneyCalculation(MathOperator operator, double userInputMoney, String userInputItemName) {
-        AuditDao audit = new AuditDao();
+        VendingMachineAuditDaoImpl audit = new VendingMachineAuditDaoImpl();
         BigDecimal itemCost = new BigDecimal(dao.updateWallet(1.0));
         BigDecimalMath moneyCalculate = new BigDecimalMath();
-        // BigDecimal itemCost = new BigDecimal("2.0");
-        System.out.println("itemCost: " + itemCost);
         BigDecimal userInputMoneyBigDecimal = new BigDecimal(userInputMoney);
-        System.out.println("userInputMoney: " + userInputMoney);
-        System.out.println("userInputMoneyBigDecimal: " + userInputMoneyBigDecimal);
-        System.out.println("MathOperator.MINUS: " + MathOperator.MINUS);
-        BigDecimal userChange = moneyCalculate.calculate(MathOperator.MINUS, userInputMoneyBigDecimal, itemCost);
-        String orderWrite = "You receive $" + userChange + " in change.";
+        BigDecimal userChange = moneyCalculate.calculate(MathOperator.MINUS, userInputMoneyBigDecimal, itemCost.setScale(2, RoundingMode.FLOOR));
+        System.out.println(userChange);
+        System.out.println(userInputMoneyBigDecimal);
+        System.out.println(itemCost);
+        System.out.println(2 - 1.25);
         try {
-            audit.orderDate(orderWrite, userInputItemName);
+            audit.orderDate(userInputItemName, userChange);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
