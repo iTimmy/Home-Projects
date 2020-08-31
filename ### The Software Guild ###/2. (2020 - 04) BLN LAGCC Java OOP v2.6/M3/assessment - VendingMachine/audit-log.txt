@@ -1,0 +1,2 @@
+[2020-08-31::05:40:49.209000200 | You receive $0 in change. | SODA]
+[2020-08-31::05:44:21.010000200 | You receive $1 in change. | PIZZA]

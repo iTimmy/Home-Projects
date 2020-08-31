@@ -10,5 +10,9 @@ public interface VendingMachineDao {
 
     void updateItem(String itemName, int numOfItems, int itemQuantity, String userItemName) throws Exception;
 
+    double updateWallet(double itemCost);
+
     void removeItem(String itemName, int itemQuantity);
+
+	Object updateWallet();
 }

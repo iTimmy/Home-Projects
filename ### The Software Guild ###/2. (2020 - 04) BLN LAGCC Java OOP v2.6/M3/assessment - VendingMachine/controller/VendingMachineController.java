@@ -7,28 +7,27 @@ import dto.*;
 
 public class VendingMachineController {
 
-    private VendingMachineView view = new VendingMachineView();
-    private VendingMachineService service = new VendingMachineServiceImpl();
+    private VendingMachineView view;
+    private VendingMachineService service;
+
+    public VendingMachineController(VendingMachineService dao, VendingMachineView view) {
+    this.service = service;
+    this.view = view;
+    }
 
     public void run() throws Exception {
         int select = 0;
 
-        while (select != 3) {
+        while (select != 2) {
             listItems();
             view.display();
             select = userSelection();
-            /*
-             * if (select != 1 || select != 2 || select != 3) { break; }
-             */
 
             switch (select) {
                 case 1:
                     buyItem();
                     break;
                 case 2:
-                    viewWallet();
-                    break;
-                case 3:
                     exit();
                     break;
             }
@@ -48,21 +47,16 @@ public class VendingMachineController {
 
     private void buyItem() throws Exception {
         double userInputMoney = view.displayUserInputMoney(); //2
-        String userInputItemName = view.displayBuyItem();
+        String userInputItemName = view.displayBuyItem().toUpperCase();
         int userInputItemQuantity = view.displayBuyItemQuantity();
-        if (service.getItem(userInputItemName.toUpperCase(), userInputItemQuantity, userInputMoney) == 1) {
+        if (service.getItem(userInputItemName, userInputItemQuantity, userInputMoney) == 1) {
+            service.moneyCalculation(MathOperator.MINUS, userInputMoney, userInputItemName);
             view.displaySuccess();
         } else if (service.getItem(userInputItemName.toUpperCase(), userInputItemQuantity, userInputMoney) == 2) {
             view.displayItemDoesNotExistMSG();
         } else if (service.getItem(userInputItemName.toUpperCase(), userInputItemQuantity, userInputMoney) == 0) {
             view.displayNotEnoughMoneyMSG();
         }
-    }
-
-    private void viewWallet() {
-        //double money = view.displayUserInputMoney();
-        //service.moneyMoney(money);
-        //view.displayViewWallet();
     }
 
     private void exit() {

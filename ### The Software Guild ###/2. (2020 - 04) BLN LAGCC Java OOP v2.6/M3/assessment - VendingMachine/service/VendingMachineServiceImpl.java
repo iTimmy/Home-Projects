@@ -1,13 +1,14 @@
 package service;
 
 import java.util.*;
+import java.math.BigDecimal;
 import controller.*;
 import dao.*;
 import dto.*;
 
 public class VendingMachineServiceImpl implements VendingMachineService {
     private VendingMachineDao dao = new VendingMachineDaoImpl();
-	private int VendingMachine;
+    private int VendingMachine;
 
     @Override
     public List<VendingMachine> getAllItems() {
@@ -37,5 +38,27 @@ public class VendingMachineServiceImpl implements VendingMachineService {
     public void removeItem(String itemName, int itemQuantity) {
         dao.removeItem(itemName, itemQuantity);
 
+    }
+
+    @Override
+    public BigDecimal moneyCalculation(MathOperator operator, double userInputMoney, String userInputItemName) {
+        AuditDao audit = new AuditDao();
+        BigDecimal itemCost = new BigDecimal(dao.updateWallet(1.0));
+        BigDecimalMath moneyCalculate = new BigDecimalMath();
+        // BigDecimal itemCost = new BigDecimal("2.0");
+        System.out.println("itemCost: " + itemCost);
+        BigDecimal userInputMoneyBigDecimal = new BigDecimal(userInputMoney);
+        System.out.println("userInputMoney: " + userInputMoney);
+        System.out.println("userInputMoneyBigDecimal: " + userInputMoneyBigDecimal);
+        System.out.println("MathOperator.MINUS: " + MathOperator.MINUS);
+        BigDecimal userChange = moneyCalculate.calculate(MathOperator.MINUS, userInputMoneyBigDecimal, itemCost);
+        String orderWrite = "You receive $" + userChange + " in change.";
+        try {
+            audit.orderDate(orderWrite, userInputItemName);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return itemCost;
     }
 }

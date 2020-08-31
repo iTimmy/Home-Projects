@@ -8,7 +8,15 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
     Map<String, VendingMachine> allItems = new HashMap<>();
     File file = new File("VendingMachine.txt");
     private final String DELIMITER = " :: ";
-    private UserWallet vw = new UserWallet();
+    private final String FILE;
+
+    public VendingMachineDaoImpl() {
+        FILE = "VendingMachine.txt";
+    }
+
+    public VendingMachineDaoImpl(String textFile) {
+        FILE = textFile;
+    }
 
     @Override
     public List<VendingMachine> getAllItems() {
@@ -63,6 +71,11 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
     }
 
     @Override
+    public double updateWallet(double itemCost) {
+        return itemCost;
+    }
+
+    @Override
     public void removeItem(String itemName, int itemQuantity) {
         if (itemQuantity <= 0) {
             allItems.remove(itemName);
@@ -95,6 +108,7 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
 
             if (allItems.get(userInputItemName).getItemName().equals(userInputItemName))
             removeItem(userInputItemName, allItems.get(userInputItemName).getItemQuantity());
+            updateWallet(itemCostToDouble);
 
         }
         String allItemDetails = itemNameToString.toUpperCase() + DELIMITER + 

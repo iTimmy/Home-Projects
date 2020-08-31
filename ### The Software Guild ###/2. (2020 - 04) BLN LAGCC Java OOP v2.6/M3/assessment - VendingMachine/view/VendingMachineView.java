@@ -5,9 +5,15 @@ import dto.*;
 
 public class VendingMachineView {
 
+    private UserIO io;
+
+    public VendingMachineView(UserIO io) {
+        this.io = io;
+    }
+
     public void display() throws Exception {
-        System.out.println("\n           MENU\n----------------------------\n" + "1. Buy item\n" + "2. View wallet\n"
-                + "3. Exit\n" + "_____________________________");
+        System.out.println("\n           MENU\n----------------------------\n" + "1. Buy item\n" + 
+        "2. Exit\n" + "_____________________________");
     }
 
 
@@ -17,12 +23,11 @@ public class VendingMachineView {
         // also, it is what jumpstarts the program... why?
         //System.out.println("view: " + listItems);
         System.out.println("\n\n\n#################################");
-        for (VendingMachine displayItemInfo : listItems) {
-            System.out.println(
-            displayItemInfo.getItemName() + " | " +
-            displayItemInfo.getItemCost() + " | " +
-            displayItemInfo.getItemQuantity());
-        }
+        listItems.stream().forEach((p) -> {
+            System.out.print(p.getItemName() + " | ");
+            System.out.print(p.getItemCost() + " | ");
+            System.out.println(p.getItemQuantity());
+        });
         System.out.println("#################################\n\n\n");
         return listItems;
     }
@@ -60,12 +65,6 @@ public class VendingMachineView {
         System.out.println("How many would you like to buy? ");
         int itemQuantity = input.nextInt();
         return itemQuantity;
-    }
-
-    public void displayViewWallet() {
-        System.out.println("------VIEW-WALLET-----");
-        System.out.println("You have $");
-        System.out.println("----------------------");
     }
 
     public void displayError() {
