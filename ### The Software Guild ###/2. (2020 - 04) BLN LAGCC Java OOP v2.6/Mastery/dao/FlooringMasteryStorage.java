@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,32 +8,98 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import dto.Order;
 import dto.Product;
 import dto.Tax;
 
 public class FlooringMasteryStorage {
-    File fileOrders = new File("Orders/Orders_08212017.txt");
+    private LocalDate currentDate = LocalDate.now();
+    File fileOrders = new File("");
     File fileTaxes = new File("Taxes.txt");
     File fileProducts = new File("Products.txt");
+    Formatter newFile;
+    Formatter overwriteFile;
 
     private final static String DELIMITER = ",";
 
     Map<LocalDate, Order> storeOrders = new HashMap<>();
     // Map<LocalDate, Map<Integer, Order>> storeAllDataByDate = new HashMap<>();
 
-    public void dataAccess(boolean loadOrSave) throws Exception {
+    public boolean dataAccess(boolean loadOrSave) throws Exception {
         if (loadOrSave == false) {
             loadData();
         } else if (loadOrSave == true) {
-            saveData();
+            if (!storeOrders.isEmpty()) {
+                doesFileExist();
+                newFile = new Formatter("Orders/Orders_" + formatDate(currentDate.toString()) + ".txt");
+                saveData();
+            } else if (storeOrders.isEmpty()) {
+                return false;
+            }
         }
+        return true;
+    }
+
+    private String formatDate(String currentDate) {
+        String[] tokens = currentDate.split("-");
+        String year = tokens[0];
+        String month = tokens[1];
+        String day = tokens[2];
+        String newFormat = month + day + year;
+        return newFormat;
+    }
+
+    private File doesFileExist() throws Exception {
+        // INIT
+        String formattedDate = "Orders/Orders_" + "" + ".txt";
+        String fileName = "";
+
+        // STREAM FILES IN DIRECTORY
+        Path findExistingFile = Paths.get("Orders/");
+            Stream<Path> subPath = Files.walk(findExistingFile);
+            List<String> orderFiles = subPath.filter(Files::isRegularFile)
+                .map(Objects::toString)
+                .collect(Collectors.toList());
+            subPath.close();
+            System.out.println(orderFiles);
+
+        List<LocalDate> storeDates = new ArrayList<>();
+        for (LocalDate currentDate : storeOrders.keySet()) {
+            storeDates.add(currentDate);
+        }
+
+        // FORMAT USER INPUT DATE TO FILE NAME CONVENTION
+        for (LocalDate currentDate : storeDates) {
+            formattedDate = "Orders/Orders_" + formatDate(storeOrders.get(currentDate).getOrderDate().toString()) + ".txt";
+        }
+
+        // CHECK IF FILENAME CLASHES WITH ANOTHER IN THE 'ORDERS' DIRECTORY
+        for (String currentFile : orderFiles) {
+            if (formattedDate.equals(currentFile)) {
+                overwriteFile = new Formatter("Orders/Orders_" + currentFile + ".txt");
+                fileName = "Orders/Orders_" + currentFile + ".txt";
+            } else if (!formattedDate.equals(currentFile)) {
+                newFile = new Formatter("Orders/Orders_" + formatDate(currentDate.toString()) + ".txt");
+                fileName = "Orders/Orders_" + formatDate(currentDate.toString()) + ".txt";
+            }
+        }        
+
+        fileOrders = new File(fileName);
+
+        return fileOrders;
     }
 
     public Map<LocalDate, Order> storeOrders() {
@@ -48,7 +115,7 @@ public class FlooringMasteryStorage {
 
 
     private void saveData() throws Exception {
-        PrintWriter writeFile = new PrintWriter(new BufferedWriter(new FileWriter(fileOrders)));
+        PrintWriter writeFile = new PrintWriter(new BufferedWriter(new FileWriter(fileOrders, true)));
         Collection<Order> storeOrdersValues = storeOrders.values();
         for (Order orderDetail : storeOrdersValues) {
             String currentOrders = marshallData(orderDetail);
@@ -65,6 +132,8 @@ public class FlooringMasteryStorage {
         String.valueOf(orderDetail.getOrderNumber()) + 
         DELIMITER + 
         orderDetail.getCustomerName() +
+        DELIMITER +
+        tax.getState() +
         DELIMITER +
         String.valueOf(tax.getTaxRate()) +
         DELIMITER +

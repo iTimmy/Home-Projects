@@ -1,6 +1,12 @@
 package service;
 
 public enum States {
+    INVALID {
+        public boolean invalidState() {
+            return false;
+        }
+    },
+
     AL, AK, AZ, AR, CA, 
     CO, CT, DE, FL, GA, 
     HI, ID, IL, IN, IA, 

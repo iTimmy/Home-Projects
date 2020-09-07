@@ -7,20 +7,27 @@ import dto.*;
 public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
 
     FlooringMasteryStorage storage = new FlooringMasteryStorage();
-    public static final String DELIMITER = " :: ";
 
     @Override
     public Order createOrder(Order order) {
         System.out.println("Running dao layer...");
         storage.storeOrders.put(order.getOrderDate(), order);
         System.out.println(storage.storeOrders);
+        System.out.println(storage.storeOrders.size());
         return order;
     }
 
     @Override
     public List<Order> getAllOrders(boolean loadOrSave) throws Exception {
-        storage.dataAccess(loadOrSave);
+        if (loadOrSave == false) {
+            storage.dataAccess(loadOrSave);
+        }
         List<Order> listOrders = new ArrayList<>(storage.storeOrders.values());
+        if (loadOrSave == true) {
+            if (storage.dataAccess(loadOrSave) == false) {
+                return null;
+            }
+        }
         return listOrders;
     }
 

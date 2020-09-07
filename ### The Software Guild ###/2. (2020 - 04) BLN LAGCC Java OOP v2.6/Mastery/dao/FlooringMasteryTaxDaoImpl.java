@@ -10,7 +10,6 @@ import dto.*;
 public class FlooringMasteryTaxDaoImpl implements FlooringMasteryTaxDao {
 
     Map<BigDecimal, Tax> storeTax = new HashMap<>();
-    private static final String DELIMITER = " :: ";
 
     @Override
     public List<Tax> getAllTaxes() {

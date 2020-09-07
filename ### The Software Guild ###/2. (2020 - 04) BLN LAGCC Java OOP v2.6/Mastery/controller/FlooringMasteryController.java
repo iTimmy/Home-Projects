@@ -53,14 +53,16 @@ public class FlooringMasteryController {
 
     public void displayOrders(boolean load) throws Exception {
         view.displayDisplayOrdersTitle();
+        view.displayLoadProgress();
         List<Order> listOrders = service.getAllOrders(load);
         view.displayDisplayOrders(listOrders);
     }
 
     public void addOrder() {
         Order newOrder = view.displayAddEditOrder();
-        view.displayProgress();
+        view.displaySaveProgress();
         service.createOrder(newOrder);
+        view.displaySuccess();
     }
 
     public void editOrder() {
@@ -82,9 +84,11 @@ public class FlooringMasteryController {
     public void exportAllData(boolean save) throws Exception {
         view.displayExportAllData();
         if (service.getAllOrders(save) != null) {
-            view.displayProgress();
+            view.displaySaveProgress();
+            view.displaySuccess();
+        } else if (service.getAllOrders(save) == null) {
+            view.displayExportAllDataErrorMSG();
         }
-        view.displaySuccess();
     }
 
     public void quit() {

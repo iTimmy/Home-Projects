@@ -6,7 +6,6 @@ import dto.*;
 public class FlooringMasteryProductDaoImpl implements FlooringMasteryProductDao {
 
     Map<String, Product> storeProduct = new HashMap<>();
-    public static final String DELIMITER = " :: ";
 
     @Override
     public List<Product> getAllProducts() {
