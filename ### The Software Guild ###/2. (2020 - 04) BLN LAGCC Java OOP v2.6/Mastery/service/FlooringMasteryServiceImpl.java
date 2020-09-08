@@ -10,7 +10,7 @@ import dao.*;
 public class FlooringMasteryServiceImpl implements FlooringMasteryService {
 
     FlooringMasteryOrderDao orderDao = new FlooringMasteryOrderDaoImpl();
-    FlooringMasteryProductDao productDao;
+    FlooringMasteryProductDao productDao = new FlooringMasteryProductDaoImpl();
     FlooringMasteryTaxDao taxDao;
 
     /*
@@ -20,7 +20,14 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
         this.tax = tax;
     } */
  
+    private BigDecimal roundBigDecimal(BigDecimal decimal) {
+        int countPlaces = String.valueOf(decimal).length() + 2;
 
+        MathContext mc = new MathContext(countPlaces);
+        BigDecimal roundedBigDecimal = decimal.round(mc);
+        
+        return roundedBigDecimal;
+    }
 
     // ORDERS \\
     @Override
@@ -35,15 +42,17 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
         BigDecimal costPerSquareFoot = order.getProduct().getCostPerSquareFoot();
 
         String stateName = order.getTax().getState();
-        BigDecimal taxRate = state.fetchStateTax(stateName);
+        BigDecimal taxRate = roundBigDecimal(state.fetchStateTax(stateName));
+        System.out.println(taxRate);
 
 
         BigDecimal taxPercentage = new BigDecimal(100).round(mc);
+        System.out.println(taxPercentage);
  
-        BigDecimal materialCost = calculate.calculate(MathOperator.MULTIPLY, order.getArea(), costPerSquareFoot).round(mc);
-        BigDecimal laborCost = calculate.calculate(MathOperator.MULTIPLY, order.getArea(), laborCostPerSquareFoot).round(mc);
-        BigDecimal tax = calculate.calculate(MathOperator.MULTIPLY, calculate.calculate(MathOperator.PLUS, materialCost, laborCost), calculate.calculate(MathOperator.DIVIDE, taxRate, taxPercentage)).round(mc);
-        BigDecimal totalCost = calculate.calculate(MathOperator.PLUS, calculate.calculate(MathOperator.PLUS, materialCost, laborCost), tax).round(mc);
+        BigDecimal materialCost = roundBigDecimal(calculate.calculate(MathOperator.MULTIPLY, order.getArea(), costPerSquareFoot));
+        BigDecimal laborCost = roundBigDecimal(calculate.calculate(MathOperator.MULTIPLY, order.getArea(), laborCostPerSquareFoot));
+        BigDecimal tax = roundBigDecimal(calculate.calculate(MathOperator.MULTIPLY, calculate.calculate(MathOperator.PLUS, materialCost, laborCost), calculate.calculate(MathOperator.DIVIDE, taxRate, taxPercentage)));
+        BigDecimal totalCost = roundBigDecimal(calculate.calculate(MathOperator.PLUS, calculate.calculate(MathOperator.PLUS, materialCost, laborCost), tax));
 
         order.getProduct().setCostPerSquareFoot(costPerSquareFoot);
         order.getProduct().setLaborCostPerSquareFoot(laborCostPerSquareFoot);
@@ -67,11 +76,24 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     }
 
     @Override
-    public Order getOrderByID(LocalDate userInputDate) {
-        if (orderDao.getOrderByID(userInputDate) != null) {
-            return orderDao.getOrderByID(userInputDate);
+    public Order getOrderByDate(LocalDate userInputDate) {
+        try {
+            if (userInputDate == null) {
+                return null;
+            }
+        } catch (Exception e) {
+            System.out.println("No");
+        } 
+        
+        if (orderDao.getOrderByDate(userInputDate) != null) {
+            return orderDao.getOrderByDate(userInputDate);
         }
         return null;
+    }
+
+    @Override
+    public Order getOrderByID(int orderNumber) {
+        throw new UnsupportedOperationException("hold");
     }
 
     @Override
@@ -108,8 +130,8 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     }
 
     @Override
-    public Tax getTaxByFloat(BigDecimal tax) {
-        return ((FlooringMasteryService) tax).getTaxByFloat(tax);
+    public Tax getTaxByState(String state) {
+        return taxDao.getTaxByState(state);
     }
 
     private int generateOrderNumber() throws NumberFormatException {

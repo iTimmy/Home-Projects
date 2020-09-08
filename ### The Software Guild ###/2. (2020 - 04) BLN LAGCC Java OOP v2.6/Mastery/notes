@@ -1,9 +1,7 @@
-Prevent duplicate copies of orders.
 Edit Order.
 Remove Order.
+Prevent file from being overwritten if you're just adding.
 The file only overwrites when you restart the program and export.
 
-Assure data is being written in Tax & Product.
-Format BigDecimal.
-
-make sure ur doing real calculations
+finish tax txt
+make a proper method to Format BigDecimal.

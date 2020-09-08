@@ -9,7 +9,8 @@ public interface FlooringMasteryService {
 
     Order createOrder(Order order);
     List<Order> getAllOrders(boolean loadOrSave) throws Exception;
-    Order getOrderByID(LocalDate userInputDate);
+    Order getOrderByDate(LocalDate userInputDate);
+    Order getOrderByID(int orderNumber);
     void updateOrder(Order orderNumber);
     void deleteOrder(Order orderNumber);
 
@@ -17,5 +18,5 @@ public interface FlooringMasteryService {
     Product getProductByName(String productName);
 
     List<Tax> getAllTaxes();
-    Tax getTaxByFloat(BigDecimal tax);
+    Tax getTaxByState(String state);
 }

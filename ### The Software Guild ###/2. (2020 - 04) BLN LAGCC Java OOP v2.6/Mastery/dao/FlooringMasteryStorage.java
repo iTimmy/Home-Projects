@@ -1,18 +1,12 @@
 package dao;
 
 import java.util.*;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Formatter;
 import java.util.HashMap;
@@ -32,6 +26,7 @@ public class FlooringMasteryStorage {
     File fileProducts = new File("Products.txt");
     Formatter newFile;
     Formatter overwriteFile;
+    LocalDate date = LocalDate.now();
 
     private final static String DELIMITER = ",";
 
@@ -44,13 +39,18 @@ public class FlooringMasteryStorage {
         } else if (loadOrSave == true) {
             if (!storeOrders.isEmpty()) {
                 doesFileExist();
-                newFile = new Formatter("Orders/Orders_" + formatDate(currentDate.toString()) + ".txt");
+                //newFile = new Formatter("Orders/Orders_" + formatDate(date.toString()) + ".txt");
                 saveData();
             } else if (storeOrders.isEmpty()) {
                 return false;
             }
         }
         return true;
+    }
+
+    public Order getOrderDateFromDao(LocalDate userInputDate) {
+        date = userInputDate;
+        return storeOrders.get(date);
     }
 
     private String formatDate(String currentDate) {
@@ -76,6 +76,7 @@ public class FlooringMasteryStorage {
             subPath.close();
             System.out.println(orderFiles);
 
+        // COLLECT DATES FROM STOREORDERS HASHMAP INTO THE STOREDATES ARRAYLIST
         List<LocalDate> storeDates = new ArrayList<>();
         for (LocalDate currentDate : storeOrders.keySet()) {
             storeDates.add(currentDate);
@@ -88,17 +89,17 @@ public class FlooringMasteryStorage {
 
         // CHECK IF FILENAME CLASHES WITH ANOTHER IN THE 'ORDERS' DIRECTORY
         for (String currentFile : orderFiles) {
+            // OVERWRITE AN EXISTING FILE
             if (formattedDate.equals(currentFile)) {
                 overwriteFile = new Formatter("Orders/Orders_" + currentFile + ".txt");
                 fileName = "Orders/Orders_" + currentFile + ".txt";
+            // CREATE A NEW FILE
             } else if (!formattedDate.equals(currentFile)) {
-                newFile = new Formatter("Orders/Orders_" + formatDate(currentDate.toString()) + ".txt");
-                fileName = "Orders/Orders_" + formatDate(currentDate.toString()) + ".txt";
+                newFile = new Formatter("Orders/Orders_" + formatDate(date.toString()) + ".txt");
+                fileName = "Orders/Orders_" + formatDate(date.toString()) + ".txt";
             }
         }        
-
         fileOrders = new File(fileName);
-
         return fileOrders;
     }
 

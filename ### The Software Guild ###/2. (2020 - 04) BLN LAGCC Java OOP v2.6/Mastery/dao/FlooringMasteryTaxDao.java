@@ -6,5 +6,5 @@ import dto.*;
 
 public interface FlooringMasteryTaxDao {
     List<Tax> getAllTaxes();
-    Tax getTaxByFloat(BigDecimal tax);
+    Tax getTaxByState(String state);
 }

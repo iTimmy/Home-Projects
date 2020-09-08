@@ -1,5 +1,6 @@
 package view;
 
+import java.time.LocalDate;
 import java.time.Month;
 
 public class UserIODecodeImpl extends UserIOConsoleImpl {
@@ -13,6 +14,30 @@ public class UserIODecodeImpl extends UserIOConsoleImpl {
     public String stateFormat(String state) {
         String newState = state.toUpperCase();
         return newState;
+    }
+
+    public LocalDate dateFormat(String date) {
+        LocalDate orderOfDate = LocalDate.now();
+        int i = 0;
+
+        String yearString = "";
+        String dayString = "";
+
+        String dateSplit[] = date.split("-");
+        for (String s : dateSplit) {
+            if (i == 0) {
+                yearString = s;
+            } else if (i == 2) {
+                dayString = s;
+            }
+            i++;
+        }
+        String dateMonth = dateSplit[1];
+        int year = Integer.parseInt(yearString);
+        int day = Integer.parseInt(dayString);
+
+        orderOfDate = LocalDate.of(year, monthFormat(dateMonth), day);
+        return orderOfDate;
     }
     
     public Month monthFormat(String dateMonth) {

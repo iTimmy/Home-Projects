@@ -7,7 +7,8 @@ import dto.*;
 public interface FlooringMasteryOrderDao {
     Order createOrder(Order order);
     List<Order> getAllOrders(boolean loadOrSave) throws Exception;
-    Order getOrderByID(LocalDate userInputDate);
+    Order getOrderByDate(LocalDate userInputDate);
+    Order getOrderByID(int orderNumber);
     void updateOrder(Order orderNumber);
     void deleteOrder(Order orderNumber);
 }

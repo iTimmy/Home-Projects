@@ -1,6 +1,7 @@
 package service;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 
 public class StateTaxes {
 
@@ -9,159 +10,159 @@ public class StateTaxes {
     }
 
 	public BigDecimal matchState(States state) {
-        
+        MathContext mc = new MathContext(3);
         BigDecimal taxRate = new BigDecimal(0);
         
         switch(state) {
             case AL:
-                taxRate = new BigDecimal(4.00);
+                taxRate = new BigDecimal(4.00).round(mc);
                 return taxRate;
             case AK:
-                taxRate = new BigDecimal(0.00);
+                taxRate = new BigDecimal(0.00).round(mc);
                 return taxRate;
             case AZ:
-                taxRate = new BigDecimal(5.60);
+                taxRate = new BigDecimal(5.60).round(mc);
                 return taxRate;
             case AR:
-                taxRate = new BigDecimal(6.50);
+                taxRate = new BigDecimal(6.50).round(mc);
                 return taxRate;
             case CA:
-                taxRate = new BigDecimal(7.25);
+                taxRate = new BigDecimal(7.25).round(mc);
                 return taxRate;
             case CO:
-                taxRate = new BigDecimal(2.90);
+                taxRate = new BigDecimal(2.90).round(mc);
                 return taxRate;
             case CT:
-                taxRate = new BigDecimal(6.35);
+                taxRate = new BigDecimal(6.35).round(mc);
                 return taxRate;
             case DE:
-                taxRate = new BigDecimal(0.00);
+                taxRate = new BigDecimal(0.00).round(mc);
                 return taxRate;
             case FL:
-                taxRate = new BigDecimal(6.00);
+                taxRate = new BigDecimal(6.00).round(mc);
                 return taxRate;
             case GA:
-                taxRate = new BigDecimal(4.00);
+                taxRate = new BigDecimal(4.00).round(mc);
                 return taxRate;
             case HI:
-                taxRate = new BigDecimal(4.00);
+                taxRate = new BigDecimal(4.00).round(mc);
                 return taxRate;
             case ID:
-                taxRate = new BigDecimal(6.00);
+                taxRate = new BigDecimal(6.00).round(mc);
                 return taxRate;
             case IL:
-                taxRate = new BigDecimal(6.25);
+                taxRate = new BigDecimal(6.25).round(mc);
                 return taxRate;
             case IN:
-                taxRate = new BigDecimal(7.00);
+                taxRate = new BigDecimal(7.00).round(mc);
                 return taxRate;
             case IA:
-                taxRate = new BigDecimal(6.00);
+                taxRate = new BigDecimal(6.00).round(mc);
                 return taxRate;
             case KS:
-                taxRate = new BigDecimal(6.50);
+                taxRate = new BigDecimal(6.50).round(mc);
                 return taxRate;
             case KY:
-                taxRate = new BigDecimal(6.00);
+                taxRate = new BigDecimal(6.00).round(mc);
                 return taxRate;
             case LA:
-                taxRate = new BigDecimal(4.45);
+                taxRate = new BigDecimal(4.45).round(mc);
                 return taxRate;
             case ME:
-                taxRate = new BigDecimal(5.50);
+                taxRate = new BigDecimal(5.50).round(mc);
                 return taxRate;
             case MD:
-                taxRate = new BigDecimal(6.25);
+                taxRate = new BigDecimal(6.25).round(mc);
                 return taxRate;
             case MA:
-                taxRate = new BigDecimal(6.00);
+                taxRate = new BigDecimal(6.00).round(mc);
                 return taxRate;
             case MI:
-                taxRate = new BigDecimal(6.00);
+                taxRate = new BigDecimal(6.00).round(mc);
                 return taxRate;
             case MN:
-                taxRate = new BigDecimal(6.875);
+                taxRate = new BigDecimal(6.875).round(mc);
                 return taxRate;
             case MS:
-                taxRate = new BigDecimal(7.00);
+                taxRate = new BigDecimal(7.00).round(mc);
                 return taxRate;
             case MO:
-                taxRate = new BigDecimal(4.225);
+                taxRate = new BigDecimal(4.225).round(mc);
                 return taxRate;
             case MT:
-                taxRate = new BigDecimal(0.00);
+                taxRate = new BigDecimal(0.00).round(mc);
                 return taxRate;
             case NE:
-                taxRate = new BigDecimal(4.75);
+                taxRate = new BigDecimal(4.75).round(mc);
                 return taxRate;
             case NV:
-                taxRate = new BigDecimal(5.00);
+                roundBigDecimal(taxRate = new BigDecimal(5.00));
                 return taxRate;
             case NH:
-                taxRate = new BigDecimal(0.00);
+                roundBigDecimal(taxRate = new BigDecimal(0.00));
                 return taxRate;
             case NJ:
-                taxRate = new BigDecimal(6.625);
+                roundBigDecimal(taxRate = new BigDecimal(6.625));
                 return taxRate;
             case NM:
-                taxRate = new BigDecimal(5.125);
+                roundBigDecimal(taxRate = new BigDecimal(5.125));
                 return taxRate;
             case NY:
-                taxRate = new BigDecimal(4.00);
+                roundBigDecimal(taxRate = new BigDecimal(4.00));
                 return taxRate;
             case NC:
-                taxRate = new BigDecimal(5.50);
+                roundBigDecimal(taxRate = new BigDecimal(5.50));
                 return taxRate;
             case ND:
-                taxRate = new BigDecimal(6.85);
+                roundBigDecimal(taxRate = new BigDecimal(6.85));
                 return taxRate;
             case OH:
-                taxRate = new BigDecimal(5.75);
+                roundBigDecimal(taxRate = new BigDecimal(5.75));
                 return taxRate;
             case OK:
-                taxRate = new BigDecimal(4.50);
+                roundBigDecimal(taxRate = new BigDecimal(4.50));
                 return taxRate;
             case OR:
-                taxRate = new BigDecimal(0.00);
+                roundBigDecimal(taxRate = new BigDecimal(0.00));
                 return taxRate;
             case PA:
-                taxRate = new BigDecimal(6.00);
+                roundBigDecimal(taxRate = new BigDecimal(6.00));
                 return taxRate;
             case RI:
-                taxRate = new BigDecimal(7.00);
+                roundBigDecimal(taxRate = new BigDecimal(7.00));
                 return taxRate;
             case SC:
-                taxRate = new BigDecimal(6.00);
+                roundBigDecimal(taxRate = new BigDecimal(6.00));
                 return taxRate;
             case SD:
-                taxRate = new BigDecimal(4.50);
+                roundBigDecimal(taxRate = new BigDecimal(4.50));
                 return taxRate;
             case TN:
-                taxRate = new BigDecimal(7.00);
+                roundBigDecimal(taxRate = new BigDecimal(7.00));
                 return taxRate;
             case TX:
-                taxRate = new BigDecimal(6.25);
+                roundBigDecimal(taxRate = new BigDecimal(6.25));
                 return taxRate;
             case UT:
-                taxRate = new BigDecimal(6.10);
+                roundBigDecimal(taxRate = new BigDecimal(6.10));
                 return taxRate;
             case VT:
-                taxRate = new BigDecimal(5.30);
+                roundBigDecimal(taxRate = new BigDecimal(5.30));
                 return taxRate;
             case VA:
-                taxRate = new BigDecimal(6.00);
+                roundBigDecimal(taxRate = new BigDecimal(6.00));
                 return taxRate;
             case WA:
-                taxRate = new BigDecimal(6.00);
+                roundBigDecimal(taxRate = new BigDecimal(6.00));
                 return taxRate;
             case WV:
-                taxRate = new BigDecimal(6.50);
+                roundBigDecimal(taxRate = new BigDecimal(6.50));
                 return taxRate;
             case WI:
-                taxRate = new BigDecimal(5.00);
+                roundBigDecimal(taxRate = new BigDecimal(5.00));
                 return taxRate;
             case WY:
-                taxRate = new BigDecimal(4.00);
+                roundBigDecimal(taxRate = new BigDecimal(4.00));
                 return taxRate;
             default:
                 throw new UnsupportedOperationException("Unknown State");
@@ -274,5 +275,14 @@ public class StateTaxes {
                 throw new UnsupportedOperationException("Please put in a valid state.");
                 // return States.INVALID;
         }
+    }
+
+    private BigDecimal roundBigDecimal(BigDecimal decimal) {
+        int countPlaces = String.valueOf(decimal).length() + 2;
+
+        MathContext mc = new MathContext(countPlaces);
+        BigDecimal roundedBigDecimal = decimal.round(mc);
+
+        return roundedBigDecimal;
     }
 }

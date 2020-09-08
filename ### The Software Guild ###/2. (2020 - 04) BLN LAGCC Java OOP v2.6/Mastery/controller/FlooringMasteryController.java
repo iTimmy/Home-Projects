@@ -16,6 +16,7 @@ public class FlooringMasteryController {
         this.view = view;
     } */
 
+    Order newOrder = new Order();
     boolean load = false;
     boolean save = true;
 
@@ -40,7 +41,7 @@ public class FlooringMasteryController {
                     removeOrder();
                     break;
                 case 5:
-                    exportAllData(save);
+                    exportAllData(save, newOrder);
                     break;
                 case 6:
                     quit();
@@ -59,7 +60,9 @@ public class FlooringMasteryController {
     }
 
     public void addOrder() {
-        Order newOrder = view.displayAddEditOrder();
+        List<Product> listProducts = service.getAllProducts();
+        view.displayAddEditOrderTitle();
+        newOrder = view.displayAddEditOrder(listProducts);
         view.displaySaveProgress();
         service.createOrder(newOrder);
         view.displaySuccess();
@@ -67,6 +70,7 @@ public class FlooringMasteryController {
 
     public void editOrder() {
         view.triggerEdit();
+        addOrder();
         /*
         view.displayEditOrder();
         LocalDate userInputDate = view.displayDisplayOrders();
@@ -81,8 +85,9 @@ public class FlooringMasteryController {
         view.displayRemoveOrder();
     }
     
-    public void exportAllData(boolean save) throws Exception {
+    public void exportAllData(boolean save, Order newOrder) throws Exception {
         view.displayExportAllData();
+        service.getOrderByDate(newOrder.getOrderDate());
         if (service.getAllOrders(save) != null) {
             view.displaySaveProgress();
             view.displaySuccess();

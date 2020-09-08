@@ -19,10 +19,12 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
 
     @Override
     public List<Order> getAllOrders(boolean loadOrSave) throws Exception {
+        // LOAD \\
         if (loadOrSave == false) {
             storage.dataAccess(loadOrSave);
         }
         List<Order> listOrders = new ArrayList<>(storage.storeOrders.values());
+        // SAVE \\
         if (loadOrSave == true) {
             if (storage.dataAccess(loadOrSave) == false) {
                 return null;
@@ -32,13 +34,18 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
     }
 
     @Override
-    public Order getOrderByID(LocalDate userInputDate) {
+    public Order getOrderByDate(LocalDate userInputDate) {
         if (userInputDate != storage.storeOrders.get(userInputDate).getOrderDate()) {
             return null;
         } else {
-            System.out.println("Good!");
+            storage.getOrderDateFromDao(userInputDate);
         }
         return storage.storeOrders.get(userInputDate);
+    }
+
+    @Override
+    public Order getOrderByID(int orderNumber) {
+        throw new UnsupportedOperationException("Hold");
     }
 
     @Override

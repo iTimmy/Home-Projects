@@ -6,6 +6,9 @@ import java.math.MathContext;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import dto.*;
+import service.BigDecimalMath;
+import service.InvalidInputException;
+import service.MathOperator;
 import service.StateTaxes;
 import service.States;
 
@@ -48,49 +51,6 @@ public class FlooringMasteryView {
         return userSelect;
     }
 
-    public LocalDate displayInputDate() {
-        // INIT \\
-        int valid = 0;
-        LocalDate orderOfDate = LocalDate.now();
-
-        // LOGIC \\
-        while (valid != 1) {
-            try{
-                int i = 0;
-                String yearString = ""; String monthString = ""; String dayString = "";
-                String date = io.readString("Provide a future date of your order (yyyy-MMM-dd): ");
-                String dateSplit[] = date.split("-");
-                for (String s : dateSplit) {
-                    if (i == 0) {
-                        yearString = s;
-                    } else if (i == 1) {
-                        monthString = s;
-                    } else if (i == 2) {
-                        dayString = s;
-                    }
-                    i++;
-                }
-                String dateMonth = dateSplit[1];
-                int year = Integer.parseInt(yearString); int day = Integer.parseInt(dayString);
-
-                decode.monthFormat(dateMonth);
-
-                orderOfDate = LocalDate.of(year, decode.monthFormat(dateMonth), day);
-                
-                if (orderOfDate.isBefore(LocalDate.now())) {
-                    io.println("Today is " + LocalDate.now() + ". You cannot reverse time.");
-                    valid = 0;
-                    System.out.println(valid);
-                } else if (orderOfDate.isAfter(LocalDate.now())) {
-                    valid = 1;
-                }
-            } catch (Exception e) {
-                io.println("xxxxxx Invalid date format! xxxxxx ");
-            }
-        }
-        return orderOfDate;
-    }
-
     public void displayDisplayOrdersTitle() {
         io.println("---------- DISPLAY ORDERS ----------");
     }   
@@ -109,105 +69,44 @@ public class FlooringMasteryView {
         });
     }
 
-    public Order displayAddEditOrder() {
+    public void displayAddEditOrderTitle() {
         io.println("---------- " + displayAddEditOrderTitle + " ORDER(S) ----------");
+    }
+
+    public Order displayAddEditOrder(List<Product> listProducts) {
         Order newOrder = new Order();
-
-        // JUST INIT \\
-        LocalDate orderDate = LocalDate.now();
-        StateTaxes state = new StateTaxes();
-        boolean validationState = false;
-        MathContext mc = new MathContext(3);
-
         if (i == 0) {
-            orderDate = displayInputDate();
-            io.print("\n");
+            LocalDate userInputDate = displayInputDate();
+            newOrder.setOrderDate(userInputDate);
             i = 1;
         }
-        
         if (i == 1) {
-            double areaSize = 0;
-            String stateName = "";
-
-            String customerName = io.readString("Customer Name" + EDIT + ": ");
-            customerName = decode.nameFormat(customerName, 0);
-            
-            // STATE VALIDATION \\
-            //while(validationState != true) {
-                try {
-                    stateName = io.readString("\nState" + EDIT + ": ");
-                    stateName = decode.stateFormat(stateName);
-                    States validateState = state.stringToState(stateName);
-                    // System.out.println(validateState);
-                } catch (Exception e) {
-                    io.println("Please put in a valid state.");
-                    // validationState = false;
-                }
-            //}
-
-            // PRODUCT TYPE \\
-            String tiles = "Tiles - "; double tileCost = 1.27;
-            String carpet = "Carpet - "; double carpetCost = 2.67;
-            String wood = "Wood - "; double woodCost = 4.45;
-
-            io.println(
-            "\n####################\n" +
-            tiles + tileCost + "\n" +
-            carpet + carpetCost + "\n" +
-            wood + woodCost + "\n" +
-            "####################");
-
-            double costPerSquareFootDouble = 0;
-            String productType = "";
-
-            while(!productType.toUpperCase().equals("TILES") && !productType.toUpperCase().equals("CARPET") && !productType.toUpperCase().equals("WOOD")) {
-                productType = io.readString("Please choose a valid product type" + EDIT + ": ");
-            }
-            // AREA \\
-            while (areaSize < 100) {
-                areaSize = io.readDouble("\nArea ft^2" + EDIT + ": ");
-                if (areaSize < 100) {
-                    io.println("The minimum size is 100(sq ft.)\nPlease choose an area size that is greater.");
-                } else if (areaSize > 100) {
-                    io.println("\n______________\nData collected.");
-                }
-            }
-
-            // PRODUCT: LOGIC \\ {
-            switch (productType.toUpperCase()) {
-                case "TILES":
-                    costPerSquareFootDouble = areaSize * tileCost;
-                case "CARPET":
-                    costPerSquareFootDouble = areaSize * carpetCost;
-                case "WOOD":
-                    costPerSquareFootDouble = areaSize * woodCost;
-            }
-
-            BigDecimal area = new BigDecimal(areaSize).round(mc);
-            BigDecimal costPerSquareFoot = new BigDecimal(costPerSquareFootDouble);
-            System.out.println(area);
-            System.out.println(costPerSquareFoot);
+            String customer = decodeCustomer();
+            String customerState = decodeState();
+            Product userInputProduct = displayProducts(listProducts);
+            BigDecimal userInputArea = decodeArea();
 
             Product newProduct = new Product();
-            newProduct.setProductType(productType.toUpperCase());
-            newProduct.setCostPerSquareFoot(costPerSquareFoot);
+            newProduct.setProductType(userInputProduct.getProductType());
+            newProduct.setCostPerSquareFoot(userInputProduct.getCostPerSquareFoot());
 
             Tax newTax = new Tax();
-            newTax.setState(stateName);
+            newTax.setState(customerState);
+            System.out.println(customerState);
+            System.out.println(customer);
+            System.out.println(userInputArea);
+            System.out.println(newProduct);
 
-            newOrder.setOrderDate(orderDate);
-            newOrder.setCustomerName(customerName);
-            newOrder.setArea(area);
+            newOrder.setCustomerName(customer);
+            newOrder.setArea(userInputArea);
             newOrder.setProduct(newProduct);
             newOrder.setTax(newTax);
         }
-
         if (i == 1) {
             i = 0;
             EDIT = "";
             displayAddEditOrderTitle = "ADD";
         }
-
         return newOrder;
     }
 
@@ -215,12 +114,12 @@ public class FlooringMasteryView {
         EDIT = " (EDIT)";
         i = 1;
         displayAddEditOrderTitle = "EDIT";
-        displayAddEditOrder();
     }
 
     public void displayRemoveOrder() {
         io.println("---------- REMOVE AN ORDER ----------");
         displayInputDate();
+        displayOrderNumber();
         io.println("\n");
     }
 
@@ -246,5 +145,114 @@ public class FlooringMasteryView {
 
 	public void displayLoadProgress() {
         io.println("Loading...");
-	}
+    }
+    
+
+
+    //################| LOGIC |################\\
+    // ORDER # \\
+    public int displayOrderNumber() {
+        int orderNumber = io.readInt("\nWhat is your order number? ");
+        return orderNumber;
+    }
+
+    // DATE \\
+    public LocalDate displayInputDate() {
+        // INIT \\
+        int valid = 0;
+        LocalDate orderOfDate = LocalDate.now();
+        // LOGIC \\
+        while (valid != 1) {
+            try {
+                String date = io.readString("\nProvide a future date of your order (yyyy-MMM-dd): ");
+                orderOfDate = decode.dateFormat(date);
+
+                if (orderOfDate.isBefore(LocalDate.now())) {
+                    io.println("Today is " + LocalDate.now() + ". You cannot reverse time.");
+                    valid = 0;
+                } else if (orderOfDate.isAfter(LocalDate.now())) {
+                    valid = 1;
+                }
+            } catch (Exception e) {
+                io.println("xxxxxx Invalid date format! xxxxxx ");
+            }
+        }
+        return orderOfDate;
+    }
+
+    // CUSTOMER \\
+    public String decodeCustomer() {
+        String customerName = io.readString("\nCustomer Name" + EDIT + ": ");
+        customerName = decode.nameFormat(customerName, 0);
+        return customerName;
+    }
+
+    // STATE \\
+    public String decodeState() {
+        // JUST INIT \\
+        StateTaxes state = new StateTaxes();
+        String stateName = "";
+        boolean validationState = false;
+        // STATE VALIDATION \\
+        // while(validationState != true) {
+        try {
+            stateName = io.readString("\nState" + EDIT + ": ");
+            stateName = decode.stateFormat(stateName);
+            States validateState = state.stringToState(stateName);
+            // System.out.println(validateState);
+        } catch (Exception e) {
+            io.println("Please put in a valid state.");
+            // validationState = false;
+        }
+        // }
+        return stateName;
+    }
+
+    // PICK PRODUCT \\
+    public Product displayProducts(List<Product> listProducts) {
+        io.println("\n#################################");
+        io.println("Products | $/ft^2 | Labor$/ft^2" + "\n=================================");
+        listProducts.stream().forEach((p) -> {
+            io.print(p.getProductType() + " ||| ");
+            io.print("$" + p.getCostPerSquareFoot() + " ||| ");
+            io.println("$" + p.getLaborCostPerSquareFoot() + " ||| ");
+        });
+        io.println("#################################\n");
+
+        // PRODUCT TYPE \\
+        BigDecimalMath math = new BigDecimalMath();
+        BigDecimal costPerSquareFoot = new BigDecimal(0);
+        String userInputProductType = "";
+
+        // PRODUCT: MATCH IN THE SYSTEM \\
+        for (Product currentProduct : listProducts) {
+            while (!userInputProductType.equals(currentProduct.getProductType())) {
+                userInputProductType = io.readString("Please choose a valid product type" + EDIT + ": ");
+                userInputProductType = decode.nameFormat(userInputProductType, 0);
+                if (userInputProductType.equals(currentProduct.getProductType())) {
+                    costPerSquareFoot = math.calculate(MathOperator.MULTIPLY, decodeArea(),
+                            currentProduct.getCostPerSquareFoot());
+                    return currentProduct;
+                }
+            }
+        }
+        return null;
+    }
+
+    // AREA \\
+    public BigDecimal decodeArea() {
+        MathContext mc = new MathContext(4);
+        double areaSize = 0;
+        // AREA \\
+        while (areaSize < 100) {
+            areaSize = io.readDouble("\nArea ft^2" + EDIT + ": ");
+            if (areaSize < 100) {
+                io.println("The minimum size is 100(sq ft.)\nPlease choose an area size that is greater.");
+            } else if (areaSize > 100) {
+                io.println("\n______________\nData collected.");
+            }
+        }
+        BigDecimal area = new BigDecimal(areaSize).round(mc);
+        return area;
+    }
 }
