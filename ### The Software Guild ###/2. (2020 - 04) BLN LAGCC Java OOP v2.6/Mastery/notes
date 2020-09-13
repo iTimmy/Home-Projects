@@ -1,7 +1,8 @@
-Edit Order.
-Remove Order.
-Prevent file from being overwritten if you're just adding.
-The file only overwrites when you restart the program and export.
+Edit Order: 
+After you edit, you cannot save that
+
+Remove Order: 
+Cannot remove the last order in the txt file, figure out why and solve
 
 finish tax txt
 make a proper method to Format BigDecimal.

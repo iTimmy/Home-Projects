@@ -50,14 +50,14 @@ public class VendingMachineController {
 
     private void buyItem() throws Exception {
         double userInputMoney = view.displayUserInputMoney(); //2
-        String userInputItemName = view.displayBuyItem().toUpperCase();
+        String userInputItemName = view.displayBuyItem();
         int userInputItemQuantity = view.displayBuyItemQuantity();
         if (service.getItem(userInputItemName, userInputItemQuantity, userInputMoney) == 1) {
             service.moneyCalculation(MathOperator.MINUS, userInputMoney, userInputItemName);
             view.displaySuccess();
-        } else if (service.getItem(userInputItemName.toUpperCase(), userInputItemQuantity, userInputMoney) == 2) {
+        } else if (service.getItem(userInputItemName, userInputItemQuantity, userInputMoney) == 2) {
             view.displayItemDoesNotExistMSG();
-        } else if (service.getItem(userInputItemName.toUpperCase(), userInputItemQuantity, userInputMoney) == 0) {
+        } else if (service.getItem(userInputItemName, userInputItemQuantity, userInputMoney) == 0) {
             view.displayNotEnoughMoneyMSG();
         }
     }

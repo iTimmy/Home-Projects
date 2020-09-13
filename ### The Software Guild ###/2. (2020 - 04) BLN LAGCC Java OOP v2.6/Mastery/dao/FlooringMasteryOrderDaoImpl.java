@@ -10,42 +10,53 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
 
     @Override
     public Order createOrder(Order order) {
-        System.out.println("Running dao layer...");
-        storage.storeOrders.put(order.getOrderDate(), order);
-        System.out.println(storage.storeOrders);
-        System.out.println(storage.storeOrders.size());
+        storage.refreshData(false);
+        storage.storeOrders.put(order.getOrderNumber(), order);
+        try {
+            storage.findOrderByDate(order.getOrderDate());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return order;
     }
 
     @Override
-    public List<Order> getAllOrders(boolean loadOrSave) throws Exception {
-        // LOAD \\
-        if (loadOrSave == false) {
-            storage.dataAccess(loadOrSave);
+    public boolean saveAllOrders(LocalDate userInputOrderDate) throws Exception {
+        if (storage.storeOrders().isEmpty() == true) {
+            return false;
+        } else if (storage.storeOrders().isEmpty() == false) {
+            storage.dataAccess(false);
+            System.out.println(storage.storeOrders());
+            storage.findOrderByDate(userInputOrderDate);
+            storage.dataAccess(true);
+            storage.refreshData(true);
+            System.out.println("s1aveAllOrders(): " + storage.storeOrders());
+            return true;
         }
+        storage.refreshData(true);
+        System.out.println("2saveAllOrders(): " + storage.storeOrders());
+        return true;
+    }
+
+    @Override
+    public List<Order> getAllOrders(LocalDate userInputOrderDate) throws Exception {
+        storage.refreshData(true);
+        storage.findOrderByDate(userInputOrderDate);
+        storage.dataAccess(false);
         List<Order> listOrders = new ArrayList<>(storage.storeOrders.values());
-        // SAVE \\
-        if (loadOrSave == true) {
-            if (storage.dataAccess(loadOrSave) == false) {
-                return null;
-            }
-        }
         return listOrders;
     }
 
     @Override
-    public Order getOrderByDate(LocalDate userInputDate) {
-        if (userInputDate != storage.storeOrders.get(userInputDate).getOrderDate()) {
-            return null;
-        } else {
-            storage.getOrderDateFromDao(userInputDate);
+    public boolean getOrderByDate(LocalDate userInputDate) {
+        try {
+            storage.refreshData(true);
+            storage.findOrderByDate(userInputDate);
+        } catch (Exception e) {
+    
         }
-        return storage.storeOrders.get(userInputDate);
-    }
-
-    @Override
-    public Order getOrderByID(int orderNumber) {
-        throw new UnsupportedOperationException("Hold");
+        return true;
     }
 
     @Override
@@ -53,8 +64,29 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
 
     }
 
+    private void searching() {
+        System.out.println("[3] Searching...");
+    }
+
     @Override
     public void deleteOrder(Order orderNumber) {
-
+        //storage.refreshData(false);
+        searching();
+        try {
+            storage.findOrderByDate(orderNumber.getOrderDate());
+            for (Order currentOrder : storage.storeOrders.values()) {
+                if (orderNumber.getOrderNumber() == (currentOrder.getOrderNumber())) {
+                    System.out.println("before remove: " + storage.storeOrders);
+                    storage.storeOrders.remove(orderNumber.getOrderNumber());
+                    storage.dataAccess(true);
+                    System.out.println(storage.storeOrders);
+                } else {
+                    System.out.println(storage.storeOrders);
+                    System.out.println("Order does not exist.");
+                }
+            }
+        } catch (Exception e) {
+            
+        }     
     }
 }

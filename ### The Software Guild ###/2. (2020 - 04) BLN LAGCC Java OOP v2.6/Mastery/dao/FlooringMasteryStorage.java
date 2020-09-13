@@ -8,7 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -20,37 +19,25 @@ import dto.Product;
 import dto.Tax;
 
 public class FlooringMasteryStorage {
-    private LocalDate currentDate = LocalDate.now();
-    File fileOrders = new File("");
-    File fileTaxes = new File("Taxes.txt");
-    File fileProducts = new File("Products.txt");
-    Formatter newFile;
-    Formatter overwriteFile;
-    LocalDate date = LocalDate.now();
-
+    private List<String> orderFiles = new ArrayList<>();
+    private File fileOrders = new File("");
+    int i = 1;
     private final static String DELIMITER = ",";
-
-    Map<LocalDate, Order> storeOrders = new HashMap<>();
-    // Map<LocalDate, Map<Integer, Order>> storeAllDataByDate = new HashMap<>();
+    Map<Integer, Order> storeOrders = new HashMap<>();
+    boolean trueOrFalse = false;
 
     public boolean dataAccess(boolean loadOrSave) throws Exception {
         if (loadOrSave == false) {
+            //refreshData(true);
             loadData();
         } else if (loadOrSave == true) {
             if (!storeOrders.isEmpty()) {
-                doesFileExist();
-                //newFile = new Formatter("Orders/Orders_" + formatDate(date.toString()) + ".txt");
+
                 saveData();
-            } else if (storeOrders.isEmpty()) {
-                return false;
             }
         }
+        //System.out.println("There are " + orderFiles.size() + " existing orders.");
         return true;
-    }
-
-    public Order getOrderDateFromDao(LocalDate userInputDate) {
-        date = userInputDate;
-        return storeOrders.get(date);
     }
 
     private String formatDate(String currentDate) {
@@ -62,62 +49,69 @@ public class FlooringMasteryStorage {
         return newFormat;
     }
 
-    private File doesFileExist() throws Exception {
-        // INIT
-        String formattedDate = "Orders/Orders_" + "" + ".txt";
-        String fileName = "";
+    public LocalDate findOrderByDate(LocalDate userInputOrderDate) throws Exception { 
+        doesFileExist(userInputOrderDate);
+        return userInputOrderDate;
+    }
 
+    private void importFiles() throws Exception {
         // STREAM FILES IN DIRECTORY
-        Path findExistingFile = Paths.get("Orders/");
-            Stream<Path> subPath = Files.walk(findExistingFile);
-            List<String> orderFiles = subPath.filter(Files::isRegularFile)
-                .map(Objects::toString)
-                .collect(Collectors.toList());
-            subPath.close();
-            System.out.println(orderFiles);
+        Path findExistingFile = Paths.get("Orders\\");
+        Stream<Path> subPath = Files.walk(findExistingFile);
+        orderFiles = subPath.filter(Files::isRegularFile)
+            .map(Objects::toString)
+            .collect(Collectors.toList());
+        subPath.close();
+    }
 
-        // COLLECT DATES FROM STOREORDERS HASHMAP INTO THE STOREDATES ARRAYLIST
-        List<LocalDate> storeDates = new ArrayList<>();
-        for (LocalDate currentDate : storeOrders.keySet()) {
-            storeDates.add(currentDate);
-        }
+    public boolean refreshData(boolean trueOrFalse) {
+        if (trueOrFalse == true) {
+            if (storeOrders.isEmpty() == false) {
+                storeOrders.clear();
+            } else {
+                // System.out.println("storeOrders is empty.");
+            }
+        } else if (trueOrFalse == false) {
 
-        // FORMAT USER INPUT DATE TO FILE NAME CONVENTION
-        for (LocalDate currentDate : storeDates) {
-            formattedDate = "Orders/Orders_" + formatDate(storeOrders.get(currentDate).getOrderDate().toString()) + ".txt";
         }
+        return trueOrFalse;
+    }
+
+    private File doesFileExist(LocalDate userInputOrderDate) throws Exception {
+        // INIT
+        refreshData(trueOrFalse);
+
+        fileOrders = new File("");
+        String formattedDate = "";
+
+        importFiles();
+
+        // FORMAT USER INPUT DATE
+        formattedDate = "Orders\\Orders_" + formatDate(userInputOrderDate.toString()) + ".txt";
 
         // CHECK IF FILENAME CLASHES WITH ANOTHER IN THE 'ORDERS' DIRECTORY
         for (String currentFile : orderFiles) {
             // OVERWRITE AN EXISTING FILE
             if (formattedDate.equals(currentFile)) {
-                overwriteFile = new Formatter("Orders/Orders_" + currentFile + ".txt");
-                fileName = "Orders/Orders_" + currentFile + ".txt";
+                fileOrders = new File(formattedDate);
+                System.out.println("File has been found.");
             // CREATE A NEW FILE
             } else if (!formattedDate.equals(currentFile)) {
-                newFile = new Formatter("Orders/Orders_" + formatDate(date.toString()) + ".txt");
-                fileName = "Orders/Orders_" + formatDate(date.toString()) + ".txt";
+                fileOrders = new File(formattedDate);
+                return null;
             }
         }        
-        fileOrders = new File(fileName);
         return fileOrders;
     }
 
-    public Map<LocalDate, Order> storeOrders() {
+    public Map<Integer, Order> storeOrders() {
         return storeOrders;
     }
 
-    /*
-    public Map<LocalDate, Map<Integer, Order>> storeAllDataByDate() {
-        return storeAllDataByDate;
-    }
-    */
-
-
-
     private void saveData() throws Exception {
-        PrintWriter writeFile = new PrintWriter(new BufferedWriter(new FileWriter(fileOrders, true)));
+        PrintWriter writeFile = new PrintWriter(new BufferedWriter(new FileWriter(fileOrders, false)));
         Collection<Order> storeOrdersValues = storeOrders.values();
+        // System.out.println("Saving " + fileOrders + "...");
         for (Order orderDetail : storeOrdersValues) {
             String currentOrders = marshallData(orderDetail);
             writeFile.println(currentOrders);
@@ -126,6 +120,7 @@ public class FlooringMasteryStorage {
         writeFile.close();
     }
     private String marshallData(Order orderDetail) {
+        // System.out.println("[" + i + "] Writing...");
         Product product = orderDetail.getProduct();
         Tax tax = orderDetail.getTax();
 
@@ -157,19 +152,24 @@ public class FlooringMasteryStorage {
         return ordersToFile;
     }
 
-
-
     private void loadData() throws Exception {
-        Scanner readFile = new Scanner(new BufferedReader(new FileReader(fileOrders)));
-        String currentLine = "";
-        while(readFile.hasNextLine()) {
-            currentLine = readFile.nextLine();
-            Order ordersFromFile = unmarshallData(currentLine);
-            storeOrders.put(ordersFromFile.getOrderDate(), ordersFromFile);
-            // storeAllDataByDate.put(ordersFromFile.getOrderDate(), storeOrders);
-        }
+        try {
+            Scanner readFile = new Scanner(new BufferedReader(new FileReader(fileOrders)));
+            String currentLine = "";
+            // System.out.println("Loading " + fileOrders + "...");
+            if (readFile.hasNextLine()) {
+                while(readFile.hasNextLine()) {
+                    currentLine = readFile.nextLine();
+                    Order ordersFromFile = unmarshallData(currentLine);
+                    storeOrders.put(ordersFromFile.getOrderNumber(), ordersFromFile);
+                }
+            } else {
+                System.out.println("The file is empty.");
+            }
+        } catch (Exception e) {}
     }
     private Order unmarshallData(String currentLine) {
+        // System.out.println("[" + i + "] Reading...");
         String[] line = currentLine.split(DELIMITER);
 
         // ORDERS \\
@@ -208,8 +208,9 @@ public class FlooringMasteryStorage {
         ordersFromFile.setProduct(productsFromFile);
         ordersFromFile.setTax(taxesFromFile);
 
-
+        i++;
 
         return ordersFromFile;
     }
+
 }

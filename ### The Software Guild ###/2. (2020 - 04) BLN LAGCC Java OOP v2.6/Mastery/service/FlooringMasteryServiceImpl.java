@@ -13,6 +13,8 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     FlooringMasteryProductDao productDao = new FlooringMasteryProductDaoImpl();
     FlooringMasteryTaxDao taxDao;
 
+    //private int staticOrderNumber = 0;
+
     /*
     public FlooringMasteryServiceImpl(FlooringMasteryOrderDao order, FlooringMasteryProductDao product, FlooringMasteryTaxDao tax) {
         this.order = order;
@@ -29,10 +31,13 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
         return roundedBigDecimal;
     }
 
+    private void searching() {
+        System.out.println("[2] Searching...");
+    }
+
     // ORDERS \\
     @Override
     public Order createOrder(Order order) {
-        System.out.println("Running service layer...");
         MathContext mc = new MathContext(3);
         BigDecimalMath calculate = new BigDecimalMath();
         StateTaxes state = new StateTaxes();
@@ -43,11 +48,8 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
 
         String stateName = order.getTax().getState();
         BigDecimal taxRate = roundBigDecimal(state.fetchStateTax(stateName));
-        System.out.println(taxRate);
-
 
         BigDecimal taxPercentage = new BigDecimal(100).round(mc);
-        System.out.println(taxPercentage);
  
         BigDecimal materialCost = roundBigDecimal(calculate.calculate(MathOperator.MULTIPLY, order.getArea(), costPerSquareFoot));
         BigDecimal laborCost = roundBigDecimal(calculate.calculate(MathOperator.MULTIPLY, order.getArea(), laborCostPerSquareFoot));
@@ -57,6 +59,7 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
         order.getProduct().setCostPerSquareFoot(costPerSquareFoot);
         order.getProduct().setLaborCostPerSquareFoot(laborCostPerSquareFoot);
         order.getTax().setTaxRate(taxRate);
+        //System.out.println("Static order number: " + staticOrderNumber);
         order.setOrderNumber(generateOrderNumber());
         order.setMaterialCost(materialCost);
         order.setLaborCost(laborCost);
@@ -67,8 +70,17 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     }
 
     @Override
-    public List<Order> getAllOrders(boolean loadOrSave) throws Exception {
-        List<Order> listOrders = orderDao.getAllOrders(loadOrSave);
+    public boolean saveAllOrders(LocalDate userInputOrderDate) throws Exception {
+        if (orderDao.saveAllOrders(userInputOrderDate) == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public List<Order> getAllOrders(LocalDate userInputOrderDate) throws Exception {
+        List<Order> listOrders = orderDao.getAllOrders(userInputOrderDate);
         if (listOrders == null) {
             return null;
         }
@@ -76,35 +88,24 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     }
 
     @Override
-    public Order getOrderByDate(LocalDate userInputDate) {
-        try {
-            if (userInputDate == null) {
-                return null;
-            }
-        } catch (Exception e) {
-            System.out.println("No");
-        } 
-        
-        if (orderDao.getOrderByDate(userInputDate) != null) {
-            return orderDao.getOrderByDate(userInputDate);
+    public boolean getOrderByDate(LocalDate userInputDate) {
+        if (orderDao.getOrderByDate(userInputDate) != true) {
+            return false;
+        } else {
+            return true;
         }
-        return null;
-    }
-
-    @Override
-    public Order getOrderByID(int orderNumber) {
-        throw new UnsupportedOperationException("hold");
     }
 
     @Override
     public void updateOrder(Order orderNumber) {
-
+        createOrder(orderNumber);
     }
 
     @Override
     public void deleteOrder(Order orderNumber) {
-
-    }
+        searching();
+        orderDao.deleteOrder(orderNumber);
+    }   
 
 
 
@@ -137,6 +138,8 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     private int generateOrderNumber() throws NumberFormatException {
         double generateOrderNumber = Math.random() * 100;
         int newOrderNumber = (int)generateOrderNumber;
+        //staticOrderNumber = newOrderNumber;
+        // System.out.println("Static order number from generated: " + staticOrderNumber);
         return newOrderNumber;
     }
 }

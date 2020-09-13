@@ -2,7 +2,6 @@ package controller;
 
 import java.time.LocalDate;
 import java.util.*;
-
 import service.*;
 import view.*;
 import dto.*;
@@ -17,8 +16,8 @@ public class FlooringMasteryController {
     } */
 
     Order newOrder = new Order();
-    boolean load = false;
-    boolean save = true;
+    boolean editMode = false;
+    LocalDate saveOrderDate;
 
     public void run() throws Exception {
         int select = 0;
@@ -29,7 +28,7 @@ public class FlooringMasteryController {
 
             switch (select) {
                 case 1:
-                    displayOrders(load);
+                    displayOrders();
                     break;
                 case 2:
                     addOrder();
@@ -41,7 +40,7 @@ public class FlooringMasteryController {
                     removeOrder();
                     break;
                 case 5:
-                    exportAllData(save, newOrder);
+                    exportAllData(newOrder);
                     break;
                 case 6:
                     quit();
@@ -52,51 +51,99 @@ public class FlooringMasteryController {
         }
     }
 
-    public void displayOrders(boolean load) throws Exception {
-        view.displayDisplayOrdersTitle();
-        view.displayLoadProgress();
-        List<Order> listOrders = service.getAllOrders(load);
-        view.displayDisplayOrders(listOrders);
+    public void displayOrders() throws Exception {
+        LocalDate userInputOrderDate = view.displayDisplayOrdersTitle();
+        searching();
+            service.getOrderByDate(userInputOrderDate);
+            System.out.println("############################################################| " + userInputOrderDate + " |#############################################################");
+            List<Order> listOrders = service.getAllOrders(userInputOrderDate);
+            view.displayDisplayOrders(listOrders);
+        
     }
 
     public void addOrder() {
+        // DISPLAY PRODUCTS \\
         List<Product> listProducts = service.getAllProducts();
+        // TOGGLES ADD OR EDIT MODE \\
         view.displayAddEditOrderTitle();
+        if (editMode == true) {
+            saveOrderDate = newOrder.getOrderDate();
+        }
         newOrder = view.displayAddEditOrder(listProducts);
+        if (editMode == true) {
+            newOrder.setOrderDate(saveOrderDate);
+        }
         view.displaySaveProgress();
-        service.createOrder(newOrder);
         view.displaySuccess();
+        editMode = false;
+
+        System.out.println("==================================\n" +
+        newOrder.getOrderDate() + " | " +
+        newOrder.getCustomerName() + " | " +
+        newOrder.getTax().getState() + " | " +
+        newOrder.getProduct().getProductType() + " | " +
+        newOrder.getArea() +
+        "\n=================================="
+        );
     }
 
-    public void editOrder() {
-        view.triggerEdit();
-        addOrder();
-        /*
-        view.displayEditOrder();
-        LocalDate userInputDate = view.displayDisplayOrders();
-        if (service.getOrderByID(userInputDate) != null) {
-          
+    public void editOrder() throws Exception {
+        if (newOrder.getOrderDate() == null) {
+            view.displayPleaseAddOrderFirst();
         } else {
-
-        } */
+            displayOrders();
+            selectedFileToDisplay();
+            view.triggerEdit();
+            editMode = true;
+            addOrder();
+        }
     }
 
     public void removeOrder() {
-        view.displayRemoveOrder();
+        Order findOrder = view.displayRemoveOrder();
+        searching();
+        service.deleteOrder(findOrder);
+    }
+
+    public void selectedFileToDisplay() {
+        System.out.println("=====================================\n" +
+        newOrder.getOrderDate() + " | " + 
+        newOrder.getCustomerName() + " | " + 
+        newOrder.getTax().getState() + " | " + 
+        newOrder.getProduct().getProductType() + " | " + 
+        newOrder.getArea() + "\n=====================================");
     }
     
-    public void exportAllData(boolean save, Order newOrder) throws Exception {
+    public void exportAllData(Order newOrder) throws Exception {
+        // TITLE \\
         view.displayExportAllData();
-        service.getOrderByDate(newOrder.getOrderDate());
-        if (service.getAllOrders(save) != null) {
-            view.displaySaveProgress();
-            view.displaySuccess();
-        } else if (service.getAllOrders(save) == null) {
+        // SERVICE \\
+        if (newOrder.getOrderDate() != null) {
+            selectedFileToDisplay();
+            service.createOrder(newOrder);
+        }
+        view.displaySaveProgress();
+        if (service.saveAllOrders(newOrder.getOrderDate()) == false) {
             view.displayExportAllDataErrorMSG();
+        } else if (service.saveAllOrders(newOrder.getOrderDate()) == true) {
+            view.displaySuccess();
         }
     }
 
     public void quit() {
         view.displayQuit();
     }
+
+
+
+
+
+
+
+
+
+    private void searching() {
+        System.out.println("[1] Searching...");
+    }
 }
+

@@ -8,9 +8,9 @@ import dto.*;
 public interface FlooringMasteryService {
 
     Order createOrder(Order order);
-    List<Order> getAllOrders(boolean loadOrSave) throws Exception;
-    Order getOrderByDate(LocalDate userInputDate);
-    Order getOrderByID(int orderNumber);
+    List<Order> getAllOrders(LocalDate userInputOrderDate) throws Exception;
+    boolean saveAllOrders(LocalDate userInputOrderDate) throws Exception;
+    boolean getOrderByDate(LocalDate userInputDate);
     void updateOrder(Order orderNumber);
     void deleteOrder(Order orderNumber);
 

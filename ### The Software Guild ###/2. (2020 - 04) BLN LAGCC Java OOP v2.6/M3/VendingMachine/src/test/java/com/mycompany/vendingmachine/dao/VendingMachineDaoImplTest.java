@@ -56,12 +56,12 @@ public class VendingMachineDaoImplTest {
      */
     @Test
     public void testGetAllItems() throws Exception {
-        String itemNameTestOne = "soda";
-        double itemCostTestOne = 1.25;
+        String itemNameTestOne = "pizza";
+        double itemCostTestOne = 1.00;
         double userInputMoneyTestOne = 5.34;
         VendingMachine itemOne = new VendingMachine(itemNameTestOne.toUpperCase(), itemCostTestOne);
         itemOne.setItemQuantity(4);
-        testDao.getItem(itemNameTestOne.toUpperCase(), itemOne.getItemQuantity(), userInputMoneyTestOne);
+        testDao.getItem(itemOne.getItemName(), itemOne.getItemQuantity(), userInputMoneyTestOne);
 
         /*
         String itemNameTestTwo = "pizza";

@@ -49,7 +49,7 @@ public class VendingMachineView {
         io.println("-------BUY-ITEM-------");
         String userInputItemName = io.readString("What would you like to buy? ");
         io.println("----------------------");
-        return userInputItemName;
+        return userInputItemName.toUpperCase();
     }
 
     public int displayBuyItemQuantity() {

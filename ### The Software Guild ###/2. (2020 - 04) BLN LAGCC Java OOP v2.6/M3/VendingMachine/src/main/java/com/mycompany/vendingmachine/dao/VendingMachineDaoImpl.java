@@ -51,6 +51,8 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
             return null;
         }
         
+        System.out.println("done");
+        
         return allItems.get(userInputItemName.toUpperCase());
     }
 
@@ -110,15 +112,18 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
         return allItemDetails;
     }
 
-    private VendingMachine unmarshallItems(String itemsToString) {;
+    private VendingMachine unmarshallItems(String itemsToString) {
         // CONVERTS WORDS FROM FILES TO VARIABLES
         System.out.println("Marshalling");
         String[] itemTokens = itemsToString.split(DELIMITER);
-        String itemName = itemTokens[0];
+        String itemName = itemTokens[0].toUpperCase();
         String itemCostString = itemTokens[1];
         System.out.println("Marshalling");
         double itemCost = Double.parseDouble(itemCostString);
+        System.out.println(itemCost);
+        System.out.println("Marshalling");
         String itemQuantityString = itemTokens[2];
+        System.out.println("Marshalling");
         int itemQuantity = Integer.parseInt(itemQuantityString);
 
         removeItem(itemName, itemQuantity);

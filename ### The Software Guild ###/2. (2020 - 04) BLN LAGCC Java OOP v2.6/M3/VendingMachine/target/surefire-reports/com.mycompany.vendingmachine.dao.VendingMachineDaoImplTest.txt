@@ -1,14 +1,14 @@
 -------------------------------------------------------------------------------
 Test set: com.mycompany.vendingmachine.dao.VendingMachineDaoImplTest
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.103 sec <<< FAILURE!
-testGetAllItems(com.mycompany.vendingmachine.dao.VendingMachineDaoImplTest)  Time elapsed: 0.041 sec  <<< ERROR!
-java.lang.NumberFormatException: For input string: "1.25 : 40"
+Tests run: 2, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.094 sec <<< FAILURE!
+testGetAllItems(com.mycompany.vendingmachine.dao.VendingMachineDaoImplTest)  Time elapsed: 0.044 sec  <<< ERROR!
+java.lang.NumberFormatException: For input string: "2.50 : 10"
 	at java.base/jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2054)
 	at java.base/jdk.internal.math.FloatingDecimal.parseDouble(FloatingDecimal.java:110)
 	at java.base/java.lang.Double.parseDouble(Double.java:549)
-	at com.mycompany.vendingmachine.dao.VendingMachineDaoImpl.unmarshallItems(VendingMachineDaoImpl.java:120)
-	at com.mycompany.vendingmachine.dao.VendingMachineDaoImpl.loadItems(VendingMachineDaoImpl.java:136)
+	at com.mycompany.vendingmachine.dao.VendingMachineDaoImpl.unmarshallItems(VendingMachineDaoImpl.java:122)
+	at com.mycompany.vendingmachine.dao.VendingMachineDaoImpl.loadItems(VendingMachineDaoImpl.java:141)
 	at com.mycompany.vendingmachine.dao.VendingMachineDaoImpl.getItem(VendingMachineDaoImpl.java:36)
 	at com.mycompany.vendingmachine.dao.VendingMachineDaoImplTest.testGetAllItems(VendingMachineDaoImplTest.java:64)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)

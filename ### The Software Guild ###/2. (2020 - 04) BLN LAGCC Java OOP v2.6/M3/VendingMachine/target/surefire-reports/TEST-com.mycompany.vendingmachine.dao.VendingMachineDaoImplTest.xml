@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="2" failures="0" name="com.mycompany.vendingmachine.dao.VendingMachineDaoImplTest" time="0.041" errors="1" skipped="0">
+<testsuite tests="2" failures="0" name="com.mycompany.vendingmachine.dao.VendingMachineDaoImplTest" time="0.044" errors="1" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="java.vm.version" value="14.0.2+12-46"/>
     <property name="sun.boot.library.path" value="I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin"/>
-    <property name="maven.multiModuleProjectDirectory" value="I:\C0De\Home-Projects - Backup\### The Software Guild ###\2. (2020 - 04) BLN LAGCC Java OOP v2.6\M3\VendingMachine"/>
+    <property name="maven.multiModuleProjectDirectory" value="I:\C0De\Home-Projects\### The Software Guild ###\2. (2020 - 04) BLN LAGCC Java OOP v2.6\M3\VendingMachine"/>
     <property name="java.vm.vendor" value="Oracle Corporation"/>
     <property name="java.vendor.url" value="https://java.oracle.com/"/>
     <property name="guice.disable.misplaced.annotation.check" value="true"/>
@@ -16,7 +16,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="test" value="com.mycompany.vendingmachine.dao.VendingMachineDaoImplTest"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="user.dir" value="I:\C0De\Home-Projects - Backup\### The Software Guild ###\2. (2020 - 04) BLN LAGCC Java OOP v2.6\M3\VendingMachine"/>
+    <property name="user.dir" value="I:\C0De\Home-Projects\### The Software Guild ###\2. (2020 - 04) BLN LAGCC Java OOP v2.6\M3\VendingMachine"/>
     <property name="java.vm.compressedOopsMode" value="32-bit"/>
     <property name="java.runtime.version" value="14.0.2+12-46"/>
     <property name="os.arch" value="amd64"/>
@@ -60,13 +60,13 @@
     <property name="sun.cpu.endian" value="little"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="com.mycompany.vendingmachine.dao.VendingMachineDaoImplTest" name="testGetAllItems" time="0.041">
-    <error message="For input string: &quot;1.25 : 40&quot;" type="java.lang.NumberFormatException">java.lang.NumberFormatException: For input string: &quot;1.25 : 40&quot;
+  <testcase classname="com.mycompany.vendingmachine.dao.VendingMachineDaoImplTest" name="testGetAllItems" time="0.044">
+    <error message="For input string: &quot;2.50 : 10&quot;" type="java.lang.NumberFormatException">java.lang.NumberFormatException: For input string: &quot;2.50 : 10&quot;
 	at java.base/jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2054)
 	at java.base/jdk.internal.math.FloatingDecimal.parseDouble(FloatingDecimal.java:110)
 	at java.base/java.lang.Double.parseDouble(Double.java:549)
-	at com.mycompany.vendingmachine.dao.VendingMachineDaoImpl.unmarshallItems(VendingMachineDaoImpl.java:120)
-	at com.mycompany.vendingmachine.dao.VendingMachineDaoImpl.loadItems(VendingMachineDaoImpl.java:136)
+	at com.mycompany.vendingmachine.dao.VendingMachineDaoImpl.unmarshallItems(VendingMachineDaoImpl.java:122)
+	at com.mycompany.vendingmachine.dao.VendingMachineDaoImpl.loadItems(VendingMachineDaoImpl.java:141)
 	at com.mycompany.vendingmachine.dao.VendingMachineDaoImpl.getItem(VendingMachineDaoImpl.java:36)
 	at com.mycompany.vendingmachine.dao.VendingMachineDaoImplTest.testGetAllItems(VendingMachineDaoImplTest.java:64)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
@@ -107,9 +107,15 @@
 VendingMachine.txt
 Marshalling
 Marshalling
+2.5
+Marshalling
+Marshalling
 Deleting...
 Deleted...
 finish loading
+Marshalling
+Marshalling
+1000.0
 Marshalling
 Marshalling
 Deleting...

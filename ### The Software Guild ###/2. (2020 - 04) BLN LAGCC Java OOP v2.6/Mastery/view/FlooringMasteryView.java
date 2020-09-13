@@ -1,16 +1,10 @@
 package view;
 
 import java.util.*;
-import java.math.BigDecimal;
-import java.math.MathContext;
+import java.math.*;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import dto.*;
-import service.BigDecimalMath;
-import service.InvalidInputException;
-import service.MathOperator;
-import service.StateTaxes;
-import service.States;
+import service.*;
 
 public class FlooringMasteryView {
     UserIO io = new UserIOConsoleImpl();
@@ -51,22 +45,28 @@ public class FlooringMasteryView {
         return userSelect;
     }
 
-    public void displayDisplayOrdersTitle() {
+    public LocalDate displayDisplayOrdersTitle() {
         io.println("---------- DISPLAY ORDERS ----------");
+        LocalDate userInputOrderDate = displayInputDate();
+        return userInputOrderDate;
     }   
 
     public void displayDisplayOrders(List<Order> listOrderDetails) {
-        listOrderDetails.stream().forEach((p) -> {
-            io.println("____________________________________");
-            io.println("Order #: " + p.getOrderNumber());
-            io.println("Customer Name: " + p.getCustomerName());
-            io.println("Area: " + p.getArea());
-            io.println("Material Cost: " + p.getMaterialCost());
-            io.println("Labor Cost: " + p.getLaborCost());
-            io.println("Order Tax: " + p.getOrderTax());
-            io.println("Total Cost: " + p.getTotalCost());
-            io.println("____________________________________");
-        });
+        if (listOrderDetails.isEmpty() == true) {
+            io.println("There are no orders.");
+        } else {
+            io.println("________________________________________________________________________________________________________________________________________");
+            listOrderDetails.stream().forEach((p) -> {
+                io.print("Order #: " + p.getOrderNumber() + " | ");
+                io.print("Customer Name: " + p.getCustomerName() + " | ");
+                io.print("Area: " + p.getArea() + " | ");
+                io.print("Material Cost: " + p.getMaterialCost() + " | ");
+                io.print("Labor Cost: " + p.getLaborCost() + " | ");
+                io.print("Order Tax: " + p.getOrderTax() + " | ");
+                io.println("Total Cost: " + p.getTotalCost() + " | ");
+            });
+            io.println("________________________________________________________________________________________________________________________________________");
+        }
     }
 
     public void displayAddEditOrderTitle() {
@@ -116,11 +116,15 @@ public class FlooringMasteryView {
         displayAddEditOrderTitle = "EDIT";
     }
 
-    public void displayRemoveOrder() {
+    public Order displayRemoveOrder() {
         io.println("---------- REMOVE AN ORDER ----------");
-        displayInputDate();
-        displayOrderNumber();
+        LocalDate userInputOrderDate = displayInputDate();
+        int userInputOrderNumber = displayOrderNumber();
         io.println("\n");
+        Order findOrder = new Order();
+        findOrder.setOrderDate(userInputOrderDate);
+        findOrder.setOrderNumber(userInputOrderNumber);
+        return findOrder;
     }
 
     public void displayExportAllData() {
@@ -142,10 +146,6 @@ public class FlooringMasteryView {
 	public void displayExportAllDataErrorMSG() {
         io.println("There is nothing to export!");
 	}
-
-	public void displayLoadProgress() {
-        io.println("Loading...");
-    }
     
 
 
@@ -255,4 +255,8 @@ public class FlooringMasteryView {
         BigDecimal area = new BigDecimal(areaSize).round(mc);
         return area;
     }
+
+	public void displayPleaseAddOrderFirst() {
+        io.println("Could not find an order to edit. Please add an order before you edit.");
+	}
 }

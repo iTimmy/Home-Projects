@@ -48,56 +48,52 @@ public class VendingMachineServiceImplTest {
      * Test of getAllItems method, of class VendingMachineServiceImpl.
      */
     @Test
-    public void testGetAllItems() {
-        System.out.println("getAllItems");
-        VendingMachineServiceImpl instance = null;
-        List<VendingMachine> expResult = null;
-        List<VendingMachine> result = instance.getAllItems();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testGetAllItems() throws Exception {
+        String itemNameTestOne = "pizza";
+        double itemCostTestOne = 1.00;
+        double userInputMoneyTestOne = 5.34;
+        VendingMachine itemOne = new VendingMachine(itemNameTestOne.toUpperCase(), itemCostTestOne);
+        itemOne.setItemQuantity(4);
+        serviceTest.getItem(itemOne.getItemName(), itemOne.getItemQuantity(), userInputMoneyTestOne);
+
+        /*
+        String itemNameTestTwo = "pizza";
+        double itemCostTestTwo = 1.75;
+        double userInputMoneyTestTwo = 7.34;
+        VendingMachine itemTwo = new VendingMachine(itemNameTestTwo.toUpperCase(), itemCostTestTwo);
+        itemOne.setItemQuantity(6);
+        testDao.getItem(itemNameTestTwo.toUpperCase(), itemOne.getItemQuantity(), userInputMoneyTestTwo);
+        
+        List<VendingMachine> list = testDao.getAllItems();
+
+        assertEquals(4, list.size());
+        */
     }
 
     /**
-     * Test of getItem method, of class VendingMachineServiceImpl.
+     * Test of getItem method, of class VendingMachineDaoImpl.
+     * @throws java.lang.Exception
      */
     @Test
-    public void testGetItem() throws Exception {
-        List<VendingMachine> items = serviceTest.getAllItems();
-        VendingMachine oneItem = new VendingMachine("pizza", 1.00);
-        assertEquals(1, items.size());
-        assertTrue(items.get(0).equals(oneItem));
-    }
+    public void testGetItem_String() throws Exception {
+        /*
+        String itemNameTest = "pizza";
+        double itemCostTest = 1.00;
+        double userMoney = 2.23;
+        VendingMachine item = new VendingMachine(itemNameTest, itemCostTest);
+        
+        item.setItemName(itemNameTest.toUpperCase());
+        item.setItemCost(itemCostTest);
+        item.setItemQuantity(6);
 
-    /**
-     * Test of removeItem method, of class VendingMachineServiceImpl.
-     */
-    @Test
-    public void testRemoveItem() {
-        System.out.println("removeItem");
-        String itemName = "";
-        int itemQuantity = 0;
-        VendingMachineServiceImpl instance = null;
-        instance.removeItem(itemName, itemQuantity);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of moneyCalculation method, of class VendingMachineServiceImpl.
-     */
-    @Test
-    public void testMoneyCalculation() {
-        System.out.println("moneyCalculation");
-        MathOperator operator = null;
-        double userInputMoney = 0.0;
-        String userInputItemName = "";
-        VendingMachineServiceImpl instance = null;
-        BigDecimal expResult = null;
-        BigDecimal result = instance.moneyCalculation(operator, userInputMoney, userInputItemName);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        VendingMachine result = testDao.getItem(itemNameTest.toUpperCase(), item.getItemQuantity(), userMoney); // 4
+        System.out.println("getItem 2: " + item.getItemQuantity());
+        
+        System.out.println(item.getItemName().equals("pizza"));
+        System.out.println(result.getItemName());
+        assertEquals(item.getItemName(), result.getItemName());
+        assertTrue(item.getItemName().equals(result.getItemName()));
+*/
     }
     
 }

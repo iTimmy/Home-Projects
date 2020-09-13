@@ -1,5 +1,5 @@
-com\mycompany\vendingmachine\service\VendingMachineService.class
 com\mycompany\vendingmachine\service\VendingMachineServiceImpl.class
+com\mycompany\vendingmachine\service\VendingMachineService.class
 com\mycompany\vendingmachine\App.class
 com\mycompany\vendingmachine\controller\VendingMachineController.class
 com\mycompany\vendingmachine\dao\VendingMachineAuditDaoImpl.class
