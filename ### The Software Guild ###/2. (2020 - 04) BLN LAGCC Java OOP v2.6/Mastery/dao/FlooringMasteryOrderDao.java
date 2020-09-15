@@ -9,6 +9,6 @@ public interface FlooringMasteryOrderDao {
     List<Order> getAllOrders(LocalDate userInputOrderDate) throws Exception;
     boolean saveAllOrders(LocalDate userInputOrderDate) throws Exception;
     boolean getOrderByDate(LocalDate userInputDate);
-    void updateOrder(Order orderNumber);
+    void updateOrder(boolean refreshOrNot, LocalDate userInputOrderDate, boolean loadOrSave) throws Exception;
     void deleteOrder(Order orderNumber);
 }

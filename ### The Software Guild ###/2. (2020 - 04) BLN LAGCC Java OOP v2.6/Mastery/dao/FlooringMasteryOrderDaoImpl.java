@@ -7,15 +7,18 @@ import dto.*;
 public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
 
     FlooringMasteryStorage storage = new FlooringMasteryStorage();
+    private boolean save = true;
+    private boolean load = false;
+    private boolean refresh = true;
+    private boolean noRefresh = false;
 
     @Override
     public Order createOrder(Order order) {
-        storage.refreshData(false);
+        storage.refreshData(noRefresh);
         storage.storeOrders.put(order.getOrderNumber(), order);
         try {
             storage.findOrderByDate(order.getOrderDate());
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return order;
@@ -26,24 +29,21 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
         if (storage.storeOrders().isEmpty() == true) {
             return false;
         } else if (storage.storeOrders().isEmpty() == false) {
-            storage.dataAccess(false);
-            System.out.println(storage.storeOrders());
+            storage.dataAccess(load);
             storage.findOrderByDate(userInputOrderDate);
-            storage.dataAccess(true);
-            storage.refreshData(true);
-            System.out.println("s1aveAllOrders(): " + storage.storeOrders());
+            storage.dataAccess(save);
+            storage.refreshData(refresh);
+
             return true;
         }
         storage.refreshData(true);
-        System.out.println("2saveAllOrders(): " + storage.storeOrders());
+        // System.out.println("2saveAllOrders(): " + storage.storeOrders());
         return true;
     }
 
     @Override
     public List<Order> getAllOrders(LocalDate userInputOrderDate) throws Exception {
-        storage.refreshData(true);
-        storage.findOrderByDate(userInputOrderDate);
-        storage.dataAccess(false);
+        updateOrder(refresh, userInputOrderDate, load);
         List<Order> listOrders = new ArrayList<>(storage.storeOrders.values());
         return listOrders;
     }
@@ -51,17 +51,28 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
     @Override
     public boolean getOrderByDate(LocalDate userInputDate) {
         try {
+            System.out.println("dao: " + userInputDate);
             storage.refreshData(true);
-            storage.findOrderByDate(userInputDate);
+            if (storage.findOrderByDate(userInputDate) == null) {
+                System.out.println("SHOULD WORK");
+                return false;
+            }
         } catch (Exception e) {
     
         }
+        System.out.println("SHOULD WORK RETURNING TRUE");
         return true;
     }
 
     @Override
-    public void updateOrder(Order orderNumber) {
-
+    public void updateOrder(boolean refreshOrNot, LocalDate userInputOrderDate, boolean loadOrSave) throws Exception {
+        storage.refreshData(refreshOrNot); //true
+        storage.findOrderByDate(userInputOrderDate);
+        if (loadOrSave == load) {
+            storage.dataAccess(load); // false
+        } else if (loadOrSave == save) {
+            storage.dataAccess(save); // true
+        }
     }
 
     private void searching() {
@@ -70,23 +81,19 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
 
     @Override
     public void deleteOrder(Order orderNumber) {
-        //storage.refreshData(false);
         searching();
         try {
-            storage.findOrderByDate(orderNumber.getOrderDate());
+            updateOrder(noRefresh, orderNumber.getOrderDate(), load);
             for (Order currentOrder : storage.storeOrders.values()) {
                 if (orderNumber.getOrderNumber() == (currentOrder.getOrderNumber())) {
-                    System.out.println("before remove: " + storage.storeOrders);
                     storage.storeOrders.remove(orderNumber.getOrderNumber());
                     storage.dataAccess(true);
-                    System.out.println(storage.storeOrders);
                 } else {
-                    System.out.println(storage.storeOrders);
                     System.out.println("Order does not exist.");
                 }
             }
         } catch (Exception e) {
             
-        }     
+        }    
     }
 }

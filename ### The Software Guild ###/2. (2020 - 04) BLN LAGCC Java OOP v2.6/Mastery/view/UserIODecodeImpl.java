@@ -71,4 +71,14 @@ public class UserIODecodeImpl extends UserIOConsoleImpl {
         }
         return month;
     }
+
+    public void keyPressed(java.awt.event.KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        if (keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
+
+        }
+        if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
+
+        }
+    }
 }

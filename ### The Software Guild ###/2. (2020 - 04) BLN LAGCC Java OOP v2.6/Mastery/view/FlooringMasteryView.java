@@ -35,12 +35,17 @@ public class FlooringMasteryView {
         );
     }
 
-    public int displaySelection() {
+    public void displayInvalidSelection() {
+        io.println("Please type a number in the given range to select an option.");
+    }
+
+    public int displaySelection() throws Exception {
         int userSelect = 0;
         try {
             userSelect = io.readInt("Select by number: ");
+            
         } catch (Exception e) {
-            io.println("Please type a number in the given range to select an option.");
+            String warning = io.readString("XXX| WARNING |XXX");
         }
         return userSelect;
     }
@@ -73,7 +78,7 @@ public class FlooringMasteryView {
         io.println("---------- " + displayAddEditOrderTitle + " ORDER(S) ----------");
     }
 
-    public Order displayAddEditOrder(List<Product> listProducts) {
+    public Order displayAddEditOrder(List<Product> listProducts, List<Tax> listTaxes) {
         Order newOrder = new Order();
         if (i == 0) {
             LocalDate userInputDate = displayInputDate();
@@ -82,7 +87,7 @@ public class FlooringMasteryView {
         }
         if (i == 1) {
             String customer = decodeCustomer();
-            String customerState = decodeState();
+            String customerState = decodeState(listTaxes);
             Product userInputProduct = displayProducts(listProducts);
             BigDecimal userInputArea = decodeArea();
 
@@ -92,10 +97,6 @@ public class FlooringMasteryView {
 
             Tax newTax = new Tax();
             newTax.setState(customerState);
-            System.out.println(customerState);
-            System.out.println(customer);
-            System.out.println(userInputArea);
-            System.out.println(newProduct);
 
             newOrder.setCustomerName(customer);
             newOrder.setArea(userInputArea);
@@ -118,11 +119,11 @@ public class FlooringMasteryView {
 
     public Order displayRemoveOrder() {
         io.println("---------- REMOVE AN ORDER ----------");
-        LocalDate userInputOrderDate = displayInputDate();
+        //LocalDate userInputOrderDate = displayInputDate();
         int userInputOrderNumber = displayOrderNumber();
         io.println("\n");
         Order findOrder = new Order();
-        findOrder.setOrderDate(userInputOrderDate);
+        //findOrder.setOrderDate(userInputOrderDate);
         findOrder.setOrderNumber(userInputOrderNumber);
         return findOrder;
     }
@@ -152,7 +153,17 @@ public class FlooringMasteryView {
     //################| LOGIC |################\\
     // ORDER # \\
     public int displayOrderNumber() {
-        int orderNumber = io.readInt("\nWhat is your order number? ");
+        int orderNumber = 0;
+        boolean valid = false;
+        while(valid != true) {
+            try {
+                orderNumber = io.readInt("\nWhat is your order number? ");
+                valid = true;
+            } catch (Exception e) {
+                String warning = io.readString("Please provide a valid number.");
+                valid = false;
+            }
+        }
         return orderNumber;
     }
 
@@ -188,23 +199,38 @@ public class FlooringMasteryView {
     }
 
     // STATE \\
-    public String decodeState() {
+    public String decodeState(List<Tax> listTaxes) {
         // JUST INIT \\
         StateTaxes state = new StateTaxes();
         String stateName = "";
         boolean validationState = false;
+
+        io.println("\n#################################");
+        io.println("State | TaxRate" + "\n=================================");
+        listTaxes.stream().forEach((t) -> {
+            io.print(t.getState() + " ||| ");
+            // io.print("$" + t.getCostPerSquareFoot() + " ||| ");
+            io.println(t.getTaxRate() + " ||| ");
+        });
+        io.println("#################################");
+
         // STATE VALIDATION \\
-        // while(validationState != true) {
-        try {
-            stateName = io.readString("\nState" + EDIT + ": ");
-            stateName = decode.stateFormat(stateName);
-            States validateState = state.stringToState(stateName);
-            // System.out.println(validateState);
-        } catch (Exception e) {
-            io.println("Please put in a valid state.");
-            // validationState = false;
+        while (validationState != true) {
+            stateName = io.readString("State" + EDIT + ": ");
+            for (Tax currentTax : listTaxes) {
+                if (stateName.toUpperCase().equals(currentTax.getState())) {
+                    validationState = true;
+                } 
+            }
+            try {
+                stateName = decode.stateFormat(stateName);
+                States validateState = state.stringToState(stateName);
+                // System.out.println(validateState);
+            } catch (Exception e) {
+                io.println("Please put in a valid state.");
+                validationState = false;
+            }
         }
-        // }
         return stateName;
     }
 
@@ -217,21 +243,23 @@ public class FlooringMasteryView {
             io.print("$" + p.getCostPerSquareFoot() + " ||| ");
             io.println("$" + p.getLaborCostPerSquareFoot() + " ||| ");
         });
-        io.println("#################################\n");
+        io.println("#################################");
 
         // PRODUCT TYPE \\
         BigDecimalMath math = new BigDecimalMath();
         BigDecimal costPerSquareFoot = new BigDecimal(0);
         String userInputProductType = "";
+        boolean validateProduct = false;
 
         // PRODUCT: MATCH IN THE SYSTEM \\
-        for (Product currentProduct : listProducts) {
-            while (!userInputProductType.equals(currentProduct.getProductType())) {
-                userInputProductType = io.readString("Please choose a valid product type" + EDIT + ": ");
-                userInputProductType = decode.nameFormat(userInputProductType, 0);
+        while (validateProduct != true) {
+            userInputProductType = io.readString("Please choose a valid product type" + EDIT + ": ");
+            userInputProductType = decode.nameFormat(userInputProductType, 0);
+            for (Product currentProduct : listProducts) {
                 if (userInputProductType.equals(currentProduct.getProductType())) {
                     costPerSquareFoot = math.calculate(MathOperator.MULTIPLY, decodeArea(),
                             currentProduct.getCostPerSquareFoot());
+                    validateProduct = true;
                     return currentProduct;
                 }
             }
@@ -258,5 +286,9 @@ public class FlooringMasteryView {
 
 	public void displayPleaseAddOrderFirst() {
         io.println("Could not find an order to edit. Please add an order before you edit.");
+	}
+
+	public void displayUnavailableState() {
+        io.println("You're not qualified to make a purchase in your state.");
 	}
 }

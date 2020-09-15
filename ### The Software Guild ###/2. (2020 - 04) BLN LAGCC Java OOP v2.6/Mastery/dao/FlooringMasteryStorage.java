@@ -31,10 +31,7 @@ public class FlooringMasteryStorage {
             //refreshData(true);
             loadData();
         } else if (loadOrSave == true) {
-            if (!storeOrders.isEmpty()) {
-
-                saveData();
-            }
+            saveData();
         }
         //System.out.println("There are " + orderFiles.size() + " existing orders.");
         return true;
@@ -50,14 +47,22 @@ public class FlooringMasteryStorage {
     }
 
     public LocalDate findOrderByDate(LocalDate userInputOrderDate) throws Exception { 
-        doesFileExist(userInputOrderDate);
+        System.out.println("findOre" + userInputOrderDate);
+        if (doesFileExist(userInputOrderDate) == null) {
+            System.out.println("returning null storage");
+            return null;
+        }
+        System.out.println("returning true storage");
         return userInputOrderDate;
     }
 
     private void importFiles() throws Exception {
+        System.out.println("importFiles()");
         // STREAM FILES IN DIRECTORY
         Path findExistingFile = Paths.get("Orders\\");
-        Stream<Path> subPath = Files.walk(findExistingFile);
+        System.out.println(orderFiles);
+        Stream<Path> subPath = Files.walk(findExistingFile); //
+        System.out.println(orderFiles);
         orderFiles = subPath.filter(Files::isRegularFile)
             .map(Objects::toString)
             .collect(Collectors.toList());
@@ -97,6 +102,7 @@ public class FlooringMasteryStorage {
                 System.out.println("File has been found.");
             // CREATE A NEW FILE
             } else if (!formattedDate.equals(currentFile)) {
+                System.out.println("File has not been found.");
                 fileOrders = new File(formattedDate);
                 return null;
             }
@@ -109,6 +115,7 @@ public class FlooringMasteryStorage {
     }
 
     private void saveData() throws Exception {
+        System.out.println("saving");
         PrintWriter writeFile = new PrintWriter(new BufferedWriter(new FileWriter(fileOrders, false)));
         Collection<Order> storeOrdersValues = storeOrders.values();
         // System.out.println("Saving " + fileOrders + "...");
@@ -165,7 +172,9 @@ public class FlooringMasteryStorage {
                 }
             } else {
                 System.out.println("The file is empty.");
+                deleteFile();
             }
+            readFile.close();
         } catch (Exception e) {}
     }
     private Order unmarshallData(String currentLine) {
@@ -213,4 +222,15 @@ public class FlooringMasteryStorage {
         return ordersFromFile;
     }
 
+    public void deleteFile() throws Exception {
+        Scanner readFile = new Scanner(new BufferedReader(new FileReader("Orders\\test.txt")));
+        System.out.println("running edeltingd");
+        if (fileOrders.exists()) {
+            System.out.println("running edeltingd");
+            if (readFile.hasNextLine() != true) {
+                System.out.println("running edeltingd");
+                fileOrders.delete();
+            }
+        }
+    }
 }

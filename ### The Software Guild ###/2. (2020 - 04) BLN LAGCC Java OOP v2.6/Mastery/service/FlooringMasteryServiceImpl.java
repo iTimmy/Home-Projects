@@ -2,6 +2,7 @@ package service;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.*;
 import dto.*;
@@ -11,9 +12,7 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
 
     FlooringMasteryOrderDao orderDao = new FlooringMasteryOrderDaoImpl();
     FlooringMasteryProductDao productDao = new FlooringMasteryProductDaoImpl();
-    FlooringMasteryTaxDao taxDao;
-
-    //private int staticOrderNumber = 0;
+    FlooringMasteryTaxDao taxDao = new FlooringMasteryTaxDaoImpl();
 
     /*
     public FlooringMasteryServiceImpl(FlooringMasteryOrderDao order, FlooringMasteryProductDao product, FlooringMasteryTaxDao tax) {
@@ -23,11 +22,7 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     } */
  
     private BigDecimal roundBigDecimal(BigDecimal decimal) {
-        int countPlaces = String.valueOf(decimal).length() + 2;
-
-        MathContext mc = new MathContext(countPlaces);
-        BigDecimal roundedBigDecimal = decimal.round(mc);
-        
+        BigDecimal roundedBigDecimal = decimal.setScale(2, RoundingMode.CEILING);
         return roundedBigDecimal;
     }
 
@@ -47,7 +42,13 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
         BigDecimal costPerSquareFoot = order.getProduct().getCostPerSquareFoot();
 
         String stateName = order.getTax().getState();
-        BigDecimal taxRate = roundBigDecimal(state.fetchStateTax(stateName));
+        Tax storedTax = getTaxByState(stateName);
+            if (storedTax == null) {
+                return null;
+            }
+
+        BigDecimal customerStateTaxRate = roundBigDecimal(state.fetchStateTax(stateName));
+        BigDecimal taxRate = roundBigDecimal(storedTax.getTaxRate());
 
         BigDecimal taxPercentage = new BigDecimal(100).round(mc);
  
@@ -59,7 +60,7 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
         order.getProduct().setCostPerSquareFoot(costPerSquareFoot);
         order.getProduct().setLaborCostPerSquareFoot(laborCostPerSquareFoot);
         order.getTax().setTaxRate(taxRate);
-        //System.out.println("Static order number: " + staticOrderNumber);
+
         order.setOrderNumber(generateOrderNumber());
         order.setMaterialCost(materialCost);
         order.setLaborCost(laborCost);
@@ -90,8 +91,10 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     @Override
     public boolean getOrderByDate(LocalDate userInputDate) {
         if (orderDao.getOrderByDate(userInputDate) != true) {
+            System.out.println("does not exist");
             return false;
         } else {
+            System.out.print("exist" + userInputDate);
             return true;
         }
     }
@@ -138,8 +141,6 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     private int generateOrderNumber() throws NumberFormatException {
         double generateOrderNumber = Math.random() * 100;
         int newOrderNumber = (int)generateOrderNumber;
-        //staticOrderNumber = newOrderNumber;
-        // System.out.println("Static order number from generated: " + staticOrderNumber);
         return newOrderNumber;
     }
 }

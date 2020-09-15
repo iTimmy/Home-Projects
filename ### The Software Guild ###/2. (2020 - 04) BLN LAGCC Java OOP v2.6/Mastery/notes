@@ -1,8 +1,22 @@
-Edit Order: 
-After you edit, you cannot save that
+DELETE TEXT FILE IF EMPTY
 
-Remove Order: 
-Cannot remove the last order in the txt file, figure out why and solve
+FIX THE DIFFERENCE BETWEEN STATE INVALID & STATE UNAVAILABLE
 
-finish tax txt
-make a proper method to Format BigDecimal.
+VALIDATION:
+Order of date does not exist if you try to display or remove an order from that file
+When adding to a new file, there are two of the fucking same IDs. Why?
+When you display, then add, it adds the new customer and the ones displayed. Why?
+
+
+
+BONUS:
+KeyCodes for ESC and ENTER...
+See if you can make export data not make duplicates or set order ID to be unique.
+
+I feel like I could've implemented this in a better way where the order number
+is assigned right when the user adds an order, but rather, the order number is
+generated when the user exports the order (which is in when it goes through the service layer).
+Because in this way, when the user decides to edit their order, they can see the order number
+associated with the customer, so that if there are other orders with the same name
+as displayed in the console, they would know which customer name that they are editing.
+But for the sake of time and getting this project done, I may leave this out for a few.

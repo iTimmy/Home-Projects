@@ -46,7 +46,8 @@ public class FlooringMasteryController {
                     quit();
                     break;
                 default:
-                    System.out.println("ok");
+                    view.displayInvalidSelection();
+                    break;
             }
         }
     }
@@ -64,12 +65,13 @@ public class FlooringMasteryController {
     public void addOrder() {
         // DISPLAY PRODUCTS \\
         List<Product> listProducts = service.getAllProducts();
+        List<Tax> listTaxes = service.getAllTaxes();
         // TOGGLES ADD OR EDIT MODE \\
         view.displayAddEditOrderTitle();
         if (editMode == true) {
             saveOrderDate = newOrder.getOrderDate();
         }
-        newOrder = view.displayAddEditOrder(listProducts);
+        newOrder = view.displayAddEditOrder(listProducts, listTaxes);
         if (editMode == true) {
             newOrder.setOrderDate(saveOrderDate);
         }
@@ -91,7 +93,9 @@ public class FlooringMasteryController {
         if (newOrder.getOrderDate() == null) {
             view.displayPleaseAddOrderFirst();
         } else {
-            displayOrders();
+            List<Order> listOrders = service.getAllOrders(newOrder.getOrderDate());
+            view.displayDisplayOrders(listOrders);
+            // displayOrders();
             selectedFileToDisplay();
             view.triggerEdit();
             editMode = true;
@@ -100,9 +104,20 @@ public class FlooringMasteryController {
     }
 
     public void removeOrder() {
+        boolean valid = false;
+        while(valid != true) {
+            LocalDate findOrderDate = view.displayInputDate();
+            if (service.getOrderByDate(findOrderDate) == false) {
+                System.out.println("This file order doesn't exist.");
+                valid = false;
+            } else if (service.getOrderByDate(findOrderDate) == true) {
+                valid = true;
+            }
+        }
         Order findOrder = view.displayRemoveOrder();
         searching();
         service.deleteOrder(findOrder);
+        valid = true;
     }
 
     public void selectedFileToDisplay() {
@@ -120,12 +135,15 @@ public class FlooringMasteryController {
         // SERVICE \\
         if (newOrder.getOrderDate() != null) {
             selectedFileToDisplay();
+            if (service.createOrder(newOrder) == null) {
+                view.displayUnavailableState();
+            } 
             service.createOrder(newOrder);
         }
-        view.displaySaveProgress();
         if (service.saveAllOrders(newOrder.getOrderDate()) == false) {
             view.displayExportAllDataErrorMSG();
-        } else if (service.saveAllOrders(newOrder.getOrderDate()) == true) {
+        } else {
+            view.displaySaveProgress();
             view.displaySuccess();
         }
     }

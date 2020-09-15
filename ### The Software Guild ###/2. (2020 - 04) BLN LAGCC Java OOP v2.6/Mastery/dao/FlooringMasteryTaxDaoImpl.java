@@ -12,21 +12,30 @@ public class FlooringMasteryTaxDaoImpl implements FlooringMasteryTaxDao {
 
     @Override
     public List<Tax> getAllTaxes() {
+        try {
+            loadTaxes();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         List<Tax> listTaxes = new ArrayList<Tax>(storeTax.values());
         return listTaxes;
     }
 
     @Override
     public Tax getTaxByState(String state) {
+        // System.out.println(state);
         try {
+            // System.out.println("trying");
             if (storeTax.isEmpty() == true) {
+                // System.out.println("tax Loading...");
                 loadTaxes();
-            } else if (storeTax.isEmpty() == false) {
-                storeTax.get(state);
+                // System.out.println(storeTax);
+                // System.out.println("if not empty: " + storeTax.get(state).getState());
             }
         } catch (Exception e) {
             System.out.println("Error.");
         }
+        // System.out.println("returning");
         return storeTax.get(state);
     }
 
@@ -36,7 +45,7 @@ public class FlooringMasteryTaxDaoImpl implements FlooringMasteryTaxDao {
         while(readFile.hasNextLine()) {
             currentLine = readFile.nextLine();
             Tax currentTax = unmarshallTaxes(currentLine);
-            storeTax.put(currentLine, currentTax);
+            storeTax.put(currentTax.getState(), currentTax);
         }
     }
     private Tax unmarshallTaxes(String currentLine) {
