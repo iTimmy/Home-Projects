@@ -1,0 +1,68 @@
+<html>
+    <body>
+        <div class="container">
+            <div class="row m-4">
+                <div class="col text-center border border-dark">
+                    <h1><a href="/" class="text-dark">Course Manager</a></h1>
+                </div>
+            </div>
+            <div class="row m-4 border border-dark">
+                <div class="col text-center m-3">
+                    <a href="teachers" class="btn btn-outline-primary btn-lg">Teachers</a>
+                </div>
+                <div class="col text-center m-3">
+                    <a href="students" class="btn btn-outline-primary btn-lg">Students</a>
+                </div>
+                <div class="col text-center m-3">
+                    <a href="courses" class="btn btn-outline-primary btn-lg">Courses</a>
+                </div>
+            </div>
+            <div class="row m-4 border border-dark">
+                <div class="col-3 text-center m-3">
+                    <span class="h3">Edit Course</span>
+                </div>
+                <div class="col-7 text-center m-3">
+                    <form action="editCourse" method="POST">
+                        <div class="form-group row">
+                            <label for="name" class="col-3 col-form-label">Name</label>
+                            <div class="col-9">
+                                <input type="text" name="name" id="name" class="form-control" th:value="${course.name}" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="description" class="col-3 col-form-label">
+                                Description</label>
+                            <div class="col-9">
+                                <input type="text" name="description" id="description" class="form-control"
+                                    th:value="${course.description}" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="teacher" class="col-3 col-form-label">Teacher</label>
+                            <div class="col-9">
+                                <select id="teacher" name="teacherId" class="form-control">
+                                    <option th:each="teacher : ${teachers}" th:value="${teacher.id}" th:text="${teacher.firstName + ' ' 
+                                                        + teacher.lastName}" th:selected="${course.teacher.id == teacher.id}">
+                                        Teacher Name</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="students" class="col-3 col-form-label">Students</label>
+                            <div class="col-9">
+                                <select multiple id="students" name="studentId" class="form-control">
+                                    <option th:each="student : ${students}" th:value="${student.id}" th:text="${student.firstName + ' ' 
+                                                        + student.lastName}"
+                                        th:selected="${course.students.contains(student)}">
+                                        Student Name</option>
+                                </select>
+                            </div>
+                        </div>
+                        <input type="hidden" name="id" th:value="${course.id}" />
+                        <button type="submit" class="btn btn-primary">Edit Course</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -17,8 +17,12 @@ import org.springframework.stereotype.Component;
 public class DVDView {
 
     //@Autowired
-    private UserIO io = new UserIOImpl();
+    private UserIO io;
     DVD dvd = new DVD();
+    
+    public DVDView (UserIO io) {
+        this.io = io;
+    }
     
     // ------DISPLAY------
     public int display() {

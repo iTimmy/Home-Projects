@@ -14,13 +14,11 @@ public class DVDController {
     // @Autowired
     private DVDView view;
     private DVDdao dao;
-
-    /*
-    public DVDController(DVDdao dao, DVDView view) {
-        this.dao = dao;
+    
+    public DVDController(DVDView view, DVDdao dao) {
         this.view = view;
+        this.dao = dao;
     }
-    */
 
     public void run() throws Exception {
         int select = 0;
@@ -92,10 +90,12 @@ public class DVDController {
         String editedDVD = view.inputDVD();
         DVD edit = dao.getDVD(editedDVD);
         if (edit != null) {
+            // logic belongs in dao
             dao.deleteDVD(editedDVD);
             edit = view.displayEditDVD(edit);
             dao.addDVD(edit.getTitle(), edit);
             System.out.println("finished");
+            // ----------------
             //dao.updateDVD(edit);
         } else {
             view.displayValidation();
@@ -130,7 +130,7 @@ public class DVDController {
     }
 
     private void loadDVD() throws Exception {
-        dao.updateDVD();
+        //dao.updateDVD();
     }
 
     private void termination() {

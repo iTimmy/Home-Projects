@@ -1,4 +1,0 @@
-PRINGLES :: 2.50 :: 10
-JUST FOOD :: 1000.0 :: 10
-SODA :: 2.50 : 10
-PIZZA :: 1.00 : 40

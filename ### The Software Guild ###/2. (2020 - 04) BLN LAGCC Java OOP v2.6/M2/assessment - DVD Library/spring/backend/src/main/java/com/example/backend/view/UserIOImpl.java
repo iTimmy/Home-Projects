@@ -12,7 +12,7 @@ public class UserIOImpl implements UserIO {
     Scanner scan = new Scanner(System.in);
 
     public void print(String message) {
-        System.out.print(message);
+        System.out.println(message);
     }
 
     public void println(String message) {

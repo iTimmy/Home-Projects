@@ -11,7 +11,7 @@ public interface DVDdao {
 
     DVD getDVD(String title) throws Exception;
 
-    void updateDVD() throws Exception;
+    void updateDVD(String dvd) throws Exception;
 
     DVD deleteDVD(String dvd) throws Exception;
     

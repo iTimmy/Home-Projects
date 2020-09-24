@@ -18,7 +18,6 @@ public class DaoImpl implements DVDdao {
     // @Autowired
     Map<String, DVD> storeDVD = new HashMap<>();
     List<String> DVDKeys = new ArrayList(storeDVD.keySet());
-    Map<String, String> storeeDVD = new HashMap<>();
     List<DVD> DVDValueList = new ArrayList(storeDVD.values());
 
     // Set<DVD> storeDVDkeys = storeDVD.keySet();
@@ -65,16 +64,13 @@ public class DaoImpl implements DVDdao {
 
     // U - Update \\
     @Override
-    public void updateDVD() throws Exception {
-        loadDVD();
-    }
-
-    public void updateDVD(String dvd) throws Exception {
+    public void updateDVD(String dvd) throws Exception { // take in dvd obj
         DVD replaceDVD = new DVD();
         replaceDVD = new DVD(replaceDVD.getTitle(), replaceDVD.getReleaseDate(), replaceDVD.getDirectorName(),
                 replaceDVD.getRating(), replaceDVD.getNotes());
         storeDVD.replace(dvd, replaceDVD);
     }
+ // -----------------------   
 
     // D - Delete \\
     @Override

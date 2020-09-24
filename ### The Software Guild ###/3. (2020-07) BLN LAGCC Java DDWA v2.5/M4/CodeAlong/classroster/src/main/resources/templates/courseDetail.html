@@ -1,0 +1,51 @@
+<html>
+    <body>
+        <div class="container">
+            <div class="row m-4">
+                <div class="col text-center border border-dark">
+                    <h1><a href="/" class="text-dark">Course Manager</a></h1>
+                </div>
+            </div>
+            <div class="row m-4 border border-dark">
+                <div class="col text-center m-3">
+                    <a href="teachers" class="btn btn-outline-primary btn-lg">Teachers</a>
+                </div>
+                <div class="col text-center m-3">
+                    <a href="students" class="btn btn-outline-primary btn-lg">Students</a>
+                </div>
+                <div class="col text-center m-3">
+                    <a href="courses" class="btn btn-outline-primary btn-lg">Courses</a>
+                </div>
+            </div>
+            <div class="row m-4 border border-dark">
+                <div class="col-6 text-right"><strong>ID</strong></div>
+                <div class="col-6 text-left">
+                    <span th:text="${course.id}">display id</span>
+                </div>
+        
+                <div class="col-6 text-right"><strong>Name</strong></div>
+                <div class="col-6 text-left">
+                    <span th:text="${course.name}">display name</span>
+                </div>
+        
+                <div class="col-6 text-right"><strong>Description</strong></div>
+                <div class="col-6 text-left">
+                    <span th:text="${course.description}">display description</span>
+                </div>
+                <div class="col-6 text-right"><strong>Teacher</strong></div>
+                <div class="col-6 text-left">
+                    <span th:text="${course.teacher.firstName + ' ' + 
+                                  course.teacher.lastName + ' - ' + 
+                                  course.teacher.specialty}">display teacher</span>
+                </div>
+                <div class="col-6 text-right"><strong>Students</strong></div>
+                <div class="col-6 text-left">
+                    <span th:each="student : ${course.students}">
+                        <span th:text="${student.firstName + ' ' + student.lastName}">
+                            display student</span><br />
+                    </span>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
