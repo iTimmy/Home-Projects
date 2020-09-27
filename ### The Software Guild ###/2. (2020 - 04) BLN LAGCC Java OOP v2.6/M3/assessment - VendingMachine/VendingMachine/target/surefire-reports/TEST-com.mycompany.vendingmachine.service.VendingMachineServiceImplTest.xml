@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="1" failures="0" name="com.mycompany.vendingmachine.service.VendingMachineServiceImplTest" time="0.014" errors="0" skipped="0">
+<testsuite tests="1" failures="0" name="com.mycompany.vendingmachine.service.VendingMachineServiceImplTest" time="0.02" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="java.vm.version" value="14.0.2+12-46"/>
     <property name="sun.boot.library.path" value="I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin"/>
-    <property name="maven.multiModuleProjectDirectory" value="C:\Users\Music Account\Desktop\VendingMachine"/>
+    <property name="maven.multiModuleProjectDirectory" value="I:\C0De\---Home-Projects---\Home-Projects\### The Software Guild ###\2. (2020 - 04) BLN LAGCC Java OOP v2.6\M3\assessment - VendingMachine\VendingMachine"/>
     <property name="java.vm.vendor" value="Oracle Corporation"/>
     <property name="java.vendor.url" value="https://java.oracle.com/"/>
     <property name="guice.disable.misplaced.annotation.check" value="true"/>
@@ -14,9 +14,8 @@
     <property name="user.script" value=""/>
     <property name="user.country" value="US"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
-    <property name="test" value="com.mycompany.vendingmachine.service.VendingMachineServiceImplTest"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="user.dir" value="C:\Users\Music Account\Desktop\VendingMachine"/>
+    <property name="user.dir" value="I:\C0De\---Home-Projects---\Home-Projects\### The Software Guild ###\2. (2020 - 04) BLN LAGCC Java OOP v2.6\M3\assessment - VendingMachine\VendingMachine"/>
     <property name="java.vm.compressedOopsMode" value="32-bit"/>
     <property name="java.runtime.version" value="14.0.2+12-46"/>
     <property name="os.arch" value="amd64"/>
@@ -45,7 +44,7 @@
     <property name="java.class.path" value="I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven\bin\..\boot\plexus-classworlds-2.6.0.jar"/>
     <property name="java.vm.specification.version" value="14"/>
     <property name="sun.arch.data.model" value="64"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher -Dtest=com.mycompany.vendingmachine.service.VendingMachineServiceImplTest -Dmaven.ext.class.path=I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven-nblib\netbeans-eventspy.jar -Dfile.encoding=UTF-8 test-compile surefire:test"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher -Dmaven.ext.class.path=I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven-nblib\netbeans-eventspy.jar -Dfile.encoding=UTF-8 clean install"/>
     <property name="java.home" value="I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK"/>
     <property name="user.language" value="en"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
@@ -60,5 +59,5 @@
     <property name="sun.cpu.endian" value="little"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="com.mycompany.vendingmachine.service.VendingMachineServiceImplTest" name="testMoneyCalculation" time="0.014"/>
+  <testcase classname="com.mycompany.vendingmachine.service.VendingMachineServiceImplTest" name="testMoneyCalculation" time="0.02"/>
 </testsuite>

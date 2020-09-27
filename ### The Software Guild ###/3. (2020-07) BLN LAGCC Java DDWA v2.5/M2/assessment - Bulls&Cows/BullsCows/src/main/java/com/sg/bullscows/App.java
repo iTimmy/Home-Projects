@@ -13,7 +13,7 @@ import com.sg.bullscows.controller.*;
  *
  * @author timmy
  */
-@SpringBootApplication
+//@SpringBootApplication
 public class App {
 
     public static void main(String[] args) {

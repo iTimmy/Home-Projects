@@ -27,7 +27,7 @@ public class GameDaoDB implements GameDao {
     }
     
     @GetMapping("/{id}")
-    public Game getGameByID(Game game) {
+    public Game getGameByID(int gameID) {
         throw new UnsupportedOperationException(".");
     }
 
@@ -36,5 +36,13 @@ public class GameDaoDB implements GameDao {
         double generatedAnswer = Math.random() * 100;
         int answer = (int)generatedAnswer;
         return answer;
+    }
+
+    private void saveGame() {
+
+    }
+
+    private void loadGame() {
+
     }
 }

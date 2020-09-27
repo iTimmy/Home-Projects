@@ -5,6 +5,15 @@ public class Game {
     private int userID;
     private String answers; 
     private boolean isFinished;
+    private Round round;
+
+    public Round getRound() {
+        return round;
+    }
+
+    public void setRound(Round round) {
+        this.round = round;
+    }
 
     public int getGameID() {
         return gameID;
@@ -31,7 +40,7 @@ public class Game {
         this.answers = answers;
     }
 
-    public boolean isIsFinished() {
+    public boolean getIsFinished() {
         return isFinished;
     }
 

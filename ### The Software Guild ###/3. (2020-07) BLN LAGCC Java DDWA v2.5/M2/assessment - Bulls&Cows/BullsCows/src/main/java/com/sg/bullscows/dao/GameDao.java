@@ -14,5 +14,5 @@ import com.sg.bullscows.dto.*;
 public interface GameDao {
     void beginGame();
     List<Game> getAllGames();
-    Game getGameByID(Game game);
+    Game getGameByID(int gameID);
 }

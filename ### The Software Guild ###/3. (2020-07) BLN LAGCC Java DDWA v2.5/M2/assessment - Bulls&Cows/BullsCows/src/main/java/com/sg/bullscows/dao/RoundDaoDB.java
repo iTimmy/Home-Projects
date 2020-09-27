@@ -29,4 +29,12 @@ public class RoundDaoDB implements RoundDao {
     public List<Round> getAllRoundsByGame(Game game) {
         throw new UnsupportedOperationException(".");
     }
+
+    private void saveRound() {
+
+    }
+    
+    private void loadRound() {
+        
+    }
 }

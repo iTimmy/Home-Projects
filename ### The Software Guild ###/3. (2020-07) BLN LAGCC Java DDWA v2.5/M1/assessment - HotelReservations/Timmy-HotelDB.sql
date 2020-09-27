@@ -17,12 +17,20 @@ PhoneNumber char(10) NOT NULL
 
 create table if not exists RoomType (
 RoomTypeID int PRIMARY KEY NOT NULL auto_increment,
-RoomNumber int NOT NULL,
 RoomTypeName char(6) NOT NULL,
 StandardOccupancy int NOT NULL,
 MaximumOccupancy int NOT NULL,
 ExtraPerson decimal (4,2) NULL,
-BasePrice decimal(5,2) NOT NULL
+BasePrice decimal(5,2) NOT NULL,
+RoomNumber int NOT NULL,
+FOREIGN KEY (RoomNumber) REFERENCES Room(RoomNumber)
+);
+
+create table if not exists Room (
+RoomID int NOT NULL PRIMARY KEY,
+RoomTypeID int NOT NULL,
+RoomNumber int NOT NULL,
+FOREIGN KEY (RoomTypeID) REFERENCES RoomType(RoomTypeID)
 );
 
 create table if not exists Amenities (
@@ -40,7 +48,9 @@ Adults int NOT NULL,
 Children int NULL,
 TotalRoomCost decimal(6,2) NOT NULL,
 GuestID int not null,
-RoomID int not null
+RoomID int not null,
+FOREIGN KEY (RoomID) REFERENCES Room(RoomID),
+FOREIGN KEY (GuestID) REFERENCES Guest(GuestID)
 );
 
 ALTER TABLE `Reservation` 
