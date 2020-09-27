@@ -15,22 +15,19 @@
           http://www.springframework.org/schema/aop  
           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
-    <bean id="io" class="com.sg.vendingmachine.view.UserIOConsoleImpl"/>
-    <bean id="dao" class="com.sg.vendingmachine.dao.VendingMachineDaoImpl"/>
+    <bean id="io" class="com.sg.flooringmastery.view.UserIOConsoleImpl"/>
+    <bean id="decode" class="com.sg.flooringmastery.view.UserIODecodeImpl"/>
+    <bean id="dao" class="com.sg.flooringmastery.dao.FlooringMasteryOrderDaoImpl"/>
      
-    <bean id="view" class="com.sg.vendingmachine.view.VendingMachineView">
+    <bean id="view" class="com.sg.flooringmastery.view.FlooringMasteryView">
         <constructor-arg ref="io" />
-    </bean>
-    
-    <bean id="auditDao" 
-         class="com.sg.vendingmachine.dao.VendingMachineAuditDaoImpl"/>
-
-    <bean id="service" class="com.sg.vendingmachine.service.VendingMachineServiceImpl">
-        <constructor-arg ref="dao" />
-        <constructor-arg ref="auditDao" />
+        <constructor-arg ref="decode"/>
     </bean>
 
-    <bean id="controller" class="com.sg.vendingmachine.controller.VendingMachineController">
+    <bean id="service" class="com.sg.flooringmastery.service.FlooringMasteryServiceImpl">
+    </bean>
+
+    <bean id="controller" class="com.sg.flooringmastery.controller.FlooringMasteryController">
         <constructor-arg ref="service" />
         <constructor-arg ref="view" />
     </bean>
