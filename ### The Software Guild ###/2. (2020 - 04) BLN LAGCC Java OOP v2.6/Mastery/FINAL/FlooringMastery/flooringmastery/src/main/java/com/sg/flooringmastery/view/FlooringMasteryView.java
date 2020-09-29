@@ -20,13 +20,13 @@ public class FlooringMasteryView {
     String displayAddEditOrderTitle = "ADD";
 
     public void displayCurrentOrder(Order newOrder) {
-        io.println("==================================\n" +
+        io.println("===============================================\n" +
         newOrder.getOrderDate() + " | " +
         newOrder.getCustomerName() + " | " +
         newOrder.getTax().getState() + " | " +
         newOrder.getProduct().getProductType() + " | " +
         newOrder.getArea() +
-        "\n=================================="
+        "\n==============================================="
         );
     }
 
@@ -61,10 +61,8 @@ public class FlooringMasteryView {
         return userSelect;
     }
 
-    public LocalDate displayDisplayOrdersTitle() {
+    public void displayDisplayOrdersTitle() {
         io.println("---------- DISPLAY ORDERS ----------");
-        LocalDate userInputOrderDate = displayInputDate();
-        return userInputOrderDate;
     }   
 
     public void displayDisplayOrders(List<Order> listOrderDetails) {
@@ -109,8 +107,8 @@ public class FlooringMasteryView {
             Tax newTax = new Tax();
             newTax.setState(customerState);
 
-            newOrder.setCustomerName(customer);
             newOrder.setArea(userInputArea);
+            newOrder.setCustomerName(customer);
             newOrder.setProduct(newProduct);
             newOrder.setTax(newTax);
         }
@@ -119,6 +117,8 @@ public class FlooringMasteryView {
             EDIT = "";
             displayAddEditOrderTitle = "ADD";
         }
+
+        io.println("\n______________\nData collected.");
         return newOrder;
     }
 
@@ -202,6 +202,24 @@ public class FlooringMasteryView {
         return orderOfDate;
     }
 
+    public LocalDate displayExistingInputDate() {
+        // INIT \\
+        int valid = 0;
+        LocalDate orderOfDate = LocalDate.now();
+        // LOGIC \\
+        while (valid != 1) {
+            try {
+                String date = io.readString("\nProvide the date of your order (yyyy-MMM-dd): ");
+                orderOfDate = decode.dateFormat(date);
+                valid = 1;
+            } catch (Exception e) {
+                io.println("xxxxxx Invalid date format! xxxxxx ");
+                valid = 0;
+            }
+        }
+        return orderOfDate;
+    }
+
     // CUSTOMER \\
     public String decodeCustomer() {
         String customerName = io.readString("\nCustomer Name" + EDIT + ": ");
@@ -225,22 +243,37 @@ public class FlooringMasteryView {
         });
         io.println("#################################");
 
+        int errorCode = 0;
         // STATE VALIDATION \\
         while (validationState != true) {
             stateName = io.readString("State" + EDIT + ": ");
-            for (Tax currentTax : listTaxes) {
-                if (stateName.toUpperCase().equals(currentTax.getState())) {
-                    validationState = true;
-                } 
-            }
+            stateName = decode.stateFormat(stateName);
+            States validateState = state.stringToState(stateName);
             try {
-                stateName = decode.stateFormat(stateName);
-                States validateState = state.stringToState(stateName);
-                // System.out.println(validateState);
+                for (Tax currentTax : listTaxes) {
+                    if (stateName.toUpperCase().equals(currentTax.getState())) {
+                        validationState = true;
+                    } else if (stateName.toUpperCase().length() != 2) {
+                        errorCode = 1;
+                    } else if (!stateName.toUpperCase().equals(currentTax.getState()) &&
+                    stateName.toUpperCase().equals(validateState.toString())) {
+                        errorCode = 2;
+                    } else if (!stateName.toUpperCase().equals(validateState.toString())) {
+                        errorCode = 3;
+                    }
+                }
+                // System.out.println(errorCode);
+                if (errorCode == 1) {
+                    io.println("Please abbreviate your state.");
+                } else if (errorCode == 2) {
+                    io.println("Your state is not eligible for purchase.");
+                } else if (errorCode == 3) {
+                    io.println("Please put in a valid state.");
+                }
             } catch (Exception e) {
                 io.println("Please put in a valid state.");
-                validationState = false;
             }
+
         }
         return stateName;
     }
@@ -258,7 +291,6 @@ public class FlooringMasteryView {
 
         // PRODUCT TYPE \\
         BigDecimalMath math = new BigDecimalMath();
-        BigDecimal costPerSquareFoot = new BigDecimal(0);
         String userInputProductType = "";
         boolean validateProduct = false;
 
@@ -268,8 +300,6 @@ public class FlooringMasteryView {
             userInputProductType = decode.nameFormat(userInputProductType, 0);
             for (Product currentProduct : listProducts) {
                 if (userInputProductType.equals(currentProduct.getProductType())) {
-                    costPerSquareFoot = math.calculate(MathOperator.MULTIPLY, decodeArea(),
-                            currentProduct.getCostPerSquareFoot());
                     validateProduct = true;
                     return currentProduct;
                 }
@@ -280,17 +310,24 @@ public class FlooringMasteryView {
 
     // AREA \\
     public BigDecimal decodeArea() {
+        boolean isValid = false;
         MathContext mc = new MathContext(4);
         double areaSize = 0;
         // AREA \\
-        while (areaSize < 100) {
-            areaSize = io.readDouble("\nArea ft^2" + EDIT + ": ");
-            if (areaSize < 100) {
-                io.println("The minimum size is 100(sq ft.)\nPlease choose an area size that is greater.");
-            } else if (areaSize > 100) {
-                io.println("\n______________\nData collected.");
+        while(isValid != true) {
+            try {
+                areaSize = io.readDouble("\nArea ft^2" + EDIT + ": ");
+                if (areaSize < 100) {
+                    io.println("The minimum size is 100(sq ft.)\nPlease choose an area size that is greater.");
+                    isValid = false;
+                } else if (areaSize > 100) {
+                    isValid = true;
+                }
+            } catch (Exception e) {
+                String warning = io.readString("Please put in a valid number.");
             }
         }
+
         BigDecimal area = new BigDecimal(areaSize).round(mc);
         return area;
     }
@@ -301,6 +338,10 @@ public class FlooringMasteryView {
 
 	public void displayUnavailableState() {
         io.println("You're not qualified to make a purchase in your state.");
+	}
+
+	public void displayDoesNotExist() {
+        io.println("Data does not exist.");
 	}
 
 }

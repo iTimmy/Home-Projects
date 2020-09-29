@@ -7,12 +7,23 @@ import java.io.FileReader;
 import java.math.BigDecimal;
 
 import com.sg.flooringmastery.dto.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlooringMasteryProductDaoImpl implements FlooringMasteryProductDao {
 
+    @Autowired
     Map<String, Product> storeProduct = new HashMap<>();
-    File fileProducts = new File("Data/Products/Products.txt");
+    private String file = "Data/Products/Products.txt";
+    File fileProducts = new File(file);
 
+//    @Autowired
+//    public FlooringMasteryProductDaoImpl() {
+//        this.file = "Data/Products/Products.txt";
+//    }
+//    public FlooringMasteryProductDaoImpl(String textFile) {
+//        this.file = textFile;
+//    }
+    
     @Override
     public List<Product> getAllProducts() {
         try {
@@ -29,17 +40,10 @@ public class FlooringMasteryProductDaoImpl implements FlooringMasteryProductDao 
         try {
             if (storeProduct.isEmpty() == true) {
                 loadProducts();
-            } else if (storeProduct.isEmpty() == false) {
-                for (Product currentProduct : storeProduct.values()) {
-                    if (currentProduct.getProductType().equals(productName)) {
-                        return storeProduct.get(productName);
-                    }
-                }
             }
-        } catch (Exception e) {
-            System.out.println("Error.");
-        }
-        return null;
+        } catch (Exception e) {}
+        System.out.println(storeProduct.get("Tile"));
+        return storeProduct.get(productName);
     }
     
     private void loadProducts() throws Exception {
@@ -48,7 +52,7 @@ public class FlooringMasteryProductDaoImpl implements FlooringMasteryProductDao 
         while(readFile.hasNextLine()) {
             currentLine = readFile.nextLine();
             Product currentProduct = unmarshallProducts(currentLine);
-            storeProduct.put(currentLine, currentProduct);
+            storeProduct.put(currentProduct.getProductType(), currentProduct);
         }
     }
 

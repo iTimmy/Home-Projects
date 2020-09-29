@@ -5,30 +5,39 @@ import java.math.*;
 import java.time.LocalDate;
 import java.util.*;
 import com.sg.flooringmastery.dto.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
 
+    @Autowired
     FlooringMasteryStorage storage = new FlooringMasteryStorage();
     Map<Integer, Order> storeOrders = new HashMap<>();
-    File fileOrders = new File("");
+    Map<Integer, Order> loadOrders = new HashMap<>();
+    private File fileOrders = new File("");
     private final static String DELIMITER = ",";
+
+    // public FlooringMasteryOrderDaoImpl(File textFile) {
+    // this.fileOrders = textFile;
+    // }
 
     private File importFile(LocalDate orderDate) throws Exception {
         fileOrders = storage.doesFileExist(orderDate);
-        return fileOrders;
+        if (fileOrders == null) {
+            return null;
+        } else {
+            return fileOrders;
+        }
     }
 
     @Override
-    public Order createOrder(Order order) {
-        storeOrders.put(order.getOrderNumber(), order);
-        try {
-            if (storage.doesFileExist(order.getOrderDate()) == null) {
-                storage.createNewFile(order.getOrderDate());
-            }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+    public Order createOrder(Order order) throws Exception {
+        // this step is skipped if the file exists
+        if (storage.doesFileExist(order.getOrderDate()) == null) {
+            storage.createNewFile(order.getOrderDate());
         }
+        importFile(order.getOrderDate());
+        storeOrders.put(order.getOrderNumber(), order);
+        // System.out.println("storeOrders: " + storeOrders);
         return order;
     }
 
@@ -40,55 +49,79 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
 
     @Override
     public List<Order> getOrdersByDate(LocalDate userInputDate) throws Exception {
-        importFile(userInputDate);
-        if (storeOrders.isEmpty() == true) {
-            loadData();
+        loadOrders.clear();
+
+        if (importFile(userInputDate) == null) {
+            return null;
         }
-        List<Order> listOrders = new ArrayList<>(storeOrders.values());
+
+        if (loadOrders.isEmpty() == true) {
+            loadDataToDisplay();
+        }
+        List<Order> listOrders = new ArrayList<>(loadOrders.values());
         return listOrders;
     }
 
     @Override
     public Order getOrderByID(int orderNumber) {
-        if (orderNumber != storeOrders.get(orderNumber).getOrderNumber()) {
-            return null;
-        } else {
-            // deleteOrder(storeOrders.get(orderNumber));
-            return storeOrders.get(orderNumber);
-        }
-    }
-
-    @Override
-    public void updateOrder() throws Exception {
-        saveData();
-        loadData();
-
-    }
-
-    @Override
-    public void deleteOrder(Order order) {
-        // storeOrders.remove(order);
-        for (Order currentOrder : storeOrders.values()) {
-            if (order.getOrderNumber() == (currentOrder.getOrderNumber())) {
-                storeOrders.remove(order.getOrderNumber());
-                try {
-                    updateOrder();
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+        try {
+            if (orderNumber != storeOrders.get(orderNumber).getOrderNumber()) {
+                return null;
             } else {
-                System.out.println("Order does not exist.");
+                // deleteOrder(storeOrders.get(orderNumber));
+                return storeOrders.get(orderNumber);
             }
+        } catch (Exception e) {
+
+        }
+        return storeOrders.get(orderNumber);
+    }
+
+    @Override
+    public void updateOrder(Order order) throws Exception {
+        Order editOrder = getOrderByID(order.getOrderNumber());
+
+        // System.out.println(order.getOrderDate());
+        // System.out.println(order.getCustomerName());
+        // System.out.println(order.getArea());
+        // System.out.println(order.getOrderNumber());
+        try {
+            editOrder.setCustomerName(order.getCustomerName());
+            editOrder.setArea(order.getArea());
+            editOrder.setMaterialCost(order.getMaterialCost());
+            editOrder.setLaborCost(order.getLaborCost());
+            editOrder.setOrderTax(order.getOrderTax());
+            editOrder.setTotalCost(order.getTotalCost());
+            editOrder.getProduct().setProductType(order.getProduct().getProductType());
+            editOrder.getProduct().setCostPerSquareFoot(order.getProduct().getCostPerSquareFoot());
+            editOrder.getProduct().setLaborCostPerSquareFoot(order.getProduct().getLaborCostPerSquareFoot());
+            editOrder.getTax().setState(order.getTax().getState());
+            editOrder.getTax().setTaxRate(order.getTax().getTaxRate());
+            storeOrders.put(editOrder.getOrderNumber(), editOrder);
+            saveData();
+        } catch (Exception e) {
+ 
         }
     }
 
     @Override
-    public boolean saveOrdersByDate(LocalDate userInputOrderDate) throws Exception {
+    public void deleteOrder(Order order) throws Exception {
+        loadData();
+        if (storeOrders.remove(order.getOrderNumber()) != null) {
+            saveData();
+        } else {
+            System.out.println("Order does not exist.");
+        }
+    }
+
+    @Override
+    public boolean saveOrdersByDate() throws Exception {
         if (storeOrders.isEmpty() == true) {
             return false;
         } else {
+            loadData();
             saveData();
+            storeOrders.clear();
             return true;
         }
     }
@@ -101,9 +134,11 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
 
     private void saveData() throws Exception {
         PrintWriter writeFile = new PrintWriter(new BufferedWriter(new FileWriter(fileOrders, false)));
+        // System.out.println("Saving: " + fileOrders);
         Collection<Order> storeOrdersValues = storeOrders.values();
         for (Order orderDetail : storeOrdersValues) {
             String currentOrders = marshallData(orderDetail);
+            // System.out.println("currentOrders: " + currentOrders);
             writeFile.println(currentOrders);
             writeFile.flush();
         }
@@ -128,6 +163,7 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
     private void loadData() throws Exception {
         try {
             Scanner readFile = new Scanner(new BufferedReader(new FileReader(fileOrders)));
+            // System.out.println("Loading: " + fileOrders);
             String currentLine = "";
             if (readFile.hasNextLine()) {
                 while (readFile.hasNextLine()) {
@@ -141,6 +177,26 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
             }
             readFile.close();
         } catch (Exception e) {}
+    }
+    
+    private void loadDataToDisplay() throws Exception {
+        try {
+            Scanner readFile = new Scanner(new BufferedReader(new FileReader(fileOrders)));
+            // System.out.println("Loading: " + fileOrders);
+            String currentLine = "";
+            if (readFile.hasNextLine()) {
+                while (readFile.hasNextLine()) {
+                    currentLine = readFile.nextLine();
+                    Order ordersFromFile = unmarshallData(currentLine);
+                    loadOrders.put(ordersFromFile.getOrderNumber(), ordersFromFile);
+                }
+            } else {
+                System.out.println("The file is empty.");
+                storage.deleteFileIfEmpty(fileOrders);
+            }
+            readFile.close();
+        } catch (Exception e) {
+        }
     }
     private Order unmarshallData(String currentLine) {
         String[] line = currentLine.split(DELIMITER);

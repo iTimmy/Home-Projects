@@ -272,11 +272,10 @@ public class StateTaxes {
             case "WY":
                 return States.WY;
             default:
-                throw new UnsupportedOperationException("Please put in a valid state.");
-                // return States.INVALID;
+                return null;
         }
     }
-
+    
     private BigDecimal roundBigDecimal(BigDecimal decimal) {
         int countPlaces = String.valueOf(decimal).length() + 2;
 

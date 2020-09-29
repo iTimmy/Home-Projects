@@ -5,11 +5,11 @@ import java.util.*;
 import com.sg.flooringmastery.dto.*;
 
 public interface FlooringMasteryOrderDao {
-    Order createOrder(Order order);
+    Order createOrder(Order order) throws Exception;
     List<Order> getAllOrders() throws Exception;
     List<Order> getOrdersByDate(LocalDate userInputDate) throws Exception;
     Order getOrderByID(int orderNumber);
-    void updateOrder() throws Exception;
-    void deleteOrder(Order order);
-    boolean saveOrdersByDate(LocalDate userInputOrderDate) throws Exception;
+    void updateOrder(Order order) throws Exception;
+    void deleteOrder(Order order) throws Exception;
+    boolean saveOrdersByDate() throws Exception;
 }

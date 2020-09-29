@@ -7,22 +7,24 @@ import com.sg.flooringmastery.view.*;
 import com.sg.flooringmastery.dto.*;
 
 public class FlooringMasteryController {
-    FlooringMasteryView view;
-    FlooringMasteryService service;
+    private FlooringMasteryView view;
+    private FlooringMasteryService service;
 
      public FlooringMasteryController(FlooringMasteryView view, FlooringMasteryServiceImpl service) {
          this.view = view;
          this.service = service;
      } 
 
-    Order newOrder = new Order();
-    boolean editMode = false;
-    LocalDate saveOrderDate;
+    private Order newOrder = new Order();
+    private boolean editMode = false;
+    private LocalDate saveOrderDate;
+    private boolean doShow = false;
 
     public void run() throws Exception {
         int select = 0;
         
         while(select != 6) {
+            displayCurrentOrderSelection(newOrder);
             view.displayMenu();
             select = view.displaySelection();
 
@@ -52,17 +54,33 @@ public class FlooringMasteryController {
         }
     }
 
-    public void displayOrders() throws Exception {
-        LocalDate userInputOrderDate = view.displayDisplayOrdersTitle();
-        searching();
-            //service.getOrderByDate(userInputOrderDate);
-            System.out.println("############################################################| " + userInputOrderDate + " |#############################################################");
-            List<Order> listOrders = service.getOrdersByDate(userInputOrderDate);
-            view.displayDisplayOrders(listOrders);
-        
+    public void displayCurrentOrderSelection(Order newOrder) {
+        try {
+            if (newOrder != null) {
+                if (doShow == true) {
+                    view.displayCurrentOrder(newOrder);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("null for now");
+        }
     }
 
-    public void addOrder() {
+    public void displayOrders() throws Exception {
+        view.displayDisplayOrdersTitle();
+        LocalDate userInputOrderDate = view.displayExistingInputDate();
+        searching();
+            List<Order> listOrders = service.getOrdersByDate(userInputOrderDate);
+            if (listOrders == null) {
+                view.displayDoesNotExist();
+            } else {
+                System.out.println("############################################################| " + userInputOrderDate + " |#############################################################");
+                view.displayDisplayOrders(listOrders);
+            }
+    }
+
+    public Order addOrder() throws Exception {
+        doShow = true;
         // DISPLAY PRODUCTS \\
         List<Product> listProducts = service.getAllProducts();
         List<Tax> listTaxes = service.getAllTaxes();
@@ -76,24 +94,31 @@ public class FlooringMasteryController {
             newOrder.setOrderDate(saveOrderDate);
         }
         view.displaySaveProgress();
-        service.createOrder(newOrder);
         view.displaySuccess();
         editMode = false;
-
-        view.displayCurrentOrder(newOrder);
+        
+        // will export
+        if (editMode == true) {
+            service.createOrder(newOrder);
+        }
+        return newOrder;
     }
 
     public void editOrder() throws Exception {
+        doShow = true;
         if (newOrder.getOrderDate() == null) {
             view.displayPleaseAddOrderFirst();
         } else {
+            // displays orders in file (what you have thus far)
             List<Order> listOrders = service.getOrdersByDate(newOrder.getOrderDate());
             view.displayDisplayOrders(listOrders);
-            // displayOrders();
+
             selectedFileToDisplay();
             view.triggerEdit();
             editMode = true;
-            addOrder();
+
+            newOrder = addOrder();
+            service.updateOrder(newOrder);
         }
     }
 
@@ -123,17 +148,18 @@ public class FlooringMasteryController {
         view.displayExportAllData();
         // SERVICE \\
         if (newOrder.getOrderDate() != null) {
+            // displays current added order if done so
             selectedFileToDisplay();
+            // if you export before adding an order, it will result in an error
             if (service.createOrder(newOrder) == null) {
                 view.displayUnavailableState();
             } 
-            service.createOrder(newOrder);
         }
-        if (service.saveOrdersByDate(newOrder.getOrderDate()) == false) {
-            view.displayExportAllDataErrorMSG();
-        } else {
+        if (service.saveOrdersByDate() == true) {
             view.displaySaveProgress();
             view.displaySuccess();
+        } else {
+            view.displayExportAllDataErrorMSG();
         }
     }
 

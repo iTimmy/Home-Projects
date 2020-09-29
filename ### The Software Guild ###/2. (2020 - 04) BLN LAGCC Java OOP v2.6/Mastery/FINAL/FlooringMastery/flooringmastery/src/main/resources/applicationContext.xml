@@ -17,14 +17,20 @@
 
     <bean id="io" class="com.sg.flooringmastery.view.UserIOConsoleImpl"/>
     <bean id="decode" class="com.sg.flooringmastery.view.UserIODecodeImpl"/>
-    <bean id="dao" class="com.sg.flooringmastery.dao.FlooringMasteryOrderDaoImpl"/>
      
     <bean id="view" class="com.sg.flooringmastery.view.FlooringMasteryView">
         <constructor-arg ref="io" />
         <constructor-arg ref="decode"/>
     </bean>
 
+    <bean id="orderDao" class="com.sg.flooringmastery.dao.FlooringMasteryOrderDaoImpl"/>
+    <bean id="productDao" class="com.sg.flooringmastery.dao.FlooringMasteryProductDaoImpl" />
+    <bean id="taxDao" class="com.sg.flooringmastery.dao.FlooringMasteryTaxDaoImpl" />
+    
     <bean id="service" class="com.sg.flooringmastery.service.FlooringMasteryServiceImpl">
+        <constructor-arg ref="orderDao"/>
+        <constructor-arg ref="productDao"/>
+        <constructor-arg ref="taxDao"/>
     </bean>
 
     <bean id="controller" class="com.sg.flooringmastery.controller.FlooringMasteryController">

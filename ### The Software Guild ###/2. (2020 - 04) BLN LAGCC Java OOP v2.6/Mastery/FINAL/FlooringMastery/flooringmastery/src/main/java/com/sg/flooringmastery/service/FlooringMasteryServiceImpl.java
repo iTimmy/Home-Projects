@@ -7,20 +7,21 @@ import java.time.LocalDate;
 import java.util.*;
 import com.sg.flooringmastery.dto.*;
 import com.sg.flooringmastery.dao.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlooringMasteryServiceImpl implements FlooringMasteryService {
 
-    FlooringMasteryOrderDao orderDao = new FlooringMasteryOrderDaoImpl();
-    FlooringMasteryProductDao productDao = new FlooringMasteryProductDaoImpl();
-    FlooringMasteryTaxDao taxDao = new FlooringMasteryTaxDaoImpl();
+    FlooringMasteryOrderDao orderDao;
+    FlooringMasteryProductDao productDao;
+    FlooringMasteryTaxDao taxDao;
 
-    /*
-    public FlooringMasteryServiceImpl(FlooringMasteryOrderDao order, FlooringMasteryProductDao product, FlooringMasteryTaxDao tax) {
-        this.order = order;
-        this.product = product;
-        this.tax = tax;
-    } */
- 
+    @Autowired
+    public FlooringMasteryServiceImpl(FlooringMasteryOrderDao orderDao, FlooringMasteryProductDao productDao, FlooringMasteryTaxDao taxDao) {
+        this.orderDao = orderDao;
+        this.productDao = productDao;
+        this.taxDao = taxDao;
+    }
+
     private BigDecimal roundBigDecimal(BigDecimal decimal) {
         BigDecimal roundedBigDecimal = decimal.setScale(2, RoundingMode.CEILING);
         return roundedBigDecimal;
@@ -30,32 +31,50 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
         System.out.println("[2] Searching...");
     }
 
-    // ORDERS \\
-    @Override
-    public Order createOrder(Order order) {
+    private Order calculation(Order order) {
         MathContext mc = new MathContext(3);
         BigDecimalMath calculate = new BigDecimalMath();
         StateTaxes state = new StateTaxes();
 
         // CALCULATIONS \\
-        BigDecimal laborCostPerSquareFoot = new BigDecimal(2.12).round(mc);
+        // System.out.println("tilee" +
+        // getProductByName("Tile").getLaborCostPerSquareFoot());
+        BigDecimal laborCostPerSquareFoot = getProductByName(order.getProduct().getProductType())
+                .getLaborCostPerSquareFoot().round(mc);
+        order.getProduct().setLaborCostPerSquareFoot(laborCostPerSquareFoot);
         BigDecimal costPerSquareFoot = order.getProduct().getCostPerSquareFoot();
 
         String stateName = order.getTax().getState();
         Tax storedTax = getTaxByState(stateName);
-            if (storedTax == null) {
-                return null;
-            }
+        if (storedTax == null) {
+            return null;
+        }
 
         BigDecimal customerStateTaxRate = roundBigDecimal(state.fetchStateTax(stateName));
-        BigDecimal taxRate = roundBigDecimal(storedTax.getTaxRate());
+        BigDecimal taxRate = storedTax.getTaxRate();
+        // System.out.println(storedTax.getTaxRate());
+        // System.out.println(taxRate);
 
-        BigDecimal taxPercentage = new BigDecimal(100).round(mc);
- 
-        BigDecimal materialCost = roundBigDecimal(calculate.calculate(MathOperator.MULTIPLY, order.getArea(), costPerSquareFoot));
-        BigDecimal laborCost = roundBigDecimal(calculate.calculate(MathOperator.MULTIPLY, order.getArea(), laborCostPerSquareFoot));
-        BigDecimal tax = roundBigDecimal(calculate.calculate(MathOperator.MULTIPLY, calculate.calculate(MathOperator.PLUS, materialCost, laborCost), calculate.calculate(MathOperator.DIVIDE, taxRate, taxPercentage)));
-        BigDecimal totalCost = roundBigDecimal(calculate.calculate(MathOperator.PLUS, calculate.calculate(MathOperator.PLUS, materialCost, laborCost), tax));
+        BigDecimal taxPercentage = new BigDecimal(100);
+        // System.out.println(order.getArea());
+        // System.out.println(order.getProduct().getCostPerSquareFoot());
+        BigDecimal materialCost = roundBigDecimal(
+                calculate.calculate(MathOperator.MULTIPLY, order.getArea(), costPerSquareFoot));
+        // System.out.println("costPerSquareFoot: " + costPerSquareFoot);
+        // System.out.println("Material Cost: " + materialCost);
+        BigDecimal laborCost = roundBigDecimal(
+                calculate.calculate(MathOperator.MULTIPLY, order.getArea(), laborCostPerSquareFoot));
+        System.out.println("Labor Cost: " + laborCost);
+        BigDecimal tax = calculate.calculate(MathOperator.MULTIPLY,
+                calculate.calculate(MathOperator.PLUS, materialCost, laborCost),
+                calculate.calculate(MathOperator.DIVIDE, taxRate, taxPercentage));
+        // System.out.println(taxPercentage);
+        // System.out.println(calculate.calculate(MathOperator.PLUS, materialCost, laborCost));
+        // System.out.println(calculate.calculate(MathOperator.DIVIDE, taxRate, taxPercentage));
+        // System.out.println("Tax: " + tax);
+        BigDecimal totalCost = roundBigDecimal(calculate.calculate(MathOperator.PLUS,
+                calculate.calculate(MathOperator.PLUS, materialCost, laborCost), tax));
+        // System.out.println("Total Cost: " + totalCost);
 
         order.getProduct().setCostPerSquareFoot(costPerSquareFoot);
         order.getProduct().setLaborCostPerSquareFoot(laborCostPerSquareFoot);
@@ -67,6 +86,13 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
         order.setOrderTax(tax);
         order.setTotalCost(totalCost);
 
+        return order;
+    }
+
+    // ORDERS \\
+    @Override
+    public Order createOrder(Order order) throws Exception {
+        order = calculation(order);
         return orderDao.createOrder(order);
     }
 
@@ -83,28 +109,32 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     public List<Order> getOrdersByDate(LocalDate userInputDate) throws Exception {
         List<Order> listOrders = orderDao.getOrdersByDate(userInputDate);
         if (listOrders == null) {
-            System.out.println("does not exist");
             return null;
         } else {
-            System.out.print("exist" + userInputDate);
             return listOrders;
         }
     }
 
     @Override
     public void updateOrder(Order orderNumber) {
-        createOrder(orderNumber);
+        try {
+            calculation(orderNumber);
+            orderDao.updateOrder(orderNumber);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void deleteOrder(Order orderNumber) {
+    public void deleteOrder(Order orderNumber) throws Exception {
         searching();
         orderDao.deleteOrder(orderNumber);
     }   
 
     @Override
-    public boolean saveOrdersByDate(LocalDate userInputOrderDate) throws Exception {
-        if (orderDao.saveOrdersByDate(userInputOrderDate) == false) {
+    public boolean saveOrdersByDate() throws Exception {
+        if (orderDao.saveOrdersByDate() == false) {
             return false;
         } else {
             return true;
@@ -122,6 +152,7 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
 
     @Override
     public Product getProductByName(String productName) {
+//        System.out.println("p : " + productDao.getProductByName(productName));
         return productDao.getProductByName(productName);
     }
 

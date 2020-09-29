@@ -6,11 +6,22 @@ import java.io.FileReader;
 import java.math.BigDecimal;
 import java.util.*;
 import com.sg.flooringmastery.dto.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlooringMasteryTaxDaoImpl implements FlooringMasteryTaxDao {
 
+    @Autowired
     Map<String, Tax> storeTax = new HashMap<>();
-    File fileTaxes = new File("Data/Taxes/Taxes.txt");
+    private String file = "Data/Taxes/Taxes.txt";
+    File fileTaxes = new File(file);
+    
+//    @Autowired
+//    public FlooringMasteryTaxDaoImpl() {
+//        this.file = "Data/Taxes/Taxes.txt";
+//    }
+//    public FlooringMasteryTaxDaoImpl(String textFile) {
+//        this.file = textFile;
+//    }
 
     @Override
     public List<Tax> getAllTaxes() {
@@ -25,19 +36,13 @@ public class FlooringMasteryTaxDaoImpl implements FlooringMasteryTaxDao {
 
     @Override
     public Tax getTaxByState(String state) {
-        // System.out.println(state);
         try {
-            // System.out.println("trying");
             if (storeTax.isEmpty() == true) {
-                // System.out.println("tax Loading...");
                 loadTaxes();
-                // System.out.println(storeTax);
-                // System.out.println("if not empty: " + storeTax.get(state).getState());
             }
         } catch (Exception e) {
             System.out.println("Error.");
         }
-        // System.out.println("returning");
         return storeTax.get(state);
     }
 

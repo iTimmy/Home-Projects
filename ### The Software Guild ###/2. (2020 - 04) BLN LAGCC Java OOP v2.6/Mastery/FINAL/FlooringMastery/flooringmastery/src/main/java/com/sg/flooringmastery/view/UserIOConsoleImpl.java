@@ -1,5 +1,7 @@
 package com.sg.flooringmastery.view;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.*;
 
 public class UserIOConsoleImpl implements UserIO {
@@ -84,6 +86,24 @@ public class UserIOConsoleImpl implements UserIO {
         if (num > max) {
             print("Too high.");
         } else if (num < min) {
+            print("Too low.");
+        }
+        return num;
+    }
+
+    public BigDecimal readBigDecimal(String prompt) {
+        MathContext moneyFormat = new MathContext(2);
+        println(prompt);
+        BigDecimal num = new BigDecimal(scan.nextDouble());
+        return num.round(moneyFormat);
+    }
+
+    public BigDecimal readBigDecimal(String prompt, BigDecimal min, BigDecimal max) {
+        println(prompt);
+        BigDecimal num = new BigDecimal(scan.nextDouble());
+        if (num.compareTo(max) == 1) {
+            print("Too high.");
+        } else if (num.compareTo(min) == 0) {
             print("Too low.");
         }
         return num;

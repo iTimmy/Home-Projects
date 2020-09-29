@@ -13,7 +13,7 @@ public class BigDecimalMath {
             case MULTIPLY:
                 return operand1.multiply(itemCost);
             case DIVIDE:
-                return operand1.divide(itemCost, 2, RoundingMode.HALF_UP);
+                return operand1.divide(itemCost, 4, RoundingMode.HALF_UP);
             default:
                 throw new UnsupportedOperationException("Unknown Math Operator");
         }
