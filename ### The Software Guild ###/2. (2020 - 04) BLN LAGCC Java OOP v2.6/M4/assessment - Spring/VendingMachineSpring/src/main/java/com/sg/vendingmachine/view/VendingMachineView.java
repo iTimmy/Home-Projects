@@ -22,17 +22,15 @@ public class VendingMachineView {
         "2. Exit\n" + "_____________________________");
     }
 
-
-
-    public List<VendingMachine> displayListItems(List<VendingMachine> listItems) {
+     public List<VendingMachine> displayListItems(List<VendingMachine> listItems) {
         // null in controller but not in view
         // also, it is what jumpstarts the program... why?
         //System.out.println("view: " + listItems);
         io.println("\n\n\n#################################");
-        listItems.stream().forEach((p) -> {
+        listItems.stream().filter(p -> p.getItemQuantity() != 0).forEach((p) -> {
             io.print(p.getItemName() + " | ");
-            io.print(p.getItemCost() + " | ");
-            System.out.println(p.getItemQuantity());
+            io.print("$" + p.getItemCost() + " | ");
+            System.out.println(p.getItemQuantity() + " Qty");
         });
         io.println("#################################\n\n\n");
         return listItems;
@@ -61,7 +59,7 @@ public class VendingMachineView {
                 valid = false;
             }
         }
-        userWallet.setMoney(input);
+        userWallet.setMoney(input.setScale(2, RoundingMode.FLOOR));
         io.println("\n");
         return userWallet;
     }
@@ -88,7 +86,15 @@ public class VendingMachineView {
     }
 
     public void displaySuccess() {
-        io.println("\n________________________________________________\nTask completed. Returning to the menu...");
+        Scanner scan = new Scanner(System.in);
+        String enter = io.readString("\n________________________________________________\nTask completed. Return to main menu? ");
+        if (enter.isEmpty() == true) {
+            System.out.println("empty");
+            enter = scan.nextLine();
+        } else if (scan.hasNextLine() == true) {
+            System.out.println("emptyy");
+            enter = scan.nextLine();
+        }
     }
 
     public void displayNotEnoughMoneyMSG() {
@@ -96,6 +102,10 @@ public class VendingMachineView {
     }
 
     public void displayItemDoesNotExistMSG() {
-        io.println("This item does not exist.");
+        io.println("This item either does not exist or is not currently in stock.");
+    }
+
+    public void displayChange(String returnChange) {
+        io.println(returnChange);
     }
 }

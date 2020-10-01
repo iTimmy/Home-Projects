@@ -42,7 +42,6 @@ public class FlooringMasteryProductDaoImpl implements FlooringMasteryProductDao 
                 loadProducts();
             }
         } catch (Exception e) {}
-        System.out.println(storeProduct.get("Tile"));
         return storeProduct.get(productName);
     }
     

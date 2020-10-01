@@ -64,11 +64,12 @@ public class DaoImpl implements DVDdao {
 
     // U - Update \\
     @Override
-    public void updateDVD(String dvd) throws Exception { // take in dvd obj
-        DVD replaceDVD = new DVD();
-        replaceDVD = new DVD(replaceDVD.getTitle(), replaceDVD.getReleaseDate(), replaceDVD.getDirectorName(),
-                replaceDVD.getRating(), replaceDVD.getNotes());
-        storeDVD.replace(dvd, replaceDVD);
+    public void updateDVD(DVD newDVD, String oldTitle) throws Exception { // take in dvd obj
+        deleteDVD(oldTitle);
+        newDVD = new DVD(newDVD.getTitle(), newDVD.getReleaseDate(), newDVD.getDirectorName(),
+                newDVD.getRating(), newDVD.getNotes());
+        storeDVD.replace(newDVD.getTitle(), newDVD);
+        addDVD(newDVD.getTitle(), newDVD);
     }
  // -----------------------   
 

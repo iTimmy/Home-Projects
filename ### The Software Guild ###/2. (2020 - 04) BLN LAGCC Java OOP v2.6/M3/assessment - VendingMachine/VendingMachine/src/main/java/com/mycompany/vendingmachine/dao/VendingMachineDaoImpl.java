@@ -4,6 +4,7 @@ import java.util.*;
 import java.io.*;
 import com.mycompany.vendingmachine.dto.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class VendingMachineDaoImpl implements VendingMachineDao {
     Map<String, VendingMachine> allItems = new HashMap<>();
@@ -23,7 +24,6 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
         try {
             loadItems();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return listItems;
@@ -31,15 +31,18 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
 
     @Override
     public VendingMachine getItem(String userInputItemName) throws Exception {
-        if (allItems.isEmpty()) {
-            loadItems();
-        } 
-        
-        if (!userInputItemName.equals(allItems.get(userInputItemName).getItemName())) {
-            return null;
-        } else {
-            return allItems.get(userInputItemName.toUpperCase());
+        try {
+            if (allItems.isEmpty()) {
+                loadItems();
+            } 
+            if (!userInputItemName.equals(allItems.get(userInputItemName).getItemName())) {
+                return null;
+            } else {
+                return allItems.get(userInputItemName.toUpperCase());
+            }
+        } catch (Exception e) {
         }
+        return allItems.get(userInputItemName.toUpperCase());
     }
     
     @Override
@@ -50,22 +53,18 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
 
     @Override
     public BigDecimal updateWallet(BigDecimal itemCost) {
-        //allItems.get()
         return itemCost;
     }
 
     @Override
     public void removeItem(VendingMachine item) {
-        System.out.println("Deleting...");
-        System.out.println(allItems);
-        allItems.remove(item.getItemName());
         try {
-            System.out.println(allItems);
-            updateItems(item);
+            allItems.remove(item);
+            saveItems();
+            loadItems();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Deleted...");
     }
 
     private void saveItems() throws Exception {
@@ -81,6 +80,7 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
     private String marshallItems(VendingMachine itemsToFile) {
         String itemNameToString = itemsToFile.getItemName();
         BigDecimal itemCostToDouble = itemsToFile.getItemCost();
+
         String itemCost = itemCostToDouble.toString();
         int itemNumToInt = itemsToFile.getItemQuantity();
 
@@ -97,7 +97,7 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
         String itemName = itemTokens[0].toUpperCase();
         String itemCostString = itemTokens[1];
         double itemCostDouble = Double.parseDouble(itemCostString);
-        BigDecimal itemCost = new BigDecimal(itemCostDouble);
+        BigDecimal itemCost = new BigDecimal(itemCostDouble).setScale(2, RoundingMode.FLOOR);
         String itemQuantityString = itemTokens[2];
         int itemQuantity = Integer.parseInt(itemQuantityString);
 

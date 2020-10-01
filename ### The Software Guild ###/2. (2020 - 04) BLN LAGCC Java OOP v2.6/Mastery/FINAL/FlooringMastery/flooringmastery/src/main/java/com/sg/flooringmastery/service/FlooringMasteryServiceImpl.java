@@ -37,8 +37,6 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
         StateTaxes state = new StateTaxes();
 
         // CALCULATIONS \\
-        // System.out.println("tilee" +
-        // getProductByName("Tile").getLaborCostPerSquareFoot());
         BigDecimal laborCostPerSquareFoot = getProductByName(order.getProduct().getProductType())
                 .getLaborCostPerSquareFoot().round(mc);
         order.getProduct().setLaborCostPerSquareFoot(laborCostPerSquareFoot);
@@ -52,35 +50,25 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
 
         BigDecimal customerStateTaxRate = roundBigDecimal(state.fetchStateTax(stateName));
         BigDecimal taxRate = storedTax.getTaxRate();
-        // System.out.println(storedTax.getTaxRate());
-        // System.out.println(taxRate);
 
         BigDecimal taxPercentage = new BigDecimal(100);
-        // System.out.println(order.getArea());
-        // System.out.println(order.getProduct().getCostPerSquareFoot());
+        
         BigDecimal materialCost = roundBigDecimal(
                 calculate.calculate(MathOperator.MULTIPLY, order.getArea(), costPerSquareFoot));
-        // System.out.println("costPerSquareFoot: " + costPerSquareFoot);
-        // System.out.println("Material Cost: " + materialCost);
+
         BigDecimal laborCost = roundBigDecimal(
                 calculate.calculate(MathOperator.MULTIPLY, order.getArea(), laborCostPerSquareFoot));
-        System.out.println("Labor Cost: " + laborCost);
         BigDecimal tax = calculate.calculate(MathOperator.MULTIPLY,
                 calculate.calculate(MathOperator.PLUS, materialCost, laborCost),
-                calculate.calculate(MathOperator.DIVIDE, taxRate, taxPercentage));
-        // System.out.println(taxPercentage);
-        // System.out.println(calculate.calculate(MathOperator.PLUS, materialCost, laborCost));
-        // System.out.println(calculate.calculate(MathOperator.DIVIDE, taxRate, taxPercentage));
-        // System.out.println("Tax: " + tax);
+                calculate.calculate(MathOperator.DIVIDE, taxRate, taxPercentage)).setScale(2, RoundingMode.FLOOR);
+
         BigDecimal totalCost = roundBigDecimal(calculate.calculate(MathOperator.PLUS,
                 calculate.calculate(MathOperator.PLUS, materialCost, laborCost), tax));
-        // System.out.println("Total Cost: " + totalCost);
 
         order.getProduct().setCostPerSquareFoot(costPerSquareFoot);
         order.getProduct().setLaborCostPerSquareFoot(laborCostPerSquareFoot);
         order.getTax().setTaxRate(taxRate);
 
-        order.setOrderNumber(generateOrderNumber());
         order.setMaterialCost(materialCost);
         order.setLaborCost(laborCost);
         order.setOrderTax(tax);
@@ -92,17 +80,18 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     // ORDERS \\
     @Override
     public Order createOrder(Order order) throws Exception {
+        order.setOrderNumber(generateOrderNumber());
         order = calculation(order);
         return orderDao.createOrder(order);
     }
 
     @Override
-    public List<Order> getAllOrders() throws Exception {
-        List<Order> listOrders = orderDao.getAllOrders();
-        if (listOrders == null) {
+    public List<Order> getActiveOrders() throws Exception {
+        List<Order> createdOrders = orderDao.getActiveOrders();
+        if (createdOrders == null) {
             return null;
         }
-        return listOrders;
+        return createdOrders;
     }
 
     @Override
@@ -116,12 +105,17 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     }
 
     @Override
-    public void updateOrder(Order orderNumber) {
+    public Order getOrderByID(int orderNumber) {
+        Order order = orderDao.getOrderByID(orderNumber);
+        return order;
+    }
+
+    @Override
+    public void updateOrder(Order editedOrder, Order existingOrder) {
         try {
-            calculation(orderNumber);
-            orderDao.updateOrder(orderNumber);
+            calculation(editedOrder);
+            orderDao.updateOrder(editedOrder, existingOrder);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -152,7 +146,6 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
 
     @Override
     public Product getProductByName(String productName) {
-//        System.out.println("p : " + productDao.getProductByName(productName));
         return productDao.getProductByName(productName);
     }
 

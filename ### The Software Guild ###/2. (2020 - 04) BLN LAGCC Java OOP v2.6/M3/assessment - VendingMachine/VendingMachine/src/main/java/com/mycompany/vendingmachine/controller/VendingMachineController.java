@@ -55,9 +55,12 @@ public class VendingMachineController {
         VendingMachine item = new VendingMachine();
         try {
             item = service.getItem(userInputItemName);
-            if (service.moneyCalculation(MathOperator.MINUS, userInputMoney, item) != null) {
+            CoinsReturned moneyCalculation = service.moneyCalculation(MathOperator.MINUS, userInputMoney, item);
+            if (moneyCalculation != null) {
+                view.displayChange(moneyCalculation);
                 view.displaySuccess();
-            } else if (service.moneyCalculation(MathOperator.MINUS, userInputMoney, item) == null) {
+                
+            } else if (moneyCalculation == null) {
                 view.displayNotEnoughMoneyMSG();
             }
         } catch (Exception e) {

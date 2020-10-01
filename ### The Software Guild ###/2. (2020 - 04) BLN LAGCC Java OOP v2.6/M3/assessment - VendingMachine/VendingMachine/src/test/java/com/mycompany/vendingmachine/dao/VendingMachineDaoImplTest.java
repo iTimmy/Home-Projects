@@ -73,10 +73,6 @@ public class VendingMachineDaoImplTest {
         assertEquals(2, list.size());
     }
 
-    /**
-     * Test of getItem method, of class VendingMachineDaoImpl.
-     * @throws java.lang.Exception
-     */
     @Test
     public void testGetItem_String() throws Exception {
         String itemNameTest = "pringles";
@@ -94,5 +90,35 @@ public class VendingMachineDaoImplTest {
 //        System.out.println(result.getItemName());
         assertEquals(item.getItemName(), result.getItemName());
         assertTrue(item.getItemName().equals(result.getItemName()));
+    }
+    
+    @Test
+    public void testUpdateItems_VendingMachine() {
+        List<VendingMachine> list = testDao.getAllItems();
+        VendingMachine itemOne = new VendingMachine();
+        itemOne.setItemName("pringles");
+        itemOne.setItemCost(new BigDecimal(2.5));
+        itemOne.setItemQuantity(50);
+        list.add(itemOne);  
+    }
+    
+    @Test
+    public void testRemoveItem_VendingMachine() throws Exception {
+        List<VendingMachine> list = testDao.getAllItems();
+        VendingMachine itemOne = new VendingMachine();
+        itemOne.setItemName("pringles");
+        itemOne.setItemCost(new BigDecimal(2.5));
+        itemOne.setItemQuantity(50);
+        list.add(itemOne);
+        
+        VendingMachine itemTwo = new VendingMachine();
+        itemTwo.setItemName("soda");
+        itemTwo.setItemCost(new BigDecimal(2.5));
+        itemTwo.setItemQuantity(50);
+        list.add(itemTwo);
+        
+        testDao.removeItem(itemTwo);
+
+        assertEquals(null, testDao.getItem(itemTwo.getItemName()));
     }
 }

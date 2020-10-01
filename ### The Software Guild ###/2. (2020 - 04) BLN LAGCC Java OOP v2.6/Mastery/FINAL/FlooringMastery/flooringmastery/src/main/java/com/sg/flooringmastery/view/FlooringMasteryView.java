@@ -19,15 +19,19 @@ public class FlooringMasteryView {
     String EDIT = "";
     String displayAddEditOrderTitle = "ADD";
 
-    public void displayCurrentOrder(Order newOrder) {
-        io.println("===============================================\n" +
-        newOrder.getOrderDate() + " | " +
-        newOrder.getCustomerName() + " | " +
-        newOrder.getTax().getState() + " | " +
-        newOrder.getProduct().getProductType() + " | " +
-        newOrder.getArea() +
-        "\n==============================================="
-        );
+    public void displayCurrentOrder(List<Order> currentOrders) {
+        io.println("############################################################################################################################################");
+        currentOrders.stream().forEach((p) -> {
+            io.print("Order #: " + p.getOrderDate() + " | ");
+            io.print("Order #: " + p.getOrderNumber() + " | ");
+            io.print("Customer Name: " + p.getCustomerName() + " | ");
+            io.print("Area: " + p.getArea() + " | ");
+            io.print("Material Cost: " + p.getMaterialCost() + " | ");
+            io.print("Labor Cost: " + p.getLaborCost() + " | ");
+            io.print("Order Tax: " + p.getOrderTax() + " | ");
+            io.println("Total Cost: " + p.getTotalCost() + " | ");
+        });
+        io.println("############################################################################################################################################");
     }
 
     public void displayMenu() {
@@ -65,11 +69,16 @@ public class FlooringMasteryView {
         io.println("---------- DISPLAY ORDERS ----------");
     }   
 
+    public void displayDisplayOrdersBanner(LocalDate date) {
+        io.println("################################################################| " + date
+        + " |##############################################################");
+    }
+
     public void displayDisplayOrders(List<Order> listOrderDetails) {
         if (listOrderDetails.isEmpty() == true) {
             io.println("There are no orders.");
-        } else {
-            io.println("________________________________________________________________________________________________________________________________________");
+        } else {     
+            io.println("____________________________________________________________________________________________________________________________________________");
             listOrderDetails.stream().forEach((p) -> {
                 io.print("Order #: " + p.getOrderNumber() + " | ");
                 io.print("Customer Name: " + p.getCustomerName() + " | ");
@@ -79,64 +88,99 @@ public class FlooringMasteryView {
                 io.print("Order Tax: " + p.getOrderTax() + " | ");
                 io.println("Total Cost: " + p.getTotalCost() + " | ");
             });
-            io.println("________________________________________________________________________________________________________________________________________");
+            io.println("____________________________________________________________________________________________________________________________________________");
         }
     }
 
-    public void displayAddEditOrderTitle() {
-        io.println("---------- " + displayAddEditOrderTitle + " ORDER(S) ----------");
-    }
+    public Order displayAddOrder(List<Product> listProducts, List<Tax> listTaxes) {
+        io.println("---------- ADD ORDER(S) ----------");
 
-    public Order displayAddEditOrder(List<Product> listProducts, List<Tax> listTaxes) {
+        EDIT = "";
+        
         Order newOrder = new Order();
-        if (i == 0) {
-            LocalDate userInputDate = displayInputDate();
-            newOrder.setOrderDate(userInputDate);
-            i = 1;
-        }
-        if (i == 1) {
-            String customer = decodeCustomer();
-            String customerState = decodeState(listTaxes);
-            Product userInputProduct = displayProducts(listProducts);
-            BigDecimal userInputArea = decodeArea();
 
-            Product newProduct = new Product();
-            newProduct.setProductType(userInputProduct.getProductType());
-            newProduct.setCostPerSquareFoot(userInputProduct.getCostPerSquareFoot());
+        LocalDate userInputDate = displayInputDate();
+        newOrder.setOrderDate(userInputDate);
 
-            Tax newTax = new Tax();
-            newTax.setState(customerState);
+        String customer = decodeCustomer();
+        String customerState = decodeState(listTaxes);
+        Product userInputProduct = displayProducts(listProducts);
+        BigDecimal userInputArea = decodeArea();
 
-            newOrder.setArea(userInputArea);
-            newOrder.setCustomerName(customer);
-            newOrder.setProduct(newProduct);
-            newOrder.setTax(newTax);
-        }
-        if (i == 1) {
-            i = 0;
-            EDIT = "";
-            displayAddEditOrderTitle = "ADD";
-        }
+        Product newProduct = new Product();
+        newProduct.setProductType(userInputProduct.getProductType());
+        newProduct.setCostPerSquareFoot(userInputProduct.getCostPerSquareFoot());
+
+        Tax newTax = new Tax();
+        newTax.setState(customerState);
+
+        newOrder.setArea(userInputArea);
+        newOrder.setCustomerName(customer);
+        newOrder.setProduct(newProduct);
+        newOrder.setTax(newTax);
 
         io.println("\n______________\nData collected.");
         return newOrder;
-    }
-
-    public void triggerEdit() {
-        EDIT = " (EDIT)";
-        i = 1;
-        displayAddEditOrderTitle = "EDIT";
     }
 
     public Order displayRemoveOrder() {
         io.println("---------- REMOVE AN ORDER ----------");
         //LocalDate userInputOrderDate = displayInputDate();
         int userInputOrderNumber = displayOrderNumber();
-        io.println("\n");
         Order findOrder = new Order();
         //findOrder.setOrderDate(userInputOrderDate);
         findOrder.setOrderNumber(userInputOrderNumber);
         return findOrder;
+    }
+
+    public void displayEditOrderTitle() {
+        io.println("---------- EDIT ORDER(S) ----------");
+    }
+
+    public Order displayEditOrder(List<Product> listProducts, List<Tax> listTaxes, List<Order> listOrders, LocalDate date) {  
+        EDIT = " (EDIT)";
+        boolean valid = false;
+        
+        Order editOrder = new Order();
+        editOrder.setOrderDate(date);
+
+        io.println("\n");
+        displayDisplayOrdersBanner(date);
+        displayDisplayOrders(listOrders);
+
+        int userInputOrderNumber = 0;
+        while(valid != true) {
+            userInputOrderNumber = displayOrderNumber();
+            for (Order order : listOrders) {
+                if (order.getOrderNumber() == userInputOrderNumber) {
+                    valid = true;
+                    break;
+                }
+            }
+            if (valid == false) {
+                io.println("The order number does not exist.");
+            }
+        }
+        editOrder.setOrderNumber(userInputOrderNumber);
+        String customer = decodeCustomer();
+        String customerState = decodeState(listTaxes);
+        Product userInputProduct = displayProducts(listProducts);
+        BigDecimal userInputArea = decodeArea();
+
+        Product editProduct = new Product();
+        editProduct.setProductType(userInputProduct.getProductType());
+        editProduct.setCostPerSquareFoot(userInputProduct.getCostPerSquareFoot());
+
+        Tax editTax = new Tax();
+        editTax.setState(customerState);
+
+        editOrder.setArea(userInputArea);
+        editOrder.setCustomerName(customer);
+        editOrder.setProduct(editProduct);
+        editOrder.setTax(editTax);
+
+        io.println("\n______________\nData recollected.");
+        return editOrder;
     }
 
     public void displayExportAllData() {
@@ -243,31 +287,28 @@ public class FlooringMasteryView {
         });
         io.println("#################################");
 
-        int errorCode = 0;
         // STATE VALIDATION \\
         while (validationState != true) {
             stateName = io.readString("State" + EDIT + ": ");
             stateName = decode.stateFormat(stateName);
             States validateState = state.stringToState(stateName);
+            String fetchedState = "";
             try {
                 for (Tax currentTax : listTaxes) {
                     if (stateName.toUpperCase().equals(currentTax.getState())) {
                         validationState = true;
-                    } else if (stateName.toUpperCase().length() != 2) {
-                        errorCode = 1;
-                    } else if (!stateName.toUpperCase().equals(currentTax.getState()) &&
-                    stateName.toUpperCase().equals(validateState.toString())) {
-                        errorCode = 2;
-                    } else if (!stateName.toUpperCase().equals(validateState.toString())) {
-                        errorCode = 3;
-                    }
+                        fetchedState = currentTax.getState();
+                        break;
+                    } else if (!stateName.toUpperCase().equals(currentTax.getState())) {
+                        validationState = false;
+                    } 
                 }
-                // System.out.println(errorCode);
-                if (errorCode == 1) {
+                if (stateName.toUpperCase().length() != 2) {
                     io.println("Please abbreviate your state.");
-                } else if (errorCode == 2) {
+                } else if (!stateName.toUpperCase().equals(fetchedState)
+                        && stateName.toUpperCase().equals(validateState.toString())) {
                     io.println("Your state is not eligible for purchase.");
-                } else if (errorCode == 3) {
+                } else if (!stateName.toUpperCase().equals(validateState.toString())) {
                     io.println("Please put in a valid state.");
                 }
             } catch (Exception e) {
@@ -332,16 +373,50 @@ public class FlooringMasteryView {
         return area;
     }
 
-	public void displayPleaseAddOrderFirst() {
-        io.println("Could not find an order to edit. Please add an order before you edit.");
-	}
-
 	public void displayUnavailableState() {
         io.println("You're not qualified to make a purchase in your state.");
 	}
 
 	public void displayDoesNotExist() {
         io.println("Data does not exist.");
+    }
+    
+    public String confirmSave() {
+        String confirmSave = "";
+        boolean valid = false;
+        while(valid != true) {
+            confirmSave = io.readString("Comfirm y/n to save data: ");
+            if (confirmSave.toUpperCase().equals("Y")) {
+                io.println("You chose to save your data.");
+                valid = true;
+            } else if (confirmSave.toUpperCase().equals("N")) {
+                io.println("You chose not to save your data.");
+                return null;
+            } else {
+                io.println("Please pick between y/n.");
+            }
+        }
+        return confirmSave;
+    }
+
+    public void returnCalculations(Order order) {
+        io.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        io.println("Material Cost: $" + order.getMaterialCost());
+        io.println("Labor Cost: $" + order.getLaborCost());
+        io.println("Tax: $" + order.getTax());
+        io.println("Total Cost: $" + order.getTotalCost());
+        io.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
+
+	public void displayAddedOrder(Order newOrder) {
+        io.println("===============================================\n" +
+        newOrder.getOrderDate() + " | " +
+        newOrder.getCustomerName() + " | " +
+        newOrder.getTax().getState() + " | " +
+        newOrder.getProduct().getProductType() + " | " +
+        newOrder.getArea() +
+        "\n==============================================="
+        );
 	}
 
 }

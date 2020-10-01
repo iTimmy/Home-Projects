@@ -9,7 +9,7 @@ public interface VendingMachineService {
 
     VendingMachine getItem(String itemName) throws Exception;
 
-    BigDecimal moneyCalculation(MathOperator operator, UserWallet userWallet, VendingMachine item);
+    CoinsReturned moneyCalculation(MathOperator operator, UserWallet userWallet, VendingMachine item) throws Exception;
     
     void updateItems(VendingMachine item) throws Exception;
 

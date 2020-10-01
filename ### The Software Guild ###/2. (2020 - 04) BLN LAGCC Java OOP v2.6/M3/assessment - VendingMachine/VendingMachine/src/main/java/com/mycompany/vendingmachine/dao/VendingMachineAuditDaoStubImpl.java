@@ -5,10 +5,15 @@
  */
 package com.mycompany.vendingmachine.dao;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author Music Account
  */
-public class VendingMachineAuditDaoStubImpl {
-    
+public class VendingMachineAuditDaoStubImpl implements VendingMachineAuditDao {
+    @Override
+    public void orderDate(String userInputItemName, BigDecimal userChange) throws Exception {
+        
+    }
 }

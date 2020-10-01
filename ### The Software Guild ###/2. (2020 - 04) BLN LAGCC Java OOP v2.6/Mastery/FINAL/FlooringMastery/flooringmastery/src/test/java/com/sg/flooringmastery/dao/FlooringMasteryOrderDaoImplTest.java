@@ -40,7 +40,7 @@ public class FlooringMasteryOrderDaoImplTest {
     BigDecimalMath mathCalculate = new BigDecimalMath();
     
     @BeforeClass
-    public static void setUpClass() throws IOException {
+    public static void setUpClass() throws IOException {    
     }
     
     @AfterClass
@@ -49,12 +49,79 @@ public class FlooringMasteryOrderDaoImplTest {
     
     @Before
     public void setUp() {
+        String testFile = "DataExportTest.txt";
+        // String testFileTwo = "Orders_3000-12-12.txt";
+        orderDaoTest = new FlooringMasteryOrderDaoImpl(testFile/*, testFileTwo*/);
     }
     
     @After
     public void tearDown() {
     }
 
+    @Test
+    public void testSaveOrders() throws Exception {
+//        Order orderOne = new Order();
+//        orderOne.setOrderDate(LocalDate.now());
+//        orderOne.setCustomerName("Timmy");
+//        orderOne.setArea(new BigDecimal(233).round(mc));
+//       
+//        Product productOne = new Product();
+//        productOne.setProductType("Tile");
+//        productOne.setCostPerSquareFoot(productDaoTest.getProductByName(productOne.getProductType()).getCostPerSquareFoot());
+//        
+//        Tax taxOne = new Tax();
+//        taxOne.setState("TX");
+//    
+//        orderOne.setProduct(productOne);
+//        orderOne.setTax(taxOne);
+//   
+//        orderDaoTest.createOrder(orderOne);
+//        orderDaoTest.saveOrdersByDate();
+    }
+    
+    @Test
+    public void testUpdateOrder() throws Exception {
+        LocalDate date = LocalDate.of(2030, Month.DECEMBER, 5);
+        
+        Order existingOrder = new Order();
+        existingOrder.setOrderDate(date);
+        existingOrder.setCustomerName("Timmy");
+        existingOrder.setArea(new BigDecimal(233).round(mc));
+       
+        Product productOne = new Product();
+        productOne.setProductType("Tile");
+        productOne.setCostPerSquareFoot(productDaoTest.getProductByName(productOne.getProductType()).getCostPerSquareFoot());
+        
+        Tax taxOne = new Tax();
+        taxOne.setState("TX");
+    
+        existingOrder.setProduct(productOne);
+        existingOrder.setTax(taxOne);
+        
+        
+        
+        Order editedOrder = new Order();
+        editedOrder.setOrderDate(date);
+        editedOrder.setCustomerName("Timmy");
+        editedOrder.setArea(new BigDecimal(233).round(mc));
+       
+        Product productTwo = new Product();
+        productTwo.setProductType("Tile");
+        productTwo.setCostPerSquareFoot(productDaoTest.getProductByName(productTwo.getProductType()).getCostPerSquareFoot());
+        
+        Tax taxTwo = new Tax();
+        taxTwo.setState("TX");
+    
+        editedOrder.setProduct(productTwo);
+        editedOrder.setTax(taxTwo);
+        
+        orderDaoTest.updateOrder(editedOrder, existingOrder);
+        
+//        System.out.println(existingOrder.getCustomerName());
+//        System.out.println(editedOrder.getCustomerName());
+        assertEquals(existingOrder.getCustomerName(), editedOrder.getCustomerName());
+    }
+    
     @Test
     public void testDisplayOrders() throws Exception {
         MathContext mc = new MathContext(4);

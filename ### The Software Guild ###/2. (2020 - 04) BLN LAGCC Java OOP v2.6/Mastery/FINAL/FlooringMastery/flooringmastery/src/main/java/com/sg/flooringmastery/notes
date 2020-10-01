@@ -27,3 +27,26 @@ because you can display the orders and then export them. You're not supposed to 
 RESOLVED: I created a separate hashmap variable called loadOrders, so that the current orders that have
 just been added to the hasmhamp via the add order option would not be interfered while choosing the
 option to display orders. 
+
+
+
+// System.out.println("tilee" +
+// getProductByName("Tile").getLaborCostPerSquareFoot());
+
+// System.out.println(storedTax.getTaxRate());
+// System.out.println(taxRate);
+
+// System.out.println(order.getArea());
+// System.out.println(order.getProduct().getCostPerSquareFoot());
+
+// System.out.println("costPerSquareFoot: " + costPerSquareFoot);
+// System.out.println("Material Cost: " + materialCost);
+
+// System.out.println("Labor Cost: " + laborCost);
+
+// System.out.println(taxPercentage);
+// System.out.println(calculate.calculate(MathOperator.PLUS, materialCost, laborCost));
+// System.out.println(calculate.calculate(MathOperator.DIVIDE, taxRate, taxPercentage));
+// System.out.println("Tax: " + tax);
+
+// System.out.println("Total Cost: " + totalCost);

@@ -58,6 +58,7 @@ public class VendingMachineServiceImplTest {
     /**
      * Test of getAllItems method, of class VendingMachineServiceImpl.
      */
+   
     @Test
     public void testMoneyCalculation() {
         UserWallet userWalletTest = new UserWallet();
@@ -80,5 +81,4 @@ public class VendingMachineServiceImplTest {
         System.out.println(result);
         assertEquals(result, result);
     }
-    
 }

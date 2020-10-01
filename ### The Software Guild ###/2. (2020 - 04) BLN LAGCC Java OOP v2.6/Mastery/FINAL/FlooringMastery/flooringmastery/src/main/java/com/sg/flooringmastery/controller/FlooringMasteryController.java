@@ -16,15 +16,17 @@ public class FlooringMasteryController {
      } 
 
     private Order newOrder = new Order();
-    private boolean editMode = false;
-    private LocalDate saveOrderDate;
     private boolean doShow = false;
 
     public void run() throws Exception {
         int select = 0;
         
         while(select != 6) {
-            displayCurrentOrderSelection(newOrder);
+            displayCurrentOrderSelection();
+            if (newOrder.getOrderDate() != null) {
+                // displays current added order if done so
+                selectedFileToDisplay();
+            }
             view.displayMenu();
             select = view.displaySelection();
 
@@ -54,11 +56,12 @@ public class FlooringMasteryController {
         }
     }
 
-    public void displayCurrentOrderSelection(Order newOrder) {
+    public void displayCurrentOrderSelection() throws Exception {
+        List<Order> currentOrders = service.getActiveOrders();
         try {
-            if (newOrder != null) {
+            if (currentOrders != null) {
                 if (doShow == true) {
-                    view.displayCurrentOrder(newOrder);
+                    view.displayCurrentOrder(currentOrders);
                 }
             }
         } catch (Exception e) {
@@ -74,7 +77,7 @@ public class FlooringMasteryController {
             if (listOrders == null) {
                 view.displayDoesNotExist();
             } else {
-                System.out.println("############################################################| " + userInputOrderDate + " |#############################################################");
+                view.displayDisplayOrdersBanner(userInputOrderDate);
                 view.displayDisplayOrders(listOrders);
             }
     }
@@ -85,41 +88,35 @@ public class FlooringMasteryController {
         List<Product> listProducts = service.getAllProducts();
         List<Tax> listTaxes = service.getAllTaxes();
         // TOGGLES ADD OR EDIT MODE \\
-        view.displayAddEditOrderTitle();
-        if (editMode == true) {
-            saveOrderDate = newOrder.getOrderDate();
-        }
-        newOrder = view.displayAddEditOrder(listProducts, listTaxes);
-        if (editMode == true) {
-            newOrder.setOrderDate(saveOrderDate);
-        }
+
+        newOrder = view.displayAddOrder(listProducts, listTaxes);
+
+        Order order = service.createOrder(newOrder);
+        view.returnCalculations(order);
         view.displaySaveProgress();
         view.displaySuccess();
-        editMode = false;
-        
-        // will export
-        if (editMode == true) {
-            service.createOrder(newOrder);
-        }
+           
         return newOrder;
     }
 
     public void editOrder() throws Exception {
-        doShow = true;
-        if (newOrder.getOrderDate() == null) {
-            view.displayPleaseAddOrderFirst();
-        } else {
+        doShow = false;
+        // DISPLAY PRODUCTS \\
+        List<Product> listProducts = service.getAllProducts();
+        List<Tax> listTaxes = service.getAllTaxes();
+        view.displayEditOrderTitle();
+        LocalDate date = view.displayExistingInputDate();
             // displays orders in file (what you have thus far)
-            List<Order> listOrders = service.getOrdersByDate(newOrder.getOrderDate());
-            view.displayDisplayOrders(listOrders);
+            // existing order in memory (LocalDate.now() is temporary instantiation)
+            List<Order> listOrders = service.getOrdersByDate(date);
 
-            selectedFileToDisplay();
-            view.triggerEdit();
-            editMode = true;
+            // creates a new order
+            Order editedOrder = view.displayEditOrder(listProducts, listTaxes, listOrders, date);
 
-            newOrder = addOrder();
-            service.updateOrder(newOrder);
-        }
+            // fetches the order number from the existing orders in memory
+            Order existingOrder = service.getOrderByID(editedOrder.getOrderNumber());
+
+            service.updateOrder(editedOrder, existingOrder);
     }
 
     public void removeOrder() throws Exception {
@@ -139,26 +136,21 @@ public class FlooringMasteryController {
         valid = true;
     }
 
-    public void selectedFileToDisplay() {
-        view.displayCurrentOrder(newOrder);
+    public void selectedFileToDisplay() throws Exception {
+        view.displayAddedOrder(newOrder);
     }
     
     public void exportAllData(Order newOrder) throws Exception {
         // TITLE \\
         view.displayExportAllData();
         // SERVICE \\
-        if (newOrder.getOrderDate() != null) {
-            // displays current added order if done so
-            selectedFileToDisplay();
-            // if you export before adding an order, it will result in an error
-            if (service.createOrder(newOrder) == null) {
-                view.displayUnavailableState();
-            } 
-        }
         if (service.saveOrdersByDate() == true) {
+            doShow = true;
             view.displaySaveProgress();
             view.displaySuccess();
         } else {
+            doShow = false;
+            // if you export before adding an order, it will result in an error
             view.displayExportAllDataErrorMSG();
         }
     }

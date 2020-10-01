@@ -7,9 +7,10 @@ import com.sg.flooringmastery.dto.*;
 public interface FlooringMasteryService {
 
     Order createOrder(Order order) throws Exception;
-    List<Order> getAllOrders() throws Exception;
+    List<Order> getActiveOrders() throws Exception;
     List<Order> getOrdersByDate(LocalDate userInputDate) throws Exception;
-    void updateOrder(Order orderNumber);
+    Order getOrderByID(int orderNumber);
+    void updateOrder(Order editedOrder, Order existingOrder);
     void deleteOrder(Order orderNumber) throws Exception;
     boolean saveOrdersByDate() throws Exception;
 

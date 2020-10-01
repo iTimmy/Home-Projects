@@ -90,13 +90,8 @@ public class DVDController {
         String editedDVD = view.inputDVD();
         DVD edit = dao.getDVD(editedDVD);
         if (edit != null) {
-            // logic belongs in dao
-            dao.deleteDVD(editedDVD);
             edit = view.displayEditDVD(edit);
-            dao.addDVD(edit.getTitle(), edit);
-            System.out.println("finished");
-            // ----------------
-            //dao.updateDVD(edit);
+            dao.updateDVD(edit, editedDVD);
         } else {
             view.displayValidation();
         }

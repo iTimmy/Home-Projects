@@ -9,7 +9,7 @@ import com.sg.flooringmastery.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlooringMasteryTaxDaoImpl implements FlooringMasteryTaxDao {
-
+    
     @Autowired
     Map<String, Tax> storeTax = new HashMap<>();
     private String file = "Data/Taxes/Taxes.txt";

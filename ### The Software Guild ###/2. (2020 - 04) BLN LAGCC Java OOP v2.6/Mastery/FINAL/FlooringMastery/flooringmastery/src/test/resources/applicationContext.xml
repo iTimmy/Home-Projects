@@ -17,7 +17,10 @@
          http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
  
     <!-- Bean definitions go here -->
-    <bean id="orderDao" class="com.sg.flooringmastery.dao.FlooringMasteryOrderDaoImpl" />
+    <bean id="orderDao" class="com.sg.flooringmastery.dao.FlooringMasteryOrderDaoImpl">
+        <constructor-arg value="DataExportTest.txt"/>
+        <!--<constructor-arg value=""/>-->
+    </bean>
     <bean id="productDao" class="com.sg.flooringmastery.dao.FlooringMasteryProductDaoImpl" />
     <bean id="taxDao" class="com.sg.flooringmastery.dao.FlooringMasteryTaxDaoImpl" />
     

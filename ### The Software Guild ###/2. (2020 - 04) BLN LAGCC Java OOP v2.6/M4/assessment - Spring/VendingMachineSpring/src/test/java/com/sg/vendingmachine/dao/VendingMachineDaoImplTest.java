@@ -73,6 +73,9 @@ public class VendingMachineDaoImplTest {
         list.add(itemTwo);
 
         assertEquals(2, list.size());
+        // add in a few more assert fctions
+        // if itemOne contains pringles
+        // if itemTwo contains soda
     }
 
     /**
