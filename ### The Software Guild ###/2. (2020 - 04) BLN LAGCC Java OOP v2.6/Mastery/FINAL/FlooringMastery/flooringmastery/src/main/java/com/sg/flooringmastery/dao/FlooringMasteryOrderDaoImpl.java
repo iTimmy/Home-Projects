@@ -34,7 +34,7 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
     }
 
     private File importFile(LocalDate orderDate) throws Exception {
-        fileOrders = storage.doesFileExist(orderDate);
+        fileOrders = storage.loadFile(orderDate);
         if (fileOrders == null) {
             return null;
         } else {
@@ -46,14 +46,22 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
     public Order createOrder(Order order) throws Exception {
         // this step is skipped if the file exists
         System.out.println(order.getOrderDate());
-        if (storage.doesFileExist(order.getOrderDate()) == null) {
+        if (storage.loadFile(order.getOrderDate()) == null) {
             storage.createNewFile(order.getOrderDate());
         }
+        // if ("Orders\\Orders_order.getOrderDate() != fileOrders) {
+        //     importFile(order.getOrderDate());
+        // }
+        storeOrders.clear();
         importFile(order.getOrderDate());
         loadData();
         activeOrders.add(order);
         storeOrders.put(order.getOrderNumber(), order);
         saveDataToOrders();
+        System.out.println(order.getOrderDate());
+        System.out.println(fileOrders);
+        System.out.println("store Orders: " + storeOrders);
+        System.out.println("active Orders: " + activeOrders);
 
         return order;
     }
@@ -208,6 +216,7 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
                     currentLine = readFile.nextLine();
                     Order ordersFromFile = unmarshallData(currentLine);
                     storeOrders.put(ordersFromFile.getOrderNumber(), ordersFromFile);
+                    activeOrders.add(ordersFromFile);
                 }
             } else {
                 System.out.println("The file is empty.");

@@ -1,16 +1,14 @@
 package com.sg.vendingmachine.service;
 
-import com.sg.vendingmachine.dto.VendingMachine;
 import com.sg.vendingmachine.dto.UserWallet;
-import com.sg.vendingmachine.dao.VendingMachineDao;
-import com.sg.vendingmachine.dao.VendingMachineAuditDao;
-import com.sg.vendingmachine.dao.VendingMachineAuditDaoImpl;
+import com.sg.vendingmachine.dto.CoinsReturned;
+import com.sg.vendingmachine.dto.VendingMachine;
+import com.sg.vendingmachine.dao.*;
 import java.util.*;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
 import com.sg.vendingmachine.dao.VendingMachineDaoImpl;
-import com.sg.vendingmachine.dto.CoinsReturned;
 import java.math.MathContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,8 +39,8 @@ public class VendingMachineServiceImpl implements VendingMachineService {
     }
 
     @Override
-    public VendingMachine getItem(String userInputItemName) throws Exception {
-        if (dao.getItem(userInputItemName) == null) {
+    public VendingMachine getItem(String userInputItemName) {
+        if (dao.getItem(userInputItemName) == null || dao.getItem(userInputItemName).getItemQuantity() <= 0) {
             return null;
         } else {
             VendingMachine retrievedItem = dao.getItem(userInputItemName);
@@ -51,21 +49,30 @@ public class VendingMachineServiceImpl implements VendingMachineService {
     }
     
     @Override
-    public void updateItems(VendingMachine item) throws Exception {
-        dao.updateItems(item);
+    public CoinsReturned updateItems(UserWallet userWallet, VendingMachine item) throws IOException, VendingMachineInsufficientFundsException {
+        CoinsReturned cr = moneyCalculation(MathOperator.MINUS, userWallet, item);
+        VendingMachine updatedItem = updateItem(item);
+        dao.updateItems(updatedItem);
+        return cr;
     }
+    
     @Override
-    public void removeItem(VendingMachine item) {
+    public void removeItem(VendingMachine item) throws IOException {
         dao.removeItem(item);
 
     }
+    
+    private VendingMachine updateItem(VendingMachine item) {
+        return item;
+    }
 
-    @Override
-    public String moneyCalculation(MathOperator operator, UserWallet userWallet, VendingMachine item) throws Exception {
+    private CoinsReturned moneyCalculation(MathOperator operator, UserWallet userWallet, VendingMachine item) throws IOException, VendingMachineInsufficientFundsException {
         BigDecimal userChange = moneyCalculate.calculate(MathOperator.MINUS, userWallet.getMoney(), item.getItemCost()).round(mc);
         
         if (hasEnoughMoney(userWallet.getMoney(), item.getItemCost()) == false) {
-            return null;
+            throw new 
+                VendingMachineInsufficientFundsException
+                    (String.format("Tried to purchase %.4f, but User wallet contained only %.4f .", item.getItemCost(), userWallet.getMoney()));
         } 
         
         int currentItemQuantity = 0;
@@ -77,31 +84,26 @@ public class VendingMachineServiceImpl implements VendingMachineService {
             removeItem(item);
         } else {
             try {
-                updateItems(item);
+                updateItem(item);
             } catch (Exception e) {}
         }
      
-        try {
-            auditDao.orderDate(item.getItemName(), userChange);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         auditDao.orderDate(item.getItemName(), userChange);
-        // System.out.println(userChange);
         
         MathContext mc = new MathContext(2);
-        String returnChange = "\n\n\nYou insert $" + userWallet.getMoney() + " to order " + item.getItemName() +
-                " for $" + item.getItemCost() + ".\n$" + 
-                userChange + " has been returned to you. Here you received... " + displayChange(returnChange(userChange));
-        return returnChange;
+        CoinsReturned cr = displayChange(returnChange(userChange));
+        
+        String statement = "\n\n\nYou insert $" + userWallet.getMoney().toString() + " to order " + item.getItemName() +
+                " for $" + item.getItemCost().toString() + ".\n$" + 
+                userChange.toString() + " has been returned to you. Here you received... ";
+        
+        cr.setStatement(statement);
+        
+        return cr;
     }
     
     private boolean hasEnoughMoney(BigDecimal money, BigDecimal itemCost) {
-        if (money.compareTo(itemCost) >= 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return (money.compareTo(itemCost) >= 0) ? true : false;
     }
     
     private CoinsReturned returnChange(BigDecimal userChange) {
@@ -148,6 +150,7 @@ public class VendingMachineServiceImpl implements VendingMachineService {
             }
             
             CoinsReturned cr = new CoinsReturned();
+            cr.setChange(userChange);
             cr.setPennies(penniesReturned);
             cr.setNickels(nickelsReturned);
             cr.setDimes(dimesReturned);
@@ -157,7 +160,7 @@ public class VendingMachineServiceImpl implements VendingMachineService {
             return cr;
     }
     
-    private String displayChange(CoinsReturned cr) {
+    private CoinsReturned displayChange(CoinsReturned cr) {
         String sNickel = "";
         String sDime = "";
         String sQuarter = "";
@@ -185,13 +188,18 @@ public class VendingMachineServiceImpl implements VendingMachineService {
         String displayDimes = Integer.toString(cr.getDimes()) + " dime" + sDime + "\n";
         String displayQuarters = Integer.toString(cr.getQuarters()) + " quarter" + sQuarter + "\n";
         String displayDollarCoins = Integer.toString(cr.getDollarCoins()) + " dollar coin" + sDollarCoin + "\n";
-
-        return "\n\n******************\n" + 
+        
+        String returnCoins = "\n\n******************\n" + 
                 "Returning:\n==================\n" + displayDollarCoins +
                 displayQuarters +
                 displayDimes + 
                 displayNickels + 
                 displayPennies +
                 "******************";
+        
+        cr.setReturnedCoins(returnCoins);
+        
+        return cr;
     }
+    
 }

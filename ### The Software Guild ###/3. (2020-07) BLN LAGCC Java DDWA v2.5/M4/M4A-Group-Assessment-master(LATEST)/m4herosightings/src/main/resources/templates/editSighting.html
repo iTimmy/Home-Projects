@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>Hero Sightings - Edit Sighting</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" 
+            crossorigin="anonymous">
+        <link rel="stylesheet" href="styles/index.css">
+        <link rel="stylesheet" href="styles/nav.css">
+    </head>
+
+<body>
+    <!-- BEGIN BODY -->
+    <div class="container-fluid">
+        <!-- NAVIGATION -->
+        <div class="row m-4 navBar">
+            <div class="domain col text-left col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <a id="toggleTheme" class="btn btn-outline-info btn-lg">
+                    <h5 class="themeStatus" style="display:inline;color:white">Dark</h5>
+                </a>
+            </div>
+            <div class="domain col text-center col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                <a href="/" class="domain btn btn-outline-primary btn-lg" id="home">
+                    <h5>Home</h5>
+                </a>
+            </div>
+            <div class="domain col text-center col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                <a href="hero" class="btn btn-outline-primary btn-lg" id="heroes">
+                    <h5>Heroes/Villians</h5>
+                </a>
+                <div class="subdomain col text-center col-12">
+                    <a href="superpower" class="btn btn-outline-primary btn-lg" id="superpower">
+                        <h5>Powers</h5>
+                    </a>
+                </div>
+            </div>
+            <div class="domain col text-center col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                <a href="sighting" class="btn btn-outline-primary btn-lg" id="sightings">
+                    <h5>Sightings</h5>
+                </a>
+                <div class="subdomain col text-center col-12">
+                    <a href="organization" class="btn btn-outline-primary btn-lg" id="organization">
+                        <h5>Organization</h5>
+                    </a>
+                </div>
+                <div class="subdomain col text-center col-12">
+                    <a href="location" class="btn btn-outline-primary btn-lg" id="location">
+                        <h5>Location</h5>
+                    </a>
+                </div>
+            </div>
+            <div class="domain col text-center col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                <a id="about" class="btn btn-outline-primary btn-lg">
+                    <h5>About</h5>
+                </a>
+            </div>
+        </div>
+        <!-- END NAVIGATION -->
+
+        <!--edit sighting form with errors boxes under fields-->
+        <div class="middle-editConfirmation bg-img">
+            <div class="row m-4 edit bg-color white-text">
+                <div class="column col-lg-3 col-xs-12 text-center m-3">
+                    <span class="h3">Edit Sighting</span>
+                </div>
+
+                <div class="column col-lg-7 col-xs-12 text-center m-3">
+                    <!-- EDIT FORM ERROR BOX -->
+                    <div class="col-12 m-1 text-center" th:if="${!errors.isEmpty()}">
+                        <p class="alert alert-danger" th:each="error : ${errors}" th:text="${error.message}">Error
+                            message</p>
+                    </div>
+
+                    <form action="editSighting" method="POST">
+                        <!-- DATE -->
+                        <div class="form-group row">
+                            <label for="date" class="column col-lg-3 col-xs-12 col-form-label">Date:</label>
+                            <div class="column col-lg-9 col-xs-12">
+                                <input type="date" name="date" id="date" class="form-control" th:value="${sighting.date}">
+
+                                <div th:if="${#fields.hasErrors('sighting.date')}">
+                                    <p th:each="error: ${#fields.errors('sighting.date')}" th:text="${error}"
+                                    class="alert alert-danger"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DESCRIPTION -->
+                        <div class="form-group row">
+                            <label for="description" class="column col-lg-3 col-xs-12 col-form-label">Description:</label>
+                            <div class="column col-lg-9 col-xs-12">
+                                <input type="text" name="description" id="description" class="form-control"
+                                    th:value="${sighting.description}">
+
+                                <div th:if="${#fields.hasErrors('sighting.description')}">
+                                    <p th:each="error: ${#fields.errors('sighting.description')}" th:text="${error}"
+                                    class="alert alert-danger"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- VALID SUCCESS -->
+                        <div class="form-group row">
+                            <label for="hero" class="column col-lg-3 col-xs-12 col-form-label">Hero:</label>
+                            <div class="column col-lg-9 col-xs-12">
+                                <select name="heroId" id="hero" class="form-control">
+                                    <option th:each="hero : ${heroes}" th:value="${hero.heroId}" th:text="${hero.name}"
+                                            th:selected="${sighting.hero.heroId == hero.heroId}">
+                                        Hero
+                                    </option>
+                                </select>
+
+                                <!-- INVALID ERROR -->
+                                <div th:if="${#fields.hasErrors('sighting.hero')}">
+                                    <p th:each="error: ${#fields.errors('sighting.hero')}" th:text="${error}"
+                                    class="alert alert-danger"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- LOCATION -->
+                        <div class="form-group row">
+                            <label for="location" class="col-3 col-form-label">Location:</label>
+                            <div class="column col-lg-9 col-xs-12">
+                                <select name="locationId" id="location" class="form-control">
+                                    <option th:each="location : ${locations}" th:value="${location.locationId}"
+                                            th:text="${location.name}"
+                                            th:selected="${sighting.location.locationId == location.locationId}">
+                                        Location
+                                    </option>
+                                </select>
+
+                                <div th:if="${#fields.hasErrors('sighting.location')}">
+                                    <p th:each="error: ${#fields.errors('sighting.location')}" th:text="${error}"
+                                    class="alert alert-danger"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--hidden id tracking-->
+                        <input type="hidden" name="id" th:value="${sighting.sightingId}"/>
+
+                        <button type="submit" class="btn btn-success">Edit Sighting</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- END -->
+
+        <!-- FOOTER/ABOUT -->
+        <div class="bottom" id="footer-about"></div>
+        <!-- END FOOTER/ABOUT -->
+    </div>
+    <!-- END BODY -->
+
+
+
+    <!-- SCRIPTS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+            crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/33e502fc2c.js" crossorigin="anonymous"></script>
+    <script src="main.js"></script>
+    <script src="header.js"></script>
+    <script src="footer.js"></script>
+    <!-- END SCRIPTS -->
+
+
+
+</body>
+
+</html>

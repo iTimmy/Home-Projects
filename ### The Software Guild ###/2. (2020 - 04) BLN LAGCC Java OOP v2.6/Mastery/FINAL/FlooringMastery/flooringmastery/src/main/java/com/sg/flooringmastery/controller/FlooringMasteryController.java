@@ -70,28 +70,35 @@ public class FlooringMasteryController {
     }
 
     public void displayOrders() throws Exception {
+        // VIEW \\
         view.displayDisplayOrdersTitle();
         LocalDate userInputOrderDate = view.displayExistingInputDate();
-        searching();
-            List<Order> listOrders = service.getOrdersByDate(userInputOrderDate);
-            if (listOrders == null) {
-                view.displayDoesNotExist();
-            } else {
-                view.displayDisplayOrdersBanner(userInputOrderDate);
-                view.displayDisplayOrders(listOrders);
-            }
+        // SERVICE \\
+        List<Order> listOrders = service.getOrdersByDate(userInputOrderDate);
+        if (listOrders == null) {
+            view.displayDoesNotExist();
+        } else {
+            view.displayDisplayOrdersBanner(userInputOrderDate);
+            view.displayDisplayOrders(listOrders);
+        }
     }
 
     public Order addOrder() throws Exception {
         doShow = true;
-        // DISPLAY PRODUCTS \\
+        // VIEW \\
         List<Product> listProducts = service.getAllProducts();
         List<Tax> listTaxes = service.getAllTaxes();
-        // TOGGLES ADD OR EDIT MODE \\
-
         newOrder = view.displayAddOrder(listProducts, listTaxes);
 
+        // SERVICE \\
         Order order = service.createOrder(newOrder);
+        if (order == null) {
+            System.out.println("hyhy");
+            view.displayFileStatus(false);
+        } else if (order != null) {
+            System.out.println("hygfdgdhy");
+            view.displayFileStatus(true);
+        }
         view.returnCalculations(order);
         view.displaySaveProgress();
         view.displaySuccess();
@@ -131,7 +138,6 @@ public class FlooringMasteryController {
             }
         }
         Order findOrder = view.displayRemoveOrder();
-        searching();
         service.deleteOrder(findOrder);
         valid = true;
     }
@@ -157,18 +163,6 @@ public class FlooringMasteryController {
 
     public void quit() {
         view.displayQuit();
-    }
-
-
-
-
-
-
-
-
-
-    private void searching() {
-        System.out.println("[1] Searching...");
     }
 }
 

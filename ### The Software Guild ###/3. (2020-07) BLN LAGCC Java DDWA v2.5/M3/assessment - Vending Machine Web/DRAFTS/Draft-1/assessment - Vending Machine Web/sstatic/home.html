@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+
+        </title>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    </head>
+
+<style>
+    body {
+        background-color: black;
+        color: white;
+        text-align: center;
+        background-image: url("https://wallpapercave.com/wp/PWKKTo6.jpg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+    .header {
+        height: 1000px;
+    }
+    .header h1 {
+        padding: 50px;
+        color: white;
+        text-align: center;
+    }
+
+    #display-items {
+        height: 500pz;
+    }
+
+    .bg-color {
+        background-color: rgba(0,0,0,0.75);
+    }
+
+    input {
+        width: 20px;
+    }
+
+    form {
+        padding: 50px;
+    }
+
+    #orders {
+        height: 100%;
+    }
+
+    .body {
+        display: none;
+        padding: 100px;
+    }
+
+    .body h1 {
+        padding-top: 100px;
+    }
+
+    #change {
+        font-size: 25px;
+        padding-bottom: 120px;
+    }
+
+    .error {
+        color: red;
+        background-color: rgb(255, 180, 180);
+    }
+
+    .error-item, .error-money, .error-item-blank, .error-money-blank, .error-type {
+        display: none;
+    }
+
+    tr {
+        font-size: 15px;
+        transition-property: font-size;
+        transition-duration : 1000ms;
+    }
+
+    tr:hover {
+        background-color: green;
+        font-size: 25px;
+        transition-property: font-size;
+        transition-duration : 500ms;
+    }
+
+    a:hover, a, a:visited {
+        text-decoration: none;
+        color: white;
+    }
+</style>
+
+<body>
+    <div class="container-fluid">
+        <div class="header">
+            <h1 class="row bg-color">Vending Machine
+                <hr>
+            </h1>
+
+            <div class="row">
+                <div class="col-lg-6 bg-color" id="display-items">
+                    <h1>Items</h1>
+
+                    <table class="table table-dark">
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Item Cost</th>
+                                <th>Item Quantity</th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="itemRows">
+                            <!-- JSON -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-1">
+                    <img src="https://media4.giphy.com/media/3o7Zen3RCzrnhHnSkU/giphy.gif" height="50%" width="30%">
+                </div>
+                <div class="col-lg-5" id="buy-item">
+                    <!-- FORM 1 -->
+                    <form class="form-horizontal" role="form" id="money-form">
+                        <div class="form-group row">
+                            <label for="total" class="col-lg-6 control-label text-right">Total $ In: </label>
+                        
+                            <div class="col-lg-6">
+                                <input type="text" class="form-control" id="total" placeholder="$" required />
+                                <p class="error error-money">You do not have enough money.</p>
+                                <p class="error error-type">Must be a number (0-9999). </p>
+                                <p class="error error-money-blank">You cannot leave this blank.</p>
+                            </div>
+                        </div>                           
+
+                        <div class="form-group row">
+                            <button type="button" class="col-lg-3 add btn btn-success" id="add-dollar">Add Dollar</button>
+                            <button type="button" class="col-lg-3 add btn btn-info" id="add-quarter">Add Quarter</button>
+                            <button type="button" class="col-lg-3 add btn btn-warning" id="add-dime">Add Dime</button>
+                            <button type="button" class="col-lg-3 add btn btn-danger" id="add-nickel">Add Nickel</button>
+                        </div>
+                    </form>
+
+                    <!-- FORM 2 -->
+                    <form class="form-horizontal" role="form" id="purchase-form">
+                        <div class="form-group">
+                            <label for="enter-messages" class="col-lg-6 control-label text-right">Messages: </label>
+                    
+                            <div class="col-lg-6">
+                                <input type="text" class="form-control" id="enter-messages" placeholder="Enter messages" required />
+                            </div>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="enter-item" class="col-lg-6 control-label text-right">Item: </label>
+                    
+                            <div class="col-lg-6">
+                                <input type="text" class="form-control" id="enter-item" placeholder="Enter item" required />
+                                <p class="error error-item">Item does not exist.</p>
+                                <p class="error error-item-blank">You cannot leave this blank.</p>
+                            </div>
+                        </div>
+                    
+                        <div class="form-group">
+                            <button type="button" class="btn btn-success" id="make-purchase">Make Purchase</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="body">
+            <div class="bg-color" id="orders">
+                <h1>Receipt</h1>
+                <hr>
+
+                <!-- FORM 3 -->
+                <form class="form-horizontal" role="form" id="purchase-form">
+                    <div class="form-group">
+                        <p id="change">
+                            
+                        </p>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-warning" id="get-item">Change</button>
+                        <button class="btn btn-danger" id="get-item">Change Return</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="js/home.js"></script>
+
+
+    
+</body>
+
+</html>

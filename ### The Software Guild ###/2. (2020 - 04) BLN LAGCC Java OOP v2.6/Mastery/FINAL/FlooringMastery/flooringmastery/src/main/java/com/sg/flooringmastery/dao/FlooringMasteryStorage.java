@@ -108,11 +108,11 @@ public class FlooringMasteryStorage {
         }
     }
 
-    public File doesFileExist(LocalDate userInputOrderDate) throws Exception {
+    public boolean doesFileExist(LocalDate userInputOrderDate) throws Exception {
+        importFiles();
+
         fileOrders = new File("");
         String formattedDate = "";
-
-        importFiles();
 
         // FORMAT USER INPUT DATE
         formattedDate = "Orders\\Orders_" + formatDateToString(userInputOrderDate) + ".txt";
@@ -133,9 +133,18 @@ public class FlooringMasteryStorage {
         }        
 
         if (!formattedDate.equals(a)) {
-            return null;
+            return false;
         }
 
-        return fileOrders;
+        return true;
     }
+
+    public File loadFile(LocalDate userInputOrderDate) throws Exception {
+        if (doesFileExist(userInputOrderDate) == true) {
+            return fileOrders;
+        } else {
+            return null;
+        }
+    }
+
 }

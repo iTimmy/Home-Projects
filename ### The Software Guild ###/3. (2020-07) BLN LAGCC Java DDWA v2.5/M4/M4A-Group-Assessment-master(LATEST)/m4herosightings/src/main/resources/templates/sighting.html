@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>HERO Sighting - Sightings</title>
+
+        <!-- Link to BS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
+            crossorigin="anonymous">
+
+        <!-- Style CSS -->
+        <link rel="stylesheet" href="styles/index.css">
+        <link rel="stylesheet" href="styles/nav.css">
+        <link rel="stylesheet" href="plugins/swiper.min.css">
+    </head>
+
+<!-- START CSS -->
+<style>
+    .box-1 {
+        padding-top: 150px;
+        margin: 0 auto;
+    }
+
+    .swiper-container {
+        background-color: rgba(0, 0, 0, 0.5);
+        height: 500px;
+        width: 100%;
+        margin: 0 auto;
+        z-index: 0;
+    }
+
+    .swiper-container img {
+        width: 500px;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: -5;
+    }
+
+    /* .swiper-container img {
+        width: 500px;
+    } */
+
+    .swiper-slider {
+        width: 500px;
+    }
+
+    .swiper-wrapper {
+        width: 500px;
+    }
+
+    .middle {
+        padding-bottom: 100px;
+    }
+</style>
+<!-- END CSS -->
+
+<body>
+    <!-- BEGIN BODY -->
+    <div class="container-fluid">
+        <!-- NAVIGATION -->
+        <div class="row m-4 navBar">
+            <div class="domain col text-left col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <a id="toggleTheme" class="btn btn-outline-info btn-lg">
+                    <h5 class="themeStatus" style="display:inline;color:white">Dark</h5>
+                </a>
+            </div>
+            <div class="domain col text-center col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                <a href="/" class="domain btn btn-outline-primary btn-lg" id="home">
+                    <h5>Home</h5>
+                </a>
+            </div>
+            <div class="domain col text-center col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                <a href="hero" class="btn btn-outline-primary btn-lg" id="heroes">
+                    <h5>Heroes/Villians</h5>
+                </a>
+                <div class="subdomain col text-center col-12">
+                    <a href="superpower" class="btn btn-outline-primary btn-lg" id="superpower">
+                        <h5>Powers</h5>
+                    </a>
+                </div>
+            </div>
+            <div class="domain col text-center col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                <a href="sighting" class="btn btn-outline-primary btn-lg" id="sightings">
+                    <h5>Sightings</h5>
+                </a>
+                <div class="subdomain col text-center col-12">
+                    <a href="organization" class="btn btn-outline-primary btn-lg" id="organization">
+                        <h5>Organization</h5>
+                    </a>
+                </div>
+                <div class="subdomain col text-center col-12">
+                    <a href="location" class="btn btn-outline-primary btn-lg" id="location">
+                        <h5>Location</h5>
+                    </a>
+                </div>
+            </div>
+            <div class="domain col text-center col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                <a id="about" class="btn btn-outline-primary btn-lg">
+                    <h5>About</h5>
+                </a>
+            </div>
+        </div>
+        <!-- END NAVIGATION -->
+
+        <!-- ENTIRE BODY -->
+        <div class="all">
+            <!-- SIGHTING GALLERY -->
+            <div class="top bg-img" id="sightingsTop">
+                <div class="box-1">
+                    <!-- ITUNES-LIKE SLIDER -->
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" th:each="sighting : ${sightings}">
+                                <div class="revealMap" id="sightingID">
+                                    <img th:attr="src=|https://maps.googleapis.com/maps/api/staticmap?center=${sighting.location.latitude},${sighting.location.longitude}&zoom=18&size=750x750&maptype=roadmap&markers=color:blue%7Clabel:S%7C${sighting.location.latitude},${sighting.location.longitude}&key=AIzaSyBpD442VLkwZ5_Kp795_zE-UWHy8-6EBQc|">
+
+                                    <h3 th:text="${sighting.hero.name}"
+                                        th:attr="data-lat=${sighting.location.latitude},data-long=${sighting.location.longitude}">
+                                        Hero 1
+                                    </h3>
+                                </div>
+                                <img src="https://www.bergmannpc.com/imager/contentimages/project/unc-charlotte-center-city/6658/UNC-Center-City-Campus-Exterior_20d4ef1e03a0bb7e3cb004631c67ab23.jpg">
+                            </div>
+                        </div>
+                        <!-- DOT NAV -->
+                        <div class="swiper-pagination"></div>
+                        <!-- NOT SURE YET -->
+                        <div class="swiper-scrollbar"></div>
+                    </div>
+                    <div class="separator"></div>
+                    <div class="search">
+                        <div id="hero-search-bar" class="search">
+                            <input id="search-hero-db" value="hey" name="search-hero-db" type="text">
+                        </div>
+                        <button type="button" class="btn other btn-primary btn-md" id="search-hero-btn">Search</button>
+                    </div>
+                    <div class="separator"></div>
+                    <div class="choose">
+                        <!-- <ul>
+                            <li>Sightings</li>
+                        </ul> -->
+                    </div>
+                    <div class="results">
+                        <!--sighting data table-->
+                        <div class="row m-4 border border-dark">
+                            <div class="col text-center m-3">
+                                <table class="table table-striped table-dark">
+                                    <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Hero</th>
+                                        <th>Location</th>
+                                        <th></th> <!--View-->
+                                        <th></th> <!--Edit-->
+                                        <th></th> <!--Delete-->
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="sighting : ${sightings}">
+                                        <td th:text="${sighting.date}">Sighting Date</td>
+                                        <td th:text="${sighting.hero.name}">Sighting Hero</td>
+                                        <td th:text="${sighting.location.name}">Sighting Location</td>
+                                        <td><a href="#" th:href="@{/viewSighting(id=${sighting.sightingId})}"><i
+                                                class="fas fa-eye"></i></a></td>
+                                        <td><a href="#" th:href="@{/editSighting(id=${sighting.sightingId})}"><i
+                                                class="fas fa-edit"></i></a></td>
+                                        <td><a href="#" th:href="@{/deleteSighting(id=${sighting.sightingId})}"><i
+                                                class="fas fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END SIGHTING GALLERY -->
+
+            <!-- SIGHTING FORM -->
+            <div class="middle bg-img" id="sightingsMiddle"
+                style="height:80%"><br><br><br>
+
+                <!--add form error box-->
+                <div class="column col-lg-12 col-sm-12 m-1 text-center" th:if="${!errors.isEmpty()}">
+                    <p class="alert alert-danger" th:each="error : ${errors}" th:text="${error.message}">Error message</p>
+                </div>
+
+                <!--add sighting form-->
+                <div class="row m-4 sightings-form bg-color">
+                    <div class="column col-lg-3 col-xs-12 text-center m-3">
+                        <span class="h3">Add Sighting</span>
+                    </div>
+
+                    <div class="column col-lg-7 col-xs-12 text-center m-3">
+                        <form action="addSighting" method="POST">
+                            <!--date-->
+                            <div class="form-group row">
+                                <label for="date" class="col-lg-3 col-xs-12 col-form-label">Date:</label>
+                                <div class="col-lg-9 col-xs-12">
+                                    <input type="date" class="form-control" name="date" id="date">
+                                </div>
+                            </div>
+
+                            <!--description-->
+                            <div class="form-group row">
+                                <label for="description" class="col-lg-3 col-xs-12 col-form-label">Description:</label>
+                                <div class="col-lg-9 col-xs-12">
+                                    <input type="text" class="form-control" name="description" id="description">
+                                </div>
+                            </div>
+
+                            <!--hero select-->
+                            <div class="form-group row">
+                                <label for="hero" class="col-lg-3 col-xs-12 col-form-label">Hero/Villain:</label>
+                                <select name="heroId" id="hero" class="form-control col">
+                                    <option th:each="hero : ${heroes}" th:value="${hero.heroId}" th:text="${hero.name}">
+                                        Superpower
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!--location select-->
+                            <div class="form-group row">
+                                <label for="location" class="col-lg-3 col-xs-12 col-form-label">Location:</label>
+                                <select name="locationId" id="location" class="form-control col">
+                                    <option th:each="location : ${locations}" th:value="${location.locationId}"
+                                            th:text="${location.name}">
+                                        Location
+                                    </option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn other btn-outline-primary">Add Sighting</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- END SIGHTING FORM -->
+        </div>
+        <!-- END ENTIRE BODY -->
+
+        <!-- FOOTER/ABOUT -->
+        <div class="bottom" id="footer-about"></div>
+        <!-- END FOOTER/ABOUT -->
+    </div>
+    <!-- END BODY -->
+
+
+
+    <!-- PLUGINS + THIRD PARTY -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+            crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/33e502fc2c.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+    <script src="plugins/swiper.min.js"></script>
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            effect: 'coverflow',
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            coverflowEffect: {
+                rotate: 50,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+            },
+        });
+    </script>
+    <script src="main.js"></script>
+    <script src="header.js"></script>
+    <script src="footer.js"></script>
+    <!-- END SCRIPTS -->
+
+
+
+</body>
+
+</html>

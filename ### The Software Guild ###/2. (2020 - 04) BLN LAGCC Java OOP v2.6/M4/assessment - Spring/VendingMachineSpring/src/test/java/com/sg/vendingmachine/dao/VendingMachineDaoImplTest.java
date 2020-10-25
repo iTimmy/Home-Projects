@@ -5,9 +5,9 @@
  */
 package com.sg.vendingmachine.dao;
 
-import com.sg.vendingmachine.dao.VendingMachineDaoImpl;
-import com.sg.vendingmachine.dao.VendingMachineDao;
 import com.sg.vendingmachine.service.VendingMachineService;
+import com.sg.vendingmachine.dao.VendingMachineDao;
+import com.sg.vendingmachine.dao.VendingMachineDaoImpl;
 import com.sg.vendingmachine.dto.VendingMachine;
 import com.sg.vendingmachine.service.MathOperator;
 import java.util.List;
@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeAll;
 
 /**
  *
@@ -35,7 +36,7 @@ public class VendingMachineDaoImplTest {
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws Exception {
     }
     
     @AfterClass
@@ -45,8 +46,6 @@ public class VendingMachineDaoImplTest {
     @Before
     public void setUp() throws IOException {
         String testFile = "VendingMachineTest.txt";
-        // Use the FileWriter to quickly blank the file
-        // new FileWriter(testFile);
         testDao = new VendingMachineDaoImpl(testFile);
     }
     
@@ -73,31 +72,58 @@ public class VendingMachineDaoImplTest {
         list.add(itemTwo);
 
         assertEquals(2, list.size());
-        // add in a few more assert fctions
-        // if itemOne contains pringles
-        // if itemTwo contains soda
     }
 
-    /**
-     * Test of getItem method, of class VendingMachineDaoImpl.
-     * @throws java.lang.Exception
-     */
     @Test
     public void testGetItem_String() throws Exception {
-        String itemNameTest = "pringles";
+        String itemNameTest = "soda";
         BigDecimal itemCostTest = new BigDecimal(2.5).round(mc);
         VendingMachine item = new VendingMachine();
         
         item.setItemName(itemNameTest.toUpperCase());
         item.setItemCost(itemCostTest);
-        item.setItemQuantity(6);
+        item.setItemQuantity(10);
+        
+        List<VendingMachine> list = testDao.getAllItems();
+        list.add(item);
 
         VendingMachine result = testDao.getItem(item.getItemName()); // 4
-//        System.out.println("getItem 2: " + item.getItemQuantity()); 
-//        System.out.println(item.getItemName().equals("pringles"));
-//        System.out.println(itemNameTest);
-//        System.out.println(result.getItemName());
-        assertEquals(item.getItemName(), result.getItemName());
-        assertTrue(item.getItemName().equals(result.getItemName()));
+//      System.out.println("getItem 2: " + item.getItemQuantity()); 
+//      System.out.println(item.getItemName().equals("pringles"));
+//      System.out.println(itemNameTest);
+//      System.out.println(result.getItemName());
+        assertTrue(item.getItemName().equals("SODA"));
+    }
+    
+    @Test
+    public void testUpdateItems_VendingMachine() throws Exception {
+        VendingMachine itemOne = new VendingMachine();
+        itemOne.setItemName("fried dog");
+        itemOne.setItemCost(new BigDecimal(2.5));
+        itemOne.setItemQuantity(50);
+        testDao.updateItems(itemOne);
+        
+        VendingMachine updatedItem = testDao.getItem(itemOne.getItemName());
+        assertEquals(updatedItem.getItemQuantity(), itemOne.getItemQuantity());
+    }
+    
+    @Test
+    public void testRemoveItem_VendingMachine() throws Exception {
+        List<VendingMachine> list = testDao.getAllItems();
+        VendingMachine itemOne = new VendingMachine();
+        itemOne.setItemName("pringles");
+        itemOne.setItemCost(new BigDecimal(2.5));
+        itemOne.setItemQuantity(50);
+        list.add(itemOne);
+        
+        VendingMachine itemTwo = new VendingMachine();
+        itemTwo.setItemName("CANDY");
+        itemTwo.setItemCost(new BigDecimal(2.5));
+        itemTwo.setItemQuantity(50);
+        list.add(itemTwo);
+        
+        testDao.removeItem(itemTwo);
+
+        assertEquals(null, testDao.getItem(itemTwo.getItemName()));
     }
 }

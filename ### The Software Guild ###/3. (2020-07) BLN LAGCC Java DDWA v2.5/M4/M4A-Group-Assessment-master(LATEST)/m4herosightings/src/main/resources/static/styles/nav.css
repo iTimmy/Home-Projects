@@ -1,0 +1,58 @@
+.navBar {
+    height: 50px;
+}
+
+.navBar .domain {
+    z-index: 5;
+}
+
+.navBar .subdomain {
+    width: inherit;
+    display: none;
+    z-index: 3;
+}
+
+.navBar .subdomain .btn {
+    background-color: rgba(0,0,0,0.75);
+}
+
+.navBar .domain:hover .subdomain {
+    display: block;
+}
+
+.navBar h5 {
+    text-align: center;
+    margin: 0 auto;
+}
+
+@media screen and (min-width: 1287px) {
+    .navBar .btn {
+        width: 180px;
+        transition-property: width;
+        transition-duration: 200ms;
+    }
+}
+
+@media screen and (max-width: 1287px) {
+    .navBar .btn {
+        width: 50px;
+        transition-property: width;
+        transition-duration: 200ms;
+    }
+}
+
+@media screen and (max-width: 580px) {
+    .navBar .btn {
+        width: 12px;
+        transition-property: width;
+        transition-duration: 200ms;
+    }
+}
+
+.navBar .btn {
+    height: 50px;
+}
+
+.navBar .btn h5, .navBar .themeStatus {
+    padding-top: 5px;
+}

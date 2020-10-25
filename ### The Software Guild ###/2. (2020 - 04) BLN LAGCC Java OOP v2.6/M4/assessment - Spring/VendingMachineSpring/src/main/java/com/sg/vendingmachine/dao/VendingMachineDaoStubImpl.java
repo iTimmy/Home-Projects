@@ -6,9 +6,12 @@
 package com.sg.vendingmachine.dao;
 
 import com.sg.vendingmachine.dto.VendingMachine;
+
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import com.sg.vendingmachine.dao.*;
 
 /**
  *
@@ -21,7 +24,7 @@ public class VendingMachineDaoStubImpl implements VendingMachineDao {
         onlyItem = new VendingMachine();
         onlyItem.setItemName("CANDY");
         onlyItem.setItemQuantity(5);
-        onlyItem.setItemCost(new BigDecimal(2.34));
+        onlyItem.setItemCost(new BigDecimal(2.50));
     }
 
     public VendingMachineDaoStubImpl(VendingMachine testItem){
@@ -29,7 +32,7 @@ public class VendingMachineDaoStubImpl implements VendingMachineDao {
      }
 
     @Override
-    public VendingMachine getItem(String itemName) throws VendingMachinePersistenceException {
+    public VendingMachine getItem(String itemName) {
         if (itemName.equals(onlyItem.getItemName())) {
             return onlyItem;
         } else {
@@ -50,10 +53,10 @@ public class VendingMachineDaoStubImpl implements VendingMachineDao {
     }
 
     @Override
-    public void updateItems(VendingMachine item) throws VendingMachinePersistenceException {      
+    public void updateItems(VendingMachine item) throws IOException {      
     }
 
     @Override
-    public void removeItem(VendingMachine item) {
+    public void removeItem(VendingMachine item) throws IOException {
     }   
 }

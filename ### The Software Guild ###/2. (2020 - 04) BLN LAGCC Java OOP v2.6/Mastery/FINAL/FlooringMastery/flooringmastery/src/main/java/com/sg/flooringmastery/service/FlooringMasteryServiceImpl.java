@@ -14,6 +14,7 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     FlooringMasteryOrderDao orderDao;
     FlooringMasteryProductDao productDao;
     FlooringMasteryTaxDao taxDao;
+    int newOrderNumber = 0;
 
     @Autowired
     public FlooringMasteryServiceImpl(FlooringMasteryOrderDao orderDao, FlooringMasteryProductDao productDao, FlooringMasteryTaxDao taxDao) {
@@ -25,10 +26,6 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     private BigDecimal roundBigDecimal(BigDecimal decimal) {
         BigDecimal roundedBigDecimal = decimal.setScale(2, RoundingMode.CEILING);
         return roundedBigDecimal;
-    }
-
-    private void searching() {
-        System.out.println("[2] Searching...");
     }
 
     private Order calculation(Order order) {
@@ -47,6 +44,8 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
         if (storedTax == null) {
             return null;
         }
+
+        // get most recent order number of the collections. make method.
 
         BigDecimal customerStateTaxRate = roundBigDecimal(state.fetchStateTax(stateName));
         BigDecimal taxRate = storedTax.getTaxRate();
@@ -122,7 +121,6 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
 
     @Override
     public void deleteOrder(Order orderNumber) throws Exception {
-        searching();
         orderDao.deleteOrder(orderNumber);
     }   
 
@@ -164,8 +162,10 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     }
 
     private int generateOrderNumber() throws NumberFormatException {
-        double generateOrderNumber = Math.random() * 100;
-        int newOrderNumber = (int)generateOrderNumber;
+        // double generateOrderNumber = Math.random() * 100;
+        // int newOrderNumber = (int)generateOrderNumber;
+        // grab the greatest order number from the dao
+        newOrderNumber++;
         return newOrderNumber;
     }
 }

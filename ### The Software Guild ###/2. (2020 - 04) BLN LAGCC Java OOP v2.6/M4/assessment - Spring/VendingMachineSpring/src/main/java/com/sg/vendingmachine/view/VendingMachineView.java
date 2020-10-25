@@ -1,14 +1,18 @@
 package com.sg.vendingmachine.view;
 
+import com.sg.vendingmachine.dto.CoinsReturned;
 import com.sg.vendingmachine.dto.UserWallet;
 import com.sg.vendingmachine.dto.VendingMachine;
 import java.util.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class VendingMachineView {
+
+    //UserIO io = new UserIOConsoleImpl();
 
     UserIO io;
 
@@ -17,12 +21,14 @@ public class VendingMachineView {
         this.io = io;
     }
 
-    public void display() throws Exception {
+    public void display() {
         io.println("\n           MENU\n----------------------------\n" + "1. Buy item\n" + 
         "2. Exit\n" + "_____________________________");
     }
 
-     public List<VendingMachine> displayListItems(List<VendingMachine> listItems) {
+
+
+    public List<VendingMachine> displayListItems(List<VendingMachine> listItems) {
         // null in controller but not in view
         // also, it is what jumpstarts the program... why?
         //System.out.println("view: " + listItems);
@@ -85,16 +91,9 @@ public class VendingMachineView {
         io.println("Error.");
     }
 
-    public void displaySuccess() {
-        Scanner scan = new Scanner(System.in);
-        String enter = io.readString("\n________________________________________________\nTask completed. Return to main menu? ");
-        if (enter.isEmpty() == true) {
-            System.out.println("empty");
-            enter = scan.nextLine();
-        } else if (scan.hasNextLine() == true) {
-            System.out.println("emptyy");
-            enter = scan.nextLine();
-        }
+    public String displaySuccess() {
+        String enter = io.readString("\n________________________________________________\nTask completed. Return to main menu? (y/n)");
+        return enter;
     }
 
     public void displayNotEnoughMoneyMSG() {
@@ -105,7 +104,7 @@ public class VendingMachineView {
         io.println("This item either does not exist or is not currently in stock.");
     }
 
-    public void displayChange(String returnChange) {
-        io.println(returnChange);
+    public void displayChange(CoinsReturned returnChange) {
+        io.println(returnChange.getStatement() + returnChange.getReturnedCoins());
     }
 }

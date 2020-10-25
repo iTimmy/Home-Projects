@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="3" failures="0" name="com.sg.vendingmachine.service.VendingMachineServiceImplTest" time="0.022" errors="0" skipped="0">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="java.vm.version" value="14.0.2+12-46"/>
+    <property name="sun.boot.library.path" value="I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin"/>
+    <property name="maven.multiModuleProjectDirectory" value="I:\C0De\---Home-Projects---\Home-Projects\### The Software Guild ###\2. (2020 - 04) BLN LAGCC Java OOP v2.6\M3\assessment - VendingMachine\VendingMachine"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="path.separator" value=";"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="sun.os.patch.level" value="Service Pack 1"/>
+    <property name="user.script" value=""/>
+    <property name="user.country" value="US"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="test" value="com.sg.vendingmachine.service.VendingMachineServiceImplTest"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="I:\C0De\---Home-Projects---\Home-Projects\### The Software Guild ###\2. (2020 - 04) BLN LAGCC Java OOP v2.6\M3\assessment - VendingMachine\VendingMachine"/>
+    <property name="java.vm.compressedOopsMode" value="32-bit"/>
+    <property name="java.runtime.version" value="14.0.2+12-46"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.io.tmpdir" value="C:\Users\MUSICA~1\AppData\Local\Temp\"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.variant" value=""/>
+    <property name="os.name" value="Windows 7"/>
+    <property name="maven.ext.class.path" value="I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven-nblib\netbeans-eventspy.jar"/>
+    <property name="classworlds.conf" value="I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven\bin\..\bin\m2.conf"/>
+    <property name="sun.jnu.encoding" value="Cp1252"/>
+    <property name="java.library.path" value="I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;I:\ALL PROGRAMS\Windows\Java Kit\bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Java\jdk1.8.0_211\bin;G:\Computers\Windows 7 Pro\Just Stuff Here\Installations &amp; Setups\Programs\MATLAB\MATLAB\bin;G:\Computers\Windows 7 Pro\Just Stuff Here\Installations &amp; Setups\Programs\--- PACKAGES ---\NodeJS\;G:\Computers\Windows 7 Pro\Just Stuff Here\Installations &amp; Setups\Programs\Git\Git\usr\bin;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Git\cmd;C:\Program Files\Amazon\AWSCLIV2\;C:\PHP;C:\Users\Music Account\AppData\Local\atom\bin;C:\Program Files\Java\jdk1.8.0_231\bin;C:\Program Files\Java\jdk1.8.0_211\bin;C:\Users\Music Account\AppData\Roaming\Dashlane\6.2018.0.34867\bin\Firefox_Extension\{442718d9-475e-452a-b3e1-fb1ee16b8e9f}\components;C:\Users\Music Account\AppData\Roaming\Dashlane\6.2018.0.34867\ucrt;C:\Users\Music Account\AppData\Roaming\Dashlane\6.2018.0.34867\bin\Qt;C:\Users\Music Account\AppData\Roaming\Dashlane\6.2018.0.34867\bin\Ssl;C:\Users\Music Account\AppData\Roaming\npm;C:\Users\Music Account\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Music Account\.dotnet\tools;I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\PyCharm\? PyCharm 2020.2 ?\PyCharm Community Edition 2020.2\bin;;I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\php\php;."/>
+    <property name="maven.conf" value="I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven\bin\../conf"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="java.class.version" value="58.0"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="6.1"/>
+    <property name="library.jansi.path" value="I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven\bin\..\lib\jansi-native"/>
+    <property name="user.home" value="C:\Users\Music Account"/>
+    <property name="user.timezone" value="America/New_York"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.specification.version" value="14"/>
+    <property name="user.name" value="Music Account"/>
+    <property name="java.class.path" value="I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven\bin\..\boot\plexus-classworlds-2.6.0.jar"/>
+    <property name="java.vm.specification.version" value="14"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher -Dtest=com.sg.vendingmachine.service.VendingMachineServiceImplTest -Dmaven.ext.class.path=I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven-nblib\netbeans-eventspy.jar -Dfile.encoding=UTF-8 test-compile surefire:test"/>
+    <property name="java.home" value="I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="java.version" value="14.0.2"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="maven.home" value="I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven\bin\.."/>
+    <property name="file.separator" value="\"/>
+    <property name="java.version.date" value="2020-07-14"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+  </properties>
+  <testcase classname="com.sg.vendingmachine.service.VendingMachineServiceImplTest" name="testGetAllItems" time="0.004"/>
+  <testcase classname="com.sg.vendingmachine.service.VendingMachineServiceImplTest" name="testRemoveItem" time="0.017"/>
+  <testcase classname="com.sg.vendingmachine.service.VendingMachineServiceImplTest" name="testUpdateItems_VendingMachine" time="0.001"/>
+</testsuite>

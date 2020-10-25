@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>Hero Sightings - Powers</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" 
+            crossorigin="anonymous">
+        <link rel="stylesheet" href="styles/index.css">
+        <link rel="stylesheet" href="styles/nav.css">
+    </head>
+
+<!-- START CSS -->
+<style>
+    .middle-viewLayout .bg-color {
+        padding: 100px;
+    }
+
+    iframe {
+        width: 100%;
+        height: 90%;
+    }
+
+    #map_wrapper {
+        height: 400px;
+    }
+
+    #map_canvas {
+        width: 100%;
+        height: 100%;
+    }
+
+    .googleMap {
+        margin-bottom: 0;
+        height: 100%;
+    }
+</style>
+<!-- END CSS -->
+
+<body></body>
+    <!-- BEGIN BODY -->
+    <div class="container-fluid">
+        <!-- NAVIGATION -->
+        <div class="row m-4 navBar">
+            <div class="domain col text-left col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <a id="toggleTheme" class="btn btn-outline-info btn-lg">
+                    <h5 class="themeStatus" style="display:inline;color:white">Dark</h5>
+                </a>
+            </div>
+            <div class="domain col text-center col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                <a href="/" class="domain btn btn-outline-primary btn-lg" id="home">
+                    <h5>Home</h5>
+                </a>
+            </div>
+            <div class="domain col text-center col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                <a href="hero" class="btn btn-outline-primary btn-lg" id="heroes">
+                    <h5>Heroes/Villians</h5>
+                </a>
+                <div class="subdomain col text-center col-12">
+                    <a href="superpower" class="btn btn-outline-primary btn-lg" id="superpower">
+                        <h5>Powers</h5>
+                    </a>
+                </div>
+            </div>
+            <div class="domain col text-center col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                <a href="sighting" class="btn btn-outline-primary btn-lg" id="sightings">
+                    <h5>Sightings</h5>
+                </a>
+                <div class="subdomain col text-center col-12">
+                    <a href="organization" class="btn btn-outline-primary btn-lg" id="organization">
+                        <h5>Organization</h5>
+                    </a>
+                </div>
+                <div class="subdomain col text-center col-12">
+                    <a href="location" class="btn btn-outline-primary btn-lg" id="location">
+                        <h5>Location</h5>
+                    </a>
+                </div>
+            </div>
+            <div class="domain col text-center col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                <a id="about" class="btn btn-outline-primary btn-lg">
+                    <h5>About</h5>
+                </a>
+            </div>
+        </div>
+        <!-- END NAVIGATION -->
+
+        <!-- VIEW: HERO FORM -->
+        <div class="middle-viewLayout bg-img">
+            <!--Details div-->
+            <div class="row m-4 view-hero bg-color white-text">
+                <div class="column sec-1 col-sm-12 col-lg-6">
+                    <div class="row">
+                        <div class="col-6 text-right"><strong>ID:</strong></div>
+                        <div class="col-6 text-left">
+                            <span th:text="${location.locationId}">display id</span>
+                        </div>
+
+                        <div class="col-6 text-right"><strong>Name:</strong></div>
+                        <div class="col-6 text-left">
+                            <span th:text="${location.name}">display name</span>
+                        </div>
+
+                        <div class="col-6 text-right"><strong>Description:</strong></div>
+                        <div class="col-6 text-left">
+                            <span th:text="${location.description}">display description</span>
+                        </div>
+
+                        <div class="col-6 text-right"><strong>Street:</strong></div>
+                        <div class="col-6 text-left">
+                            <span th:text="${location.street}">display street</span>
+                        </div>
+
+                        <div class="col-6 text-right"><strong>City:</strong></div>
+                        <div class="col-6 text-left">
+                            <span th:text="${location.city}">display City</span>
+                        </div>
+
+                        <div class="col-6 text-right"><strong>State:</strong></div>
+                        <div class="col-6 text-left">
+                            <span th:text="${location.state}">display State</span>
+                        </div>
+
+                        <div class="col-6 text-right"><strong>Zipcode:</strong></div>
+                        <div class="col-6 text-left">
+                            <span th:text="${location.zipcode}">display Zipcode</span>
+                        </div>
+                        <div class="col-6 text-right"><strong>Coordinates:</strong></div>
+                        <div class="col-6 text-left">
+                            <span th:text="${location.latitude + '/' + location.longitude}">display Coordinates</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column sec-2 col-sm-12 col-lg-6" style="padding: 0px;">
+                    <div class="col-12"><strong>View Location:</strong></div>
+                    <div class="googleMap"></div> <!--iframe loads here-->
+                </div>
+            </div>
+        </div>
+        <!-- END VIEW: HERO FORM -->
+
+        <!-- FOOTER/ABOUT -->
+        <div class="bottom" id="footer-about"></div>
+        <!-- END FOOTER/ABOUT -->
+    </div>
+    <!-- END BODY -->
+
+
+
+    <!-- SCRIPTS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+            crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/33e502fc2c.js" crossorigin="anonymous"></script>
+    <script th:inline="javascript">
+        function loadMap() {
+            const apiKey = "AIzaSyBpD442VLkwZ5_Kp795_zE-UWHy8-6EBQc";
+            var map = [[${location}]];
+
+            var mapsrc = "https://www.google.com/maps/embed/v1/place?key=" + apiKey + "&q=" + map.latitude + ","
+                + map.longitude + "&center=" + map.latitude + "," + map.longitude + "&zoom=18";
+
+            $('<iframe>', {
+                src: mapsrc,
+                width: "50px",
+                height: "50px",
+                frameborder: "0",
+                style: "border:0"
+            }).appendTo('.googleMap');
+
+            $('iframe').attr('allowfullscreen', '');
+        }
+
+        $(document).ready(loadMap);
+    </script>
+    <script src="main.js"></script>
+    <script src="header.js"></script>
+    <script src="footer.js"></script>
+    <!-- END SCRIPTS -->
+
+
+
+</body>
+
+</html>

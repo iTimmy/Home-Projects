@@ -419,4 +419,14 @@ public class FlooringMasteryView {
         );
 	}
 
+	public String displayFileStatus(boolean b) {
+        if (b == true) {
+            io.println("The file exists. This will be overwritten.");
+            return "The file exists. This will be overwritten.";
+        } else {
+            io.println("The file does not exist. This will be created as new.");
+            return "The file does not exist. This will be created as new.";
+        }
+	}
+
 }

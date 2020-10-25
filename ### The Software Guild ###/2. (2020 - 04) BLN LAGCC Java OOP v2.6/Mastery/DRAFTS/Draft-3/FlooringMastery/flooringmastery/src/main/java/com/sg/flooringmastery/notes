@@ -1,0 +1,52 @@
+DELETE TEXT FILE IF EMPTY
+
+Exceptions
+
+BONUS:
+KeyCodes for ESC and ENTER...
+See if you can make export data not make duplicates or set order ID to be unique.
+
+I feel like I could've implemented this in a better way where the order number
+is assigned right when the user adds an order, but rather, the order number is
+generated when the user exports the order (which is in when it goes through the service layer).
+Because in this way, when the user decides to edit their order, they can see the order number
+associated with the customer, so that if there are other orders with the same name
+as displayed in the console, they would know which customer name that they are editing.
+But for the sake of time and getting this project done, I may leave this out for a few.
+
+________________________________________________________________________________________________
+RESOLUTIONS:
+Duplicate orders. Why?
+RESOLVED: While creating a proper function which is updateOrders(Order order), addOrder() and editOrder()
+are no longer sharing. For instance, editOrder() in the controller layer would reference addOrder() so then
+it is less redudant in prompting the user for info. Now, it no longer references.
+
+
+Assure that when displaying orders, it's coming straight from the file rather than the hashmap,
+because you can display the orders and then export them. You're not supposed to do that.
+RESOLVED: I created a separate hashmap variable called loadOrders, so that the current orders that have
+just been added to the hasmhamp via the add order option would not be interfered while choosing the
+option to display orders. 
+
+
+
+// System.out.println("tilee" +
+// getProductByName("Tile").getLaborCostPerSquareFoot());
+
+// System.out.println(storedTax.getTaxRate());
+// System.out.println(taxRate);
+
+// System.out.println(order.getArea());
+// System.out.println(order.getProduct().getCostPerSquareFoot());
+
+// System.out.println("costPerSquareFoot: " + costPerSquareFoot);
+// System.out.println("Material Cost: " + materialCost);
+
+// System.out.println("Labor Cost: " + laborCost);
+
+// System.out.println(taxPercentage);
+// System.out.println(calculate.calculate(MathOperator.PLUS, materialCost, laborCost));
+// System.out.println(calculate.calculate(MathOperator.DIVIDE, taxRate, taxPercentage));
+// System.out.println("Tax: " + tax);
+
+// System.out.println("Total Cost: " + totalCost);

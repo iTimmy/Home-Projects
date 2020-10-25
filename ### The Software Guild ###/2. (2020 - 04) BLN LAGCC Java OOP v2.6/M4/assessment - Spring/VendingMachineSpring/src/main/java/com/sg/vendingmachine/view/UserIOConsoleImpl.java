@@ -3,6 +3,7 @@ package com.sg.vendingmachine.view;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,0 +1,219 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (mmap) failed to map 134217728 bytes for Failed to commit area from 0x0000000080800000 to 0x0000000088800000 of length 134217728.
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   The process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+#   JVM is running with Unscaled Compressed Oops mode in which the Java heap is
+#     placed in the first 4GB address space. The Java Heap base address is the
+#     maximum limit for the native heap growth. Please use -XX:HeapBaseMinAddress
+#     to set the Java Heap base and to place the Java Heap above 4GB virtual address.
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (./open/src/hotspot/os/windows/os_windows.cpp:3315), pid=92592, tid=92764
+#
+# JRE version:  (14.0.2+12) (build )
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (14.0.2+12-46, mixed mode, sharing, tiered, compressed oops, g1 gc, windows-amd64)
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -Dclassworlds.conf=I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven\bin\..\bin\m2.conf -Dmaven.home=I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven\bin\.. -Dlibrary.jansi.path=I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven\bin\..\lib\jansi-native -Dmaven.multiModuleProjectDirectory=I:\C0De\---Home-Projects---\Home-Projects\### The Software Guild ###\2. (2020 - 04) BLN LAGCC Java OOP v2.6\M3\assessment - VendingMachine\VendingMachine org.codehaus.plexus.classworlds.launcher.Launcher -Dexec.args=-classpath %classpath com.sg.vendingmachine.App -Dexec.executable=I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\java.exe -Dexec.classpathScope=runtime -Dmaven.ext.class.path=I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven-nblib\netbeans-eventspy.jar -Dfile.encoding=UTF-8 process-classes org.codehaus.mojo:exec-maven-plugin:1.5.0:exec
+
+Host: Intel(R) Core(TM) i5-6400T CPU @ 2.20GHz, 4 cores, 7G,  Windows 7 , 64 bit Build 7601 (6.1.7601.24545)
+Time: Sun Oct 25 04:49:42 2020 Eastern Daylight Time elapsed time: 0 seconds (0d 0h 0m 0s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00000000004a4000):  JavaThread "Unknown thread" [_thread_in_vm, id=92764, stack(0x00000000023e0000,0x00000000024e0000)]
+
+Stack: [0x00000000023e0000,0x00000000024e0000]
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x5f8a9a]
+V  [jvm.dll+0x74247a]
+V  [jvm.dll+0x743c2f]
+V  [jvm.dll+0x744273]
+V  [jvm.dll+0x20d288]
+V  [jvm.dll+0x5f5dea]
+V  [jvm.dll+0x5eac45]
+V  [jvm.dll+0x2c7e9c]
+V  [jvm.dll+0x2c7cd2]
+V  [jvm.dll+0x2cdbbc]
+V  [jvm.dll+0x313fe8]
+V  [jvm.dll+0x313710]
+V  [jvm.dll+0x2a092a]
+V  [jvm.dll+0x2a1a79]
+V  [jvm.dll+0x71fd48]
+V  [jvm.dll+0x321c14]
+V  [jvm.dll+0x70112c]
+V  [jvm.dll+0x392def]
+V  [jvm.dll+0x394e61]
+C  [jli.dll+0x524b]
+C  [ucrtbase.DLL+0x203ba]
+C  [kernel32.dll+0x1556d]
+C  [ntdll.dll+0x5372d]
+
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x000007feb4413038, length=0, elements={
+}
+
+Java Threads: ( => current thread )
+
+Other Threads:
+  0x00000000004e5800 GCTaskThread "GC Thread#0" [stack: 0x000000001f080000,0x000000001f180000] [id=90680]
+  0x00000000004f7000 ConcurrentGCThread "G1 Main Marker" [stack: 0x000000001f1b0000,0x000000001f2b0000] [id=90244]
+  0x00000000004f9000 ConcurrentGCThread "G1 Conc#0" [stack: 0x000000001f320000,0x000000001f420000] [id=92568]
+
+[error occurred during error reporting (printing all threads), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x000007feb3c41257]
+
+VM state:not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x000000000049e440] Heap_lock - owner thread: 0x00000000004a4000
+
+Heap address: 0x0000000080800000, size: 2040 MB, Compressed Oops mode: 32-bit
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 0
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Classes unloaded (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (2 events):
+Event: 0.008 Loaded shared library I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\java.dll
+Event: 0.009 Loaded shared library I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\zip.dll
+
+
+Dynamic libraries:
+0x000000013f7a0000 - 0x000000013f7af000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\java.exe
+0x0000000076e60000 - 0x0000000076fff000 	C:\Windows\SYSTEM32\ntdll.dll
+0x0000000076d40000 - 0x0000000076e5f000 	C:\Windows\system32\kernel32.dll
+0x000007fefca70000 - 0x000007fefcad7000 	C:\Windows\system32\KERNELBASE.dll
+0x00000000746a0000 - 0x0000000074729000 	C:\Windows\System32\SYSFER.DLL
+0x000007fef0d90000 - 0x000007fef0da8000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\jli.dll
+0x000007fefcfe0000 - 0x000007fefd0bb000 	C:\Windows\system32\ADVAPI32.dll
+0x000007fefd380000 - 0x000007fefd41f000 	C:\Windows\system32\msvcrt.dll
+0x000007fefcee0000 - 0x000007fefceff000 	C:\Windows\SYSTEM32\sechost.dll
+0x000007feff020000 - 0x000007feff14c000 	C:\Windows\system32\RPCRT4.dll
+0x000007fefad70000 - 0x000007fefaf65000 	C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.7601.24483_none_e372d88f30fbb845\COMCTL32.dll
+0x000007fefe660000 - 0x000007fefe6c7000 	C:\Windows\system32\GDI32.dll
+0x0000000076c40000 - 0x0000000076d3b000 	C:\Windows\system32\USER32.dll
+0x000007fefd1d0000 - 0x000007fefd1de000 	C:\Windows\system32\LPK.dll
+0x000007fefea70000 - 0x000007fefeb3b000 	C:\Windows\system32\USP10.dll
+0x000007fefcf60000 - 0x000007fefcfd1000 	C:\Windows\system32\SHLWAPI.dll
+0x000007fefbc10000 - 0x000007fefbc1c000 	C:\Windows\system32\VERSION.dll
+0x000007fef8be0000 - 0x000007fef8bf5000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\VCRUNTIME140.dll
+0x000007fefa140000 - 0x000007fefa144000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-crt-runtime-l1-1-0.dll
+0x000007feeff50000 - 0x000007fef004c000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\ucrtbase.DLL
+0x000007fefa160000 - 0x000007fefa163000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-core-localization-l1-2-0.dll
+0x000007fef0dc0000 - 0x000007fef0dc3000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-core-processthreads-l1-1-1.dll
+0x000007fef0db0000 - 0x000007fef0db3000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-core-file-l1-2-0.dll
+0x000007fef0d70000 - 0x000007fef0d73000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-core-timezone-l1-1-0.dll
+0x000007fef0d80000 - 0x000007fef0d83000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-core-file-l2-1-0.dll
+0x000007feeff40000 - 0x000007feeff43000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-core-synch-l1-2-0.dll
+0x000007fefa130000 - 0x000007fefa133000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-crt-heap-l1-1-0.dll
+0x000007fefa120000 - 0x000007fefa124000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-crt-string-l1-1-0.dll
+0x000007fef8bc0000 - 0x000007fef8bc4000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-crt-stdio-l1-1-0.dll
+0x000007fef8bd0000 - 0x000007fef8bd4000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-crt-convert-l1-1-0.dll
+0x000007fef1150000 - 0x000007fef1153000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-crt-environment-l1-1-0.dll
+0x000007fef0d60000 - 0x000007fef0d63000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-crt-filesystem-l1-1-0.dll
+0x000007fef0d50000 - 0x000007fef0d55000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-crt-math-l1-1-0.dll
+0x000007feeccf0000 - 0x000007feeccf3000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-crt-locale-l1-1-0.dll
+0x000007fefee10000 - 0x000007fefee3e000 	C:\Windows\system32\IMM32.DLL
+0x000007fefd0c0000 - 0x000007fefd1cb000 	C:\Windows\system32\MSCTF.dll
+0x000007fec6600000 - 0x000007fec669b000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\msvcp140.dll
+0x000007fef0d30000 - 0x000007fef0d33000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-crt-time-l1-1-0.dll
+0x000007fef8ba0000 - 0x000007fef8ba3000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\api-ms-win-crt-utility-l1-1-0.dll
+0x000007feb3990000 - 0x000007feb44ae000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\server\jvm.dll
+0x000007fef7170000 - 0x000007fef7179000 	C:\Windows\system32\WSOCK32.dll
+0x000007fefcd70000 - 0x000007fefcdbd000 	C:\Windows\system32\WS2_32.dll
+0x000007fefea60000 - 0x000007fefea68000 	C:\Windows\system32\NSI.dll
+0x000007fefa350000 - 0x000007fefa38b000 	C:\Windows\system32\WINMM.dll
+0x0000000077000000 - 0x0000000077007000 	C:\Windows\system32\PSAPI.DLL
+0x000007fef0d40000 - 0x000007fef0d4a000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\jimage.dll
+0x000007fef6210000 - 0x000007fef6335000 	C:\Windows\system32\DBGHELP.DLL
+0x000007fef0cc0000 - 0x000007fef0ce5000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\java.dll
+0x000007fef0ca0000 - 0x000007fef0cb6000 	I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\zip.dll
+
+dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
+symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin;C:\Windows\SYSTEM32;C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.7601.24483_none_e372d88f30fbb845;I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\server
+
+VM Arguments:
+jvm_args: -Dclassworlds.conf=I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven\bin\..\bin\m2.conf -Dmaven.home=I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven\bin\.. -Dlibrary.jansi.path=I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven\bin\..\lib\jansi-native -Dmaven.multiModuleProjectDirectory=I:\C0De\---Home-Projects---\Home-Projects\### The Software Guild ###\2. (2020 - 04) BLN LAGCC Java OOP v2.6\M3\assessment - VendingMachine\VendingMachine 
+java_command: org.codehaus.plexus.classworlds.launcher.Launcher -Dexec.args=-classpath %classpath com.sg.vendingmachine.App -Dexec.executable=I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK\bin\java.exe -Dexec.classpathScope=runtime -Dmaven.ext.class.path=I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven-nblib\netbeans-eventspy.jar -Dfile.encoding=UTF-8 process-classes org.codehaus.mojo:exec-maven-plugin:1.5.0:exec
+java_class_path (initial): I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\_ NetBeans _\--- NetBeans ---\netbeans\java\maven\bin\..\boot\plexus-classworlds-2.6.0.jar
+Launcher Type: SUN_STANDARD
+
+[Global flags]
+     intx CICompilerCount                          = 3                                         {product} {ergonomic}
+     uint ConcGCThreads                            = 1                                         {product} {ergonomic}
+     uint G1ConcRefinementThreads                  = 4                                         {product} {ergonomic}
+   size_t G1HeapRegionSize                         = 1048576                                   {product} {ergonomic}
+    uintx GCDrainStackTargetSize                   = 64                                        {product} {ergonomic}
+   size_t InitialHeapSize                          = 134217728                                 {product} {ergonomic}
+   size_t MarkStackSize                            = 4194304                                   {product} {ergonomic}
+   size_t MaxHeapSize                              = 2139095040                                {product} {ergonomic}
+   size_t MinHeapDeltaBytes                        = 1048576                                   {product} {ergonomic}
+   size_t MinHeapSize                              = 8388608                                   {product} {ergonomic}
+    uintx NonNMethodCodeHeapSize                   = 5832780                                {pd product} {ergonomic}
+    uintx NonProfiledCodeHeapSize                  = 122912730                              {pd product} {ergonomic}
+    uintx ProfiledCodeHeapSize                     = 122912730                              {pd product} {ergonomic}
+    uintx ReservedCodeCacheSize                    = 251658240                              {pd product} {ergonomic}
+     bool SegmentedCodeCache                       = true                                      {product} {ergonomic}
+   size_t SoftMaxHeapSize                          = 2139095040                             {manageable} {ergonomic}
+     bool UseCompressedClassPointers               = true                                 {lp64_product} {ergonomic}
+     bool UseCompressedOops                        = true                                 {lp64_product} {ergonomic}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+     bool UseLargePagesIndividualAllocation        = false                                  {pd product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags
+ #1: stderr all=off uptime,level,tags
+
+Environment Variables:
+JAVA_HOME=I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\NetBeans\JDK
+PATH=I:\ALL PROGRAMS\Windows\Java Kit\bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Java\jdk1.8.0_211\bin;G:\Computers\Windows 7 Pro\Just Stuff Here\Installations & Setups\Programs\MATLAB\MATLAB\bin;G:\Computers\Windows 7 Pro\Just Stuff Here\Installations & Setups\Programs\--- PACKAGES ---\NodeJS\;G:\Computers\Windows 7 Pro\Just Stuff Here\Installations & Setups\Programs\Git\Git\usr\bin;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Git\cmd;C:\Program Files\Amazon\AWSCLIV2\;C:\PHP;C:\Users\Music Account\AppData\Local\atom\bin;C:\Program Files\Java\jdk1.8.0_231\bin;C:\Program Files\Java\jdk1.8.0_211\bin;C:\Users\Music Account\AppData\Roaming\Dashlane\6.2018.0.34867\bin\Firefox_Extension\{442718d9-475e-452a-b3e1-fb1ee16b8e9f}\components;C:\Users\Music Account\AppData\Roaming\Dashlane\6.2018.0.34867\ucrt;C:\Users\Music Account\AppData\Roaming\Dashlane\6.2018.0.34867\bin\Qt;C:\Users\Music Account\AppData\Roaming\Dashlane\6.2018.0.34867\bin\Ssl;C:\Users\Music Account\AppData\Roaming\npm;C:\Users\Music Account\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Music Account\.dotnet\tools;I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\PyCharm\? PyCharm 2020.2 ?\PyCharm Community Edition 2020.2\bin;;I:\ALL PROGRAMS\Windows\Program Files\Creational Programs\php\php
+USERNAME=Music Account
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 94 Stepping 3, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 7 , 64 bit Build 7601 (6.1.7601.24545)
+OS uptime: 0 days 23:10 hours
+
+CPU:total 4 (initial active 4) (4 cores per cpu, 1 threads per core) family 6 model 94 stepping 3, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, 3dnowpref, lzcnt, tsc, tscinvbit, bmi1, bmi2, adx, fma
+
+Memory: 4k page, system-wide physical 8152M (378M free)
+TotalPageFile size 19845M (AvailPageFile size 7M)
+current process WorkingSet (physical memory assigned to process): 11M, peak: 11M
+current process commit charge ("private bytes"): 59M, peak: 185M
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (14.0.2+12-46) for windows-amd64 JRE (14.0.2+12-46), built on Jul  9 2020 00:35:52 by "mach5one" with MS VC++ 15.9 (VS2017)
+
+END.

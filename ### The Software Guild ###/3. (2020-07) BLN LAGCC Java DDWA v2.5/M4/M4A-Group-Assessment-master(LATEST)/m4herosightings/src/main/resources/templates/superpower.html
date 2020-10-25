@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>Hero Sightings - Powers</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+            crossorigin="anonymous">
+        <link rel="stylesheet" href="styles/index.css">
+        <link rel="stylesheet" href="styles/nav.css">
+    </head>
+
+<!-- START CSS -->
+<style>
+    .middle {
+        /* border: 5px solid red; */
+        margin: 0 auto;
+    }
+
+    .row, .row .row {
+        /* border:5px solid blue; */
+        margin: 0 auto;
+    }
+
+    .col-12 {
+        /* border:5px solid green; */
+        margin: 0 auto;
+    }
+
+    .middle .bg-color {
+        padding: 50px;
+        margin: 0 auto;
+    }
+
+    .middle .superpower-form {
+        padding-bottom: 500px;
+    }
+</style>
+<!-- END CSS -->
+
+<body>
+    <!-- BEGIN BODY -->
+    <div class="container-fluid">
+        <!-- NAVIGATION -->
+        <div class="row m-4 navBar">
+            <div class="domain col text-left col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <a id="toggleTheme" class="btn btn-outline-info btn-lg">
+                    <h5 class="themeStatus" style="display:inline;color:white">Dark</h5>
+                </a>
+            </div>
+            <div class="domain col text-center col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                <a href="/" class="domain btn btn-outline-primary btn-lg" id="home">
+                    <h5>Home</h5>
+                </a>
+            </div>
+            <div class="domain col text-center col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                <a href="hero" class="btn btn-outline-primary btn-lg" id="heroes">
+                    <h5>Heroes/Villians</h5>
+                </a>
+                <div class="subdomain col text-center col-12">
+                    <a href="superpower" class="btn btn-outline-primary btn-lg" id="superpower">
+                        <h5>Powers</h5>
+                    </a>
+                </div>
+            </div>
+            <div class="domain col text-center col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                <a href="sighting" class="btn btn-outline-primary btn-lg" id="sightings">
+                    <h5>Sightings</h5>
+                </a>
+                <div class="subdomain col text-center col-12">
+                    <a href="organization" class="btn btn-outline-primary btn-lg" id="organization">
+                        <h5>Organization</h5>
+                    </a>
+                </div>
+                <div class="subdomain col text-center col-12">
+                    <a href="location" class="btn btn-outline-primary btn-lg" id="location">
+                        <h5>Location</h5>
+                    </a>
+                </div>
+            </div>
+            <div class="domain col text-center col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                <a id="about" class="btn btn-outline-primary btn-lg">
+                    <h5>About</h5>
+                </a>
+            </div>
+        </div>
+        <!-- END NAVIGATION -->
+
+        <!-- POWER TABLE -->
+        <div id="superpower-data">
+            <table class="table table-dark table-striped" id="superpower-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th></th> <!--Details-->
+                    <th></th> <!--Edit-->
+                    <th></th> <!--Delete-->
+                </tr>
+                </thead>
+
+                <tbody id="superpower-content-rows">
+                <tr th:each="sp : ${superpowers}">
+                    <td th:text="${sp.name}">Power</td>
+                    <td th:text="${sp.description}">Description</td>
+                    <td><a href="#" th:href="@{/viewSuperpower(id=${sp.superpowerId})}"><i class="far fa-eye"></a></td>
+                    <td><a href="#" th:href="@{/editSuperpower(id=${sp.superpowerId})}"><i class="fas fa-edit"></a></td>
+                    <td><a href="#" th:href="@{/deleteSuperpower(id=${sp.superpowerId})}"><i class="fas fa-trash"></a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- END POWER TABLE -->
+
+        <!-- POWER FORM -->
+        <div class="middle bg-img">
+            <div class="row bg-color text-center">
+                <h3 class="col-12" style="background-color:rgba(0, 0, 0, 0.308)">Add Superpower</h3>
+            </div>
+
+            <div class="row superpower-form bg-color justify-content-center">
+                <!--edit form error box-->
+                <div class="col-12 m-1 text-center" th:if="${!errors.isEmpty()}">
+                    <p class="alert alert-danger" th:each="error : ${errors}" th:text="${error.message}">Error message</p>
+                </div>
+
+                <form action="addSuperpower" method="POST">
+                    <!--name-->
+                    <div class="form-group row">
+                        <label for="name" class="col-12 col-form-label">Power:</label>
+                        <div class="col-12">
+                            <input type="text" name="name" class="form-control" id="name">
+                        </div>
+                    </div>
+
+                    <!--description-->
+                    <div class="form-group row">
+                        <label for="description" class="col-12 col-form-label">Description:</label>
+                        <div class="col-12">
+                            <input type="text" name="description" class="form-control" id="description">
+                        </div>
+                    </div>
+
+                    <!--submit btn-->
+                    <button type="submit" class="btn btn-outline-primary">Add Power</button>
+                </form>
+            </div>
+        </div>
+        <!-- END POWER FORM -->
+
+        <!-- FOOTER/ABOUT -->
+        <div class="bottom" id="footer-about"></div>
+        <!-- END FOOTER/ABOUT -->
+    </div>
+    <!-- END BODY -->
+
+
+
+    <!-- SCRIPTS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+            crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/33e502fc2c.js" crossorigin="anonymous"></script>
+    <script src="main.js"></script>
+    <script src="header.js"></script>
+    <script src="footer.js"></script>
+    <!-- END SCRIPTS -->
+
+
+
+</body>
+
+</html>
