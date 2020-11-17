@@ -22,6 +22,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -29,13 +31,17 @@ import static org.junit.Assert.*;
  */
 public class FlooringMasteryOrderDaoImplTest {
     
-    FlooringMasteryProductDao productDaoTest = new FlooringMasteryProductDaoImpl();
-    FlooringMasteryTaxDao taxDaoTest = new FlooringMasteryTaxDaoImpl();
+    FlooringMasteryProductDao productDaoTest;
+    FlooringMasteryTaxDao taxDaoTest;
+    FlooringMasteryOrderDao orderDaoTest;
     
     public FlooringMasteryOrderDaoImplTest() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        orderDaoTest = ctx.getBean("orderDao", FlooringMasteryOrderDao.class);
+        productDaoTest = ctx.getBean("productDao", FlooringMasteryProductDao.class);
+        taxDaoTest = ctx.getBean("taxDao", FlooringMasteryTaxDao.class);
     }
     
-    FlooringMasteryOrderDao orderDaoTest = new FlooringMasteryOrderDaoImpl();
     MathContext mc = new MathContext(2);
     BigDecimalMath mathCalculate = new BigDecimalMath();
     
@@ -49,34 +55,13 @@ public class FlooringMasteryOrderDaoImplTest {
     
     @Before
     public void setUp() {
-        String testFile = "DataExportTest.txt";
+        String testFile = "../DataExportTest.txt";
         // String testFileTwo = "Orders_3000-12-12.txt";
         orderDaoTest = new FlooringMasteryOrderDaoImpl(testFile/*, testFileTwo*/);
     }
     
     @After
     public void tearDown() {
-    }
-
-    @Test
-    public void testSaveOrders() throws Exception {
-//        Order orderOne = new Order();
-//        orderOne.setOrderDate(LocalDate.now());
-//        orderOne.setCustomerName("Timmy");
-//        orderOne.setArea(new BigDecimal(233).round(mc));
-//       
-//        Product productOne = new Product();
-//        productOne.setProductType("Tile");
-//        productOne.setCostPerSquareFoot(productDaoTest.getProductByName(productOne.getProductType()).getCostPerSquareFoot());
-//        
-//        Tax taxOne = new Tax();
-//        taxOne.setState("TX");
-//    
-//        orderOne.setProduct(productOne);
-//        orderOne.setTax(taxOne);
-//   
-//        orderDaoTest.createOrder(orderOne);
-//        orderDaoTest.saveOrdersByDate();
     }
     
     @Test

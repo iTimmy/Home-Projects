@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Blog</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+
+<style>
+    body {
+        background-image: url('103237.jpg');
+        background-attachment: fixed;
+        color: white;
+    }
+
+    .bg {
+        background-color: black;
+        z-index: 2;
+    }
+
+    .top {
+        height: 100px;
+    }
+
+    .middle {
+        height: 800px;
+    }
+
+    .bg-color {
+        background-color: rgba(0, 0, 0, 0.801);
+    }
+
+    .cover {
+        height: 500px;
+    }
+
+    .column {
+        /* border: 5px solid red; */
+        height: 100%;
+    }
+
+    /* .row {
+        border: 5px solid blue;
+    } */
+
+    #nav-button {
+        cursor: pointer;
+    }
+
+    #nav-options {
+        display: none;
+    }
+
+    .black-white {
+        background-color: black;
+    }
+
+    .fa {
+        /* border: 5px solid red; */
+        height: 100%;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .domain {
+        margin: 20px;
+    }
+
+</style>
+
+<body>
+    <div class="bg"></div>
+    <div class="container-fluid">
+        <div class="top bg-color row">
+            <div class="black-white column col-lg-1" id="nav-button">
+                <div class="fa fa-bars w3-xxxlarge">
+
+                </div>
+            </div>
+            <div class="black-white column col-lg-11" id="nav-options">
+                <div class="row">
+                    <div class="domain col text-left col-lg-2">
+                        <a id="toggleTheme" class="btn btn-warning btn-lg">
+                            <h5 class="themeStatus" style="display:inline;color:white">Dark</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-center col-lg-2">
+                        <a href="/" class="btn btn-danger btn-lg" id="home">
+                            <h5>Home</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-center col-lg-2">
+                        <a href="hero" class="btn btn-danger btn-lg" id="heroes">
+                            <h5>Heroes/Villians</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-center col-lg-2">
+                        <a href="sighting" class="btn btn-danger btn-lg" id="sightings">
+                            <h5>Sightings</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-center col-lg-2">
+                        <a id="about" class="btn btn-danger btn-lg" id="about">
+                            <h5>About</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cover">
+
+        </div>
+
+        <div class="middle b row">
+            <div class="column col-12">
+
+            </div>
+        </div>
+
+        <div class="footer">
+
+        </div>
+    </div>
+</body>
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<!-- script -->
+<script src="main.js"></script>
+
+</html>

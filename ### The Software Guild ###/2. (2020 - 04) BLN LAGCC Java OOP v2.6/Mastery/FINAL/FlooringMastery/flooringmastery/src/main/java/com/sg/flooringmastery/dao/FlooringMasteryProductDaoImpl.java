@@ -5,24 +5,26 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.math.BigDecimal;
-
 import com.sg.flooringmastery.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FlooringMasteryProductDaoImpl implements FlooringMasteryProductDao {
 
-    @Autowired
+    //@Autowired
     Map<String, Product> storeProduct = new HashMap<>();
     private String file = "Data/Products/Products.txt";
     File fileProducts = new File(file);
 
-//    @Autowired
-//    public FlooringMasteryProductDaoImpl() {
-//        this.file = "Data/Products/Products.txt";
-//    }
-//    public FlooringMasteryProductDaoImpl(String textFile) {
-//        this.file = textFile;
-//    }
+    @Autowired
+    public FlooringMasteryProductDaoImpl() {
+        this.file = "Data/Products/Products.txt";
+    }
+    public FlooringMasteryProductDaoImpl(String textFile) {
+        this.file = textFile;
+    }
     
     @Override
     public List<Product> getAllProducts() {

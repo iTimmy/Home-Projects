@@ -21,6 +21,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.BeforeAll;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -33,6 +35,8 @@ public class VendingMachineDaoImplTest {
     MathContext mc = new MathContext(2);
     
     public VendingMachineDaoImplTest() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        testDao = ctx.getBean("daoStub", VendingMachineDao.class);
     }
     
     @BeforeClass

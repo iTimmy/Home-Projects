@@ -17,7 +17,6 @@ public class CoinsReturned {
     private int nickels;
     private int dimes;
     private int quarters;
-    private int dollarCoins;
     private String statement;
     private String returnedCoins;
     
@@ -75,13 +74,5 @@ public class CoinsReturned {
     
     public void setQuarters(int quarters) {
         this.quarters = quarters;
-    }
-    
-    public int getDollarCoins() {
-        return dollarCoins;
-    }
-    
-    public void setDollarCoins(int dollarCoins) {
-        this.dollarCoins = dollarCoins;
     }
 }

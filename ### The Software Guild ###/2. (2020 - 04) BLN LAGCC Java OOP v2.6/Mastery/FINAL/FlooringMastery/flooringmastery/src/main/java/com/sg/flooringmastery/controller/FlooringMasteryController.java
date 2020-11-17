@@ -5,15 +5,19 @@ import java.util.*;
 import com.sg.flooringmastery.service.*;
 import com.sg.flooringmastery.view.*;
 import com.sg.flooringmastery.dto.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FlooringMasteryController {
     private FlooringMasteryView view;
     private FlooringMasteryService service;
 
-     public FlooringMasteryController(FlooringMasteryView view, FlooringMasteryServiceImpl service) {
-         this.view = view;
-         this.service = service;
-     } 
+    @Autowired
+    public FlooringMasteryController(FlooringMasteryView view, FlooringMasteryServiceImpl service) {
+        this.view = view;
+        this.service = service;
+    } 
 
     private Order newOrder = new Order();
     private boolean doShow = false;
@@ -22,11 +26,6 @@ public class FlooringMasteryController {
         int select = 0;
         
         while(select != 6) {
-            displayCurrentOrderSelection();
-            if (newOrder.getOrderDate() != null) {
-                // displays current added order if done so
-                selectedFileToDisplay();
-            }
             view.displayMenu();
             select = view.displaySelection();
 
@@ -56,19 +55,6 @@ public class FlooringMasteryController {
         }
     }
 
-    public void displayCurrentOrderSelection() throws Exception {
-        List<Order> currentOrders = service.getActiveOrders();
-        try {
-            if (currentOrders != null) {
-                if (doShow == true) {
-                    view.displayCurrentOrder(currentOrders);
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("null for now");
-        }
-    }
-
     public void displayOrders() throws Exception {
         // VIEW \\
         view.displayDisplayOrdersTitle();
@@ -89,20 +75,15 @@ public class FlooringMasteryController {
         List<Product> listProducts = service.getAllProducts();
         List<Tax> listTaxes = service.getAllTaxes();
         newOrder = view.displayAddOrder(listProducts, listTaxes);
-
-        // SERVICE \\
-        Order order = service.createOrder(newOrder);
-        if (order == null) {
-            System.out.println("hyhy");
-            view.displayFileStatus(false);
-        } else if (order != null) {
-            System.out.println("hygfdgdhy");
-            view.displayFileStatus(true);
+        
+        Order order = service.createOrder(newOrder); // calculations occur here so it has to go through the service layer before confirming to create
+        view.returnCalculations(order); 
+        if (view.displayConfirmation("create") == true) {
+            view.displaySaveProgress();
+            view.displaySuccess();
+        } else {
+            service.deleteOrder(order); // if user hits 'n' or any other key than 'y', the order they just created (that passed thru the service) will be deleted, not convenient but it works
         }
-        view.returnCalculations(order);
-        view.displaySaveProgress();
-        view.displaySuccess();
-           
         return newOrder;
     }
 
@@ -119,31 +100,36 @@ public class FlooringMasteryController {
 
             // creates a new order
             Order editedOrder = view.displayEditOrder(listProducts, listTaxes, listOrders, date);
-
-            // fetches the order number from the existing orders in memory
             Order existingOrder = service.getOrderByID(editedOrder.getOrderNumber());
-
-            service.updateOrder(editedOrder, existingOrder);
+            
+            view.returnCalculations(editedOrder);
+            if (view.displayConfirmation("update") == true) {
+                // fetches the order number from the existing orders in memory
+                service.updateOrder(editedOrder, existingOrder);
+                view.displaySaveProgress();
+                view.displaySuccess();
+            } else {
+            }
     }
 
     public void removeOrder() throws Exception {
         boolean valid = false;
         while(valid != true) {
             LocalDate findOrderDate = view.displayInputDate();
-            if (service.getOrdersByDate(findOrderDate) == null) {
-                System.out.println("This file order doesn't exist.");
-                valid = false;
-            } else if (service.getOrdersByDate(findOrderDate) != null) {
-                valid = true;
-            }
+            List<Order> listOrders = service.getOrdersByDate(findOrderDate);
+            view.displayDisplayOrders(listOrders);
+                if (service.getOrdersByDate(findOrderDate) == null) {
+                    //System.out.println("This file order doesn't exist.");
+                    valid = false;
+                } else if (service.getOrdersByDate(findOrderDate) != null) {
+                    valid = true;
+                }
         }
         Order findOrder = view.displayRemoveOrder();
-        service.deleteOrder(findOrder);
+        if (view.displayConfirmation("delete") == true) {
+            service.deleteOrder(findOrder);
+        }
         valid = true;
-    }
-
-    public void selectedFileToDisplay() throws Exception {
-        view.displayAddedOrder(newOrder);
     }
     
     public void exportAllData(Order newOrder) throws Exception {

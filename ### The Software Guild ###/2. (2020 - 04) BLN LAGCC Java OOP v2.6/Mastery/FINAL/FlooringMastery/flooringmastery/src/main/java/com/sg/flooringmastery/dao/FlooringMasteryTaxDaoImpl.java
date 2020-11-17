@@ -1,3 +1,5 @@
+
+
 package com.sg.flooringmastery.dao;
 
 import java.io.BufferedReader;
@@ -7,21 +9,24 @@ import java.math.BigDecimal;
 import java.util.*;
 import com.sg.flooringmastery.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FlooringMasteryTaxDaoImpl implements FlooringMasteryTaxDao {
     
-    @Autowired
+    //@Autowired
     Map<String, Tax> storeTax = new HashMap<>();
     private String file = "Data/Taxes/Taxes.txt";
     File fileTaxes = new File(file);
     
-//    @Autowired
-//    public FlooringMasteryTaxDaoImpl() {
-//        this.file = "Data/Taxes/Taxes.txt";
-//    }
-//    public FlooringMasteryTaxDaoImpl(String textFile) {
-//        this.file = textFile;
-//    }
+    @Autowired
+    public FlooringMasteryTaxDaoImpl() {
+        this.file = "Data/Taxes/Taxes.txt";
+    }
+    public FlooringMasteryTaxDaoImpl(String textFile) {
+        this.file = textFile;
+    }
 
     @Override
     public List<Tax> getAllTaxes() {

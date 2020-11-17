@@ -154,8 +154,7 @@ public class VendingMachineServiceImpl implements VendingMachineService {
             cr.setPennies(penniesReturned);
             cr.setNickels(nickelsReturned);
             cr.setDimes(dimesReturned);
-            cr.setQuarters(quartersReturned);
-            cr.setDollarCoins(dollarCoinsReturned);
+            cr.setQuarters(quartersReturned + (dollarCoinsReturned * 4));
             
             return cr;
     }
@@ -164,7 +163,6 @@ public class VendingMachineServiceImpl implements VendingMachineService {
         String sNickel = "";
         String sDime = "";
         String sQuarter = "";
-        String sDollarCoin = "";
         String ies = "y";
         
         if (cr.getPennies() > 1 || cr.getPennies() == 0) {
@@ -179,18 +177,14 @@ public class VendingMachineServiceImpl implements VendingMachineService {
         if (cr.getQuarters() > 1 || cr.getQuarters() == 0) {
             sQuarter = "s";
         }
-        if (cr.getDollarCoins() > 1 || cr.getDollarCoins() == 0) {
-            sDollarCoin = "s";
-        }
         
         String displayPennies = Integer.toString(cr.getPennies()) + " penn" + ies + "\n";
         String displayNickels = Integer.toString(cr.getNickels()) + " nickel" + sNickel + "\n";
         String displayDimes = Integer.toString(cr.getDimes()) + " dime" + sDime + "\n";
         String displayQuarters = Integer.toString(cr.getQuarters()) + " quarter" + sQuarter + "\n";
-        String displayDollarCoins = Integer.toString(cr.getDollarCoins()) + " dollar coin" + sDollarCoin + "\n";
         
         String returnCoins = "\n\n******************\n" + 
-                "Returning:\n==================\n" + displayDollarCoins +
+                "Returning:\n==================\n" +
                 displayQuarters +
                 displayDimes + 
                 displayNickels + 

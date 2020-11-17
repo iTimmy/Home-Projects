@@ -6,16 +6,18 @@ import java.time.LocalDate;
 import java.util.*;
 import com.sg.flooringmastery.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
 
-   // @Autowired
     FlooringMasteryStorage storage = new FlooringMasteryStorage();
     // STORE TO SAVE
     Map<Integer, Order> storeOrders = new HashMap<>();
     // STORE TO DISPLAY
     Map<Integer, Order> loadOrders = new HashMap<>();
     // STORE TO COUNT CURRENT CREATED ORDERS
+    Map<Integer, Order> storeAllOrdersFromFiles = new HashMap<>();
     List<Order> activeOrders = new ArrayList<>();
     private String file;
     private File fileOrders = new File("");
@@ -33,6 +35,26 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
         // this.file = file;
     }
 
+    private int generateOrderNumber() throws NumberFormatException, Exception {
+        List<String> orderFiles = storage.importAllOrders();
+        for (String s : orderFiles) {
+            File file = new File(s);
+            loadDataFromFiles(file);
+        }
+        //System.out.println(storeAllOrdersFromFiles);
+        
+        int max = 0;
+        for (Order eachOrder : storeAllOrdersFromFiles.values()) {
+            if (eachOrder.getOrderNumber() > max) {
+                max = eachOrder.getOrderNumber();
+            }
+
+        }
+        int newOrderNumber = max;
+        newOrderNumber++;
+        return newOrderNumber;
+    }
+
     private File importFile(LocalDate orderDate) throws Exception {
         fileOrders = storage.loadFile(orderDate);
         if (fileOrders == null) {
@@ -45,24 +67,16 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
     @Override
     public Order createOrder(Order order) throws Exception {
         // this step is skipped if the file exists
-        System.out.println(order.getOrderDate());
         if (storage.loadFile(order.getOrderDate()) == null) {
             storage.createNewFile(order.getOrderDate());
         }
-        // if ("Orders\\Orders_order.getOrderDate() != fileOrders) {
-        //     importFile(order.getOrderDate());
-        // }
         storeOrders.clear();
         importFile(order.getOrderDate());
         loadData();
+        order.setOrderNumber(generateOrderNumber());
         activeOrders.add(order);
         storeOrders.put(order.getOrderNumber(), order);
         saveDataToOrders();
-        System.out.println(order.getOrderDate());
-        System.out.println(fileOrders);
-        System.out.println("store Orders: " + storeOrders);
-        System.out.println("active Orders: " + activeOrders);
-
         return order;
     }
 
@@ -116,6 +130,7 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
             existingOrder.getProduct().setLaborCostPerSquareFoot(editedOrder.getProduct().getLaborCostPerSquareFoot());
             existingOrder.getTax().setState(editedOrder.getTax().getState());
             existingOrder.getTax().setTaxRate(editedOrder.getTax().getTaxRate());
+            activeOrders.add(editedOrder);
             storeOrders.put(editedOrder.getOrderNumber(), editedOrder);
             saveDataToOrders();
         } catch (Exception e) {
@@ -127,6 +142,7 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
     public void deleteOrder(Order order) throws Exception {
         loadData();
         if (storeOrders.remove(order.getOrderNumber()) != null) {
+//            activeOrders.remove(order.getOrderNumber());
             saveDataToOrders();
         } else {
             System.out.println("Order does not exist.");
@@ -135,10 +151,15 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
 
     @Override
     public boolean saveOrdersByDate() throws Exception {
+        List<String> orderFiles = storage.importAllOrders();
+        for (String currentFile : orderFiles) {
+            File file = new File(currentFile);
+            loadDataFromFiles(file);
+            saveDataToExportData();
+        }
         if (storeOrders.isEmpty() == true) {
             return false;
         } else {
-            saveDataToExportData();
             return true;
         }
     }
@@ -149,11 +170,7 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
 
     private void saveDataToExportData() throws Exception {
         PrintWriter writeFile = new PrintWriter(new BufferedWriter(new FileWriter(dataExportFile)));
-        storeOrders.clear();
-        for (Order order : activeOrders) {
-            storeOrders.put(order.getOrderNumber(), order);
-        }
-        for (Order orderDetail : storeOrders.values()) {
+        for (Order orderDetail : storeAllOrdersFromFiles.values()) {
             String currentOrders = marshallDataExport(orderDetail);
             writeFile.println(currentOrders);
             writeFile.flush();
@@ -164,16 +181,19 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
         Product product = orderDetail.getProduct();
         Tax tax = orderDetail.getTax();
 
-        System.out.println(orderDetail.getOrderDate());
-        String ordersToFile = String.valueOf(orderDetail.getOrderNumber()) + DELIMITER + orderDetail.getCustomerName()
-                + DELIMITER + tax.getState() + DELIMITER + String.valueOf(tax.getTaxRate()) + DELIMITER
-                + product.getProductType() + DELIMITER + String.valueOf(orderDetail.getArea()) + DELIMITER
-                + String.valueOf(product.getCostPerSquareFoot()) + DELIMITER
-                + String.valueOf(product.getLaborCostPerSquareFoot()) + DELIMITER
-                + String.valueOf(orderDetail.getMaterialCost()) + DELIMITER + String.valueOf(orderDetail.getLaborCost())
-                + DELIMITER + String.valueOf(orderDetail.getOrderTax()) + DELIMITER
-                + String.valueOf(orderDetail.getTotalCost()) + DELIMITER
-                + orderDetail.getOrderDate();
+        String ordersToFile = String.valueOf(orderDetail.getOrderDate())
+                + DELIMITER + String.valueOf(orderDetail.getOrderNumber()) 
+                + DELIMITER + orderDetail.getCustomerName()
+                + DELIMITER + tax.getState() 
+                + DELIMITER + String.valueOf(tax.getTaxRate()) 
+                + DELIMITER + product.getProductType() 
+                + DELIMITER + String.valueOf(orderDetail.getArea()) 
+                + DELIMITER + String.valueOf(product.getCostPerSquareFoot()) 
+                + DELIMITER + String.valueOf(product.getLaborCostPerSquareFoot()) 
+                + DELIMITER + String.valueOf(orderDetail.getMaterialCost()) 
+                + DELIMITER + String.valueOf(orderDetail.getLaborCost())
+                + DELIMITER + String.valueOf(orderDetail.getOrderTax()) 
+                + DELIMITER + String.valueOf(orderDetail.getTotalCost());
 
         return ordersToFile;
     }
@@ -205,6 +225,27 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
 
         return ordersToFile;
     }
+    
+    private void loadDataFromFiles(File currentFile) throws Exception {
+        try {
+            Scanner readFile = new Scanner(new BufferedReader(new FileReader(currentFile)));
+            // System.out.println("Loading: " + fileOrders);
+            String[] parts = currentFile.toString().split("_|\\.");
+            String dateString = parts[1].substring(4,8) + "-" + parts[1].substring(0,2) + "-" + parts[1].substring(2,4);
+            LocalDate date = storage.formatStringToDate(dateString);
+            // System.out.println(date);
+            String currentLine = "";
+            if (readFile.hasNextLine()) {
+                while (readFile.hasNextLine()) {
+                    currentLine = readFile.nextLine();
+                    Order ordersFromFile = unmarshallData(currentLine);
+                    storeAllOrdersFromFiles.put(ordersFromFile.getOrderNumber(), ordersFromFile);
+                    ordersFromFile.setOrderDate(date);
+                }
+            } 
+            readFile.close();
+        } catch (Exception e) {}
+    }
 
     private void loadData() throws Exception {
         try {
@@ -216,7 +257,6 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
                     currentLine = readFile.nextLine();
                     Order ordersFromFile = unmarshallData(currentLine);
                     storeOrders.put(ordersFromFile.getOrderNumber(), ordersFromFile);
-                    activeOrders.add(ordersFromFile);
                 }
             } else {
                 System.out.println("The file is empty.");
@@ -245,6 +285,7 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
         } catch (Exception e) {
         }
     }
+    
     private Order unmarshallData(String currentLine) {
         String[] line = currentLine.split(DELIMITER);
 

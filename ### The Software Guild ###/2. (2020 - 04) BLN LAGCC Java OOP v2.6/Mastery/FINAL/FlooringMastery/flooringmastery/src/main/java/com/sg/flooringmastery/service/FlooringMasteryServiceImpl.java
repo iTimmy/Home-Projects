@@ -8,13 +8,14 @@ import java.util.*;
 import com.sg.flooringmastery.dto.*;
 import com.sg.flooringmastery.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FlooringMasteryServiceImpl implements FlooringMasteryService {
 
     FlooringMasteryOrderDao orderDao;
     FlooringMasteryProductDao productDao;
     FlooringMasteryTaxDao taxDao;
-    int newOrderNumber = 0;
 
     @Autowired
     public FlooringMasteryServiceImpl(FlooringMasteryOrderDao orderDao, FlooringMasteryProductDao productDao, FlooringMasteryTaxDao taxDao) {
@@ -47,7 +48,6 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
 
         // get most recent order number of the collections. make method.
 
-        BigDecimal customerStateTaxRate = roundBigDecimal(state.fetchStateTax(stateName));
         BigDecimal taxRate = storedTax.getTaxRate();
 
         BigDecimal taxPercentage = new BigDecimal(100);
@@ -79,7 +79,6 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     // ORDERS \\
     @Override
     public Order createOrder(Order order) throws Exception {
-        order.setOrderNumber(generateOrderNumber());
         order = calculation(order);
         return orderDao.createOrder(order);
     }
@@ -159,13 +158,5 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
     @Override
     public Tax getTaxByState(String state) {
         return taxDao.getTaxByState(state);
-    }
-
-    private int generateOrderNumber() throws NumberFormatException {
-        // double generateOrderNumber = Math.random() * 100;
-        // int newOrderNumber = (int)generateOrderNumber;
-        // grab the greatest order number from the dao
-        newOrderNumber++;
-        return newOrderNumber;
     }
 }

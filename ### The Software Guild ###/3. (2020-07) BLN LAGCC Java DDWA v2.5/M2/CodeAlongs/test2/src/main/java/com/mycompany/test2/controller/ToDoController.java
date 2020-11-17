@@ -28,10 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/todo")
 public class ToDoController {
 
-    private final ToDoDao dao;
+    private ToDoDao dao;
 
-    public ToDoController(ToDoDao dao) {
-        this.dao = dao;
+    public ToDoController() {
+        
     }
 
     @GetMapping

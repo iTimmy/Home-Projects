@@ -18,16 +18,24 @@
  
     <!-- Bean definitions go here -->
     <bean id="orderDao" class="com.sg.flooringmastery.dao.FlooringMasteryOrderDaoImpl">
-        <constructor-arg value="DataExportTest.txt"/>
+        <constructor-arg value="../Orders"/>
         <!--<constructor-arg value=""/>-->
     </bean>
-    <bean id="productDao" class="com.sg.flooringmastery.dao.FlooringMasteryProductDaoImpl" />
-    <bean id="taxDao" class="com.sg.flooringmastery.dao.FlooringMasteryTaxDaoImpl" />
+    <bean id="productDao" class="com.sg.flooringmastery.dao.FlooringMasteryProductDaoImpl">
+        <constructor-arg value="../Data/Products/ProductsTest.txt"/>
+    </bean>
+    <bean id="taxDao" class="com.sg.flooringmastery.dao.FlooringMasteryTaxDaoImpl">
+        <constructor-arg value="../Data/Taxes/TaxesTest.txt"/>
+    </bean>
+        
+    <bean id="orderDaoStub" class="com.sg.flooringmastery.dao.FlooringMasteryOrderDaoStubImpl" />
+    <bean id="productDaoStub" class="com.sg.flooringmastery.dao.FlooringMasteryProductDaoStubImpl" />
+    <bean id="taxDaoStub" class="com.sg.flooringmastery.dao.FlooringMasteryTaxDaoStubImpl" />
     
     <bean id="service" class="com.sg.flooringmastery.service.FlooringMasteryServiceImpl">
-        <constructor-arg ref="orderDao"/>
-        <constructor-arg ref="productDao"/>
-        <constructor-arg ref="taxDao"/>
+        <constructor-arg ref="orderDaoStub"/>
+        <constructor-arg ref="productDaoStub"/>
+        <constructor-arg ref="taxDaoStub"/>
     </bean>
    
 </beans>

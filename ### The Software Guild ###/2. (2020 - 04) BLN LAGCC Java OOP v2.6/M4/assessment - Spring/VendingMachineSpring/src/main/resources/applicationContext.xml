@@ -21,8 +21,11 @@
     <bean id="view" class="com.sg.vendingmachine.view.VendingMachineView">
         <constructor-arg ref="io"/>
     </bean>
-    <bean id="auditDao" class="com.sg.vendingmachine.dao.VendingMachineAuditDaoStubImpl" />
+    <bean id="auditDao" class="com.sg.vendingmachine.dao.VendingMachineAuditDaoStubImpl">
+        <!--<constructor-arg value="audit-log.txt"/>-->
+    </bean>
     <bean id="dao" class="com.sg.vendingmachine.dao.VendingMachineDaoImpl">
+        <constructor-arg value="VendingMachine.txt"/>
     </bean>
     <bean id="service" class="com.sg.vendingmachine.service.VendingMachineServiceImpl">
         <constructor-arg ref="dao"/>

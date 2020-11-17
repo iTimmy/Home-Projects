@@ -1,0 +1,136 @@
+body {
+        text-align: center;
+        /* background-image: url("https://wallpapercave.com/wp/PWKKTo6.jpg"); */
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+    .header {
+        height: 1000px;
+    }
+    .header h1 {
+        padding: 50px;
+        /* color: white; */
+        text-align: center;
+    }
+
+    #display-items {
+        height: 500pz;
+    }
+
+    .bg-color {
+        background-color: rgba(0,0,0,0.75);
+    }
+
+    input {
+        width: 20px;
+    }
+
+    form {
+        padding: 50px;
+    }
+
+    #orders {
+        height: 100%;
+    }
+
+    .body {
+        display: none;
+        padding: 100px;
+    }
+
+    .body h1 {
+        padding-top: 100px;
+    }
+
+    #change {
+        font-size: 25px;
+        padding-bottom: 120px;
+    }
+
+    .error {
+        color: red;
+        background-color: rgb(255, 180, 180);
+    }
+
+    .error-item, .error-money, .error-item-blank, .error-money-blank, .error-type {
+        display: none;
+    }
+
+    tr {
+        font-size: 15px;
+        transition-property: font-size;
+        transition-duration : 1000ms;
+    }
+
+    tr:hover {
+        background-color: green;
+        font-size: 25px;
+        transition-property: font-size;
+        transition-duration : 500ms;
+    }
+
+    a:hover, a, a:visited {
+        text-decoration: none;
+        /* color: white; */
+    }
+
+    /* .column {
+        border: 5px solid red;
+    }
+
+    .row {
+        border: 5px solid blue;
+    } */
+
+    .itemRows .column {
+        height: 100%;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        margin: 20px;
+    }
+
+    @media screen and (max-width: 300px) {
+        .itemRows .column {
+            width: 91%;
+        }
+    }
+    @media screen and (min-width: 800px) {
+        .itemRows .column {
+            width: 28%;
+        }
+    }
+    @media screen and (min-width: 1700px) {
+        .itemRows .column {
+             width: 30%;
+        }
+    }
+
+    #item-id {
+        text-align: left;
+    }
+
+    hr {
+        color: black;
+        background-color: black;
+    }
+
+    #item-quantity {
+
+    }
+
+    h2 {
+        padding-top: 0;
+    }
+
+    #form-1 .column label {
+        margin: -50px;
+    }
+
+    /* .form-group {
+        margin-top: -50px;
+    } */
+
+    .select-item { 
+        cursor: pointer;
+    }

@@ -3,8 +3,12 @@ package com.sg.flooringmastery.view;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserIOConsoleImpl implements UserIO {
+    @Autowired
     Scanner scan = new Scanner(System.in);
 
     public void print(String message) {

@@ -89,6 +89,11 @@ public class FlooringMasteryStorage {
         newFile.createNewFile();
         orderFiles.add(newFile.toString());
     }
+    
+    public List<String> importAllOrders() throws Exception {
+        importFiles();
+        return orderFiles;
+    }
 
     public void deleteFileIfEmpty(File file) {
         file.delete();

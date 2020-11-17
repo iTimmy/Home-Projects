@@ -5,12 +5,16 @@ import java.math.*;
 import java.time.*;
 import com.sg.flooringmastery.dto.*;
 import com.sg.flooringmastery.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FlooringMasteryView {
     UserIO io;
     UserIODecodeImpl decode;
 
-     public FlooringMasteryView(UserIO io, UserIODecodeImpl decode) {
+    @Autowired
+    public FlooringMasteryView(UserIO io, UserIODecodeImpl decode) {
          this.io = io;
          this.decode = decode;
      } 
@@ -18,21 +22,6 @@ public class FlooringMasteryView {
     int i = 0;
     String EDIT = "";
     String displayAddEditOrderTitle = "ADD";
-
-    public void displayCurrentOrder(List<Order> currentOrders) {
-        io.println("############################################################################################################################################");
-        currentOrders.stream().forEach((p) -> {
-            io.print("Order #: " + p.getOrderDate() + " | ");
-            io.print("Order #: " + p.getOrderNumber() + " | ");
-            io.print("Customer Name: " + p.getCustomerName() + " | ");
-            io.print("Area: " + p.getArea() + " | ");
-            io.print("Material Cost: " + p.getMaterialCost() + " | ");
-            io.print("Labor Cost: " + p.getLaborCost() + " | ");
-            io.print("Order Tax: " + p.getOrderTax() + " | ");
-            io.println("Total Cost: " + p.getTotalCost() + " | ");
-        });
-        io.println("############################################################################################################################################");
-    }
 
     public void displayMenu() {
         io.println(
@@ -103,16 +92,16 @@ public class FlooringMasteryView {
         newOrder.setOrderDate(userInputDate);
 
         String customer = decodeCustomer();
-        String customerState = decodeState(listTaxes);
+        
+        Tax newTax = decodeState(listTaxes);
+        
         Product userInputProduct = displayProducts(listProducts);
         BigDecimal userInputArea = decodeArea();
 
         Product newProduct = new Product();
         newProduct.setProductType(userInputProduct.getProductType());
         newProduct.setCostPerSquareFoot(userInputProduct.getCostPerSquareFoot());
-
-        Tax newTax = new Tax();
-        newTax.setState(customerState);
+        newProduct.setLaborCostPerSquareFoot(userInputProduct.getLaborCostPerSquareFoot());
 
         newOrder.setArea(userInputArea);
         newOrder.setCustomerName(customer);
@@ -163,16 +152,15 @@ public class FlooringMasteryView {
         }
         editOrder.setOrderNumber(userInputOrderNumber);
         String customer = decodeCustomer();
-        String customerState = decodeState(listTaxes);
+        Tax editTax = decodeState(listTaxes);
         Product userInputProduct = displayProducts(listProducts);
         BigDecimal userInputArea = decodeArea();
 
         Product editProduct = new Product();
         editProduct.setProductType(userInputProduct.getProductType());
         editProduct.setCostPerSquareFoot(userInputProduct.getCostPerSquareFoot());
+        editProduct.setLaborCostPerSquareFoot(userInputProduct.getLaborCostPerSquareFoot());
 
-        Tax editTax = new Tax();
-        editTax.setState(customerState);
 
         editOrder.setArea(userInputArea);
         editOrder.setCustomerName(customer);
@@ -272,10 +260,11 @@ public class FlooringMasteryView {
     }
 
     // STATE \\
-    public String decodeState(List<Tax> listTaxes) {
+    public Tax decodeState(List<Tax> listTaxes) {
         // JUST INIT \\
         StateTaxes state = new StateTaxes();
         String stateName = "";
+        BigDecimal stateTax = new BigDecimal(0);
         boolean validationState = false;
 
         io.println("\n#################################");
@@ -292,12 +281,14 @@ public class FlooringMasteryView {
             stateName = io.readString("State" + EDIT + ": ");
             stateName = decode.stateFormat(stateName);
             States validateState = state.stringToState(stateName);
-            String fetchedState = "";
+            String fetchedStateName = "";
+            //BigDecimal fetchedStateTax = new BigDecimal(0);
             try {
                 for (Tax currentTax : listTaxes) {
                     if (stateName.toUpperCase().equals(currentTax.getState())) {
                         validationState = true;
-                        fetchedState = currentTax.getState();
+                        fetchedStateName = currentTax.getState();
+                        stateTax = currentTax.getTaxRate();
                         break;
                     } else if (!stateName.toUpperCase().equals(currentTax.getState())) {
                         validationState = false;
@@ -305,7 +296,7 @@ public class FlooringMasteryView {
                 }
                 if (stateName.toUpperCase().length() != 2) {
                     io.println("Please abbreviate your state.");
-                } else if (!stateName.toUpperCase().equals(fetchedState)
+                } else if (!stateName.toUpperCase().equals(fetchedStateName)
                         && stateName.toUpperCase().equals(validateState.toString())) {
                     io.println("Your state is not eligible for purchase.");
                 } else if (!stateName.toUpperCase().equals(validateState.toString())) {
@@ -316,7 +307,13 @@ public class FlooringMasteryView {
             }
 
         }
-        return stateName;
+        
+        Tax newState = new Tax();
+        newState.setState(stateName);
+        newState.setTaxRate(stateTax);
+        System.out.println("stateTax: " + stateTax);
+        
+        return newState;
     }
 
     // PICK PRODUCT \\
@@ -400,33 +397,48 @@ public class FlooringMasteryView {
     }
 
     public void returnCalculations(Order order) {
+        MathContext mc = new MathContext(3);
+        // CALCULATIONS \\
+        BigDecimal taxPercentage = new BigDecimal(100);
+        BigDecimal materialCost = roundBigDecimal(order.getArea().multiply(order.getProduct().getCostPerSquareFoot()));
+        BigDecimal laborCost = roundBigDecimal(order.getArea().multiply(order.getProduct().getLaborCostPerSquareFoot()));
+        BigDecimal tax = (materialCost.add(laborCost)).multiply(order.getTax().getTaxRate().divide(taxPercentage, 4, RoundingMode.HALF_UP)).setScale(2, RoundingMode.FLOOR);
+        BigDecimal totalCost = roundBigDecimal((materialCost.add(laborCost)).add(tax));
+        
         io.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        io.println("Material Cost: $" + order.getMaterialCost());
-        io.println("Labor Cost: $" + order.getLaborCost());
-        io.println("Tax: $" + order.getTax());
-        io.println("Total Cost: $" + order.getTotalCost());
+        io.println("Customer Name: " + order.getCustomerName());
+        io.println("State: " + order.getTax().getState());
+        io.println("Product: " + order.getProduct().getProductType());
+        io.println("Area: " + order.getArea());
+        io.println("Material Cost: $" + materialCost);
+        io.println("Labor Cost: $" + laborCost);
+        io.println("Tax: $" + tax);
+        io.println("Total Cost: $" + totalCost);
         io.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
+    
+    private BigDecimal roundBigDecimal(BigDecimal decimal) {
+        BigDecimal roundedBigDecimal = decimal.setScale(2, RoundingMode.CEILING);
+        return roundedBigDecimal;
+    }
 
-	public void displayAddedOrder(Order newOrder) {
-        io.println("===============================================\n" +
-        newOrder.getOrderDate() + " | " +
-        newOrder.getCustomerName() + " | " +
-        newOrder.getTax().getState() + " | " +
-        newOrder.getProduct().getProductType() + " | " +
-        newOrder.getArea() +
-        "\n==============================================="
-        );
-	}
+//	public String displayFileStatus(boolean b) {
+//            if (b == true) {
+//                io.println("The file exists. This will be overwritten.");
+//                return "The file exists. This will be overwritten.";
+//            } else {
+//                io.println("The file does not exist. This will be created as new.");
+//                return "The file does not exist. This will be created as new.";
+//            }
+//	}
 
-	public String displayFileStatus(boolean b) {
-        if (b == true) {
-            io.println("The file exists. This will be overwritten.");
-            return "The file exists. This will be overwritten.";
+    public boolean displayConfirmation(String word) {
+        String input = io.readString("Confirm if you wish to " + word + " this order. (y/n) ");
+        if (input.toUpperCase().equals("Y")) {
+            return true;
         } else {
-            io.println("The file does not exist. This will be created as new.");
-            return "The file does not exist. This will be created as new.";
+            return false;
         }
-	}
+    }
 
 }

@@ -7,20 +7,29 @@ package com.sg.flooringmastery.dao;
 
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dao.*;
+import com.sg.flooringmastery.service.BigDecimalMath;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-/**
- *
- * @author Music Account
- */
+@Component
 public class FlooringMasteryOrderDaoStubImpl implements FlooringMasteryOrderDao {
     public Order onlyOrder;
+    MathContext mc = new MathContext(2);
+    BigDecimalMath mathCalculate = new BigDecimalMath();
 
+    @Autowired
     public FlooringMasteryOrderDaoStubImpl() {
         onlyOrder = new Order();
         onlyOrder.setCustomerName("Ada");
+        onlyOrder.setOrderNumber(1);
+        onlyOrder.setOrderDate(LocalDate.of(2030, Month.DECEMBER, 5));
+        onlyOrder.setArea(new BigDecimal(233).round(mc));
     }
 
     public FlooringMasteryOrderDaoStubImpl(Order testOrder){
@@ -80,7 +89,7 @@ public class FlooringMasteryOrderDaoStubImpl implements FlooringMasteryOrderDao 
     public void deleteOrder(Order order)
                 throws FlooringMasteryPersistenceException {
         if (order.getOrderNumber() == (onlyOrder.getOrderNumber())) {
-            // return onlyStudent;
+                onlyOrder.setCustomerName("");
         }
     }   
     

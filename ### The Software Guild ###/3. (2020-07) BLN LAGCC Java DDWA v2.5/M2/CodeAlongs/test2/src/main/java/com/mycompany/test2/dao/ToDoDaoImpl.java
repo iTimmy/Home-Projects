@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+@Repository
 public class ToDoDaoImpl implements ToDoDao {
 
     private static final List<ToDo> todos = new ArrayList<>();

@@ -2,7 +2,10 @@ package com.sg.flooringmastery.view;
 
 import java.time.LocalDate;
 import java.time.Month;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserIODecodeImpl extends UserIOConsoleImpl {
     public String nameFormat(String str, int p) {
         String newStr = "";
