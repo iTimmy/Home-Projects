@@ -1,0 +1,25 @@
+body {
+    margin: 0 auto;
+}
+
+#nav-button {
+    cursor: pointer;
+}
+
+#nav-options {
+    display: none;
+}
+
+.top {
+    height: 50px;
+}
+
+.fa {
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+}
+
+.domain {
+    margin: 20px;
+}

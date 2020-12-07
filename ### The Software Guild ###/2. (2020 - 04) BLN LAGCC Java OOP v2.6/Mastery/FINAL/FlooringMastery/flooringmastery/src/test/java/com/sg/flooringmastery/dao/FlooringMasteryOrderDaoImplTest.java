@@ -55,9 +55,6 @@ public class FlooringMasteryOrderDaoImplTest {
     
     @Before
     public void setUp() {
-        String testFile = "../DataExportTest.txt";
-        // String testFileTwo = "Orders_3000-12-12.txt";
-        orderDaoTest = new FlooringMasteryOrderDaoImpl(testFile/*, testFileTwo*/);
     }
     
     @After
@@ -82,7 +79,7 @@ public class FlooringMasteryOrderDaoImplTest {
     
         existingOrder.setProduct(productOne);
         existingOrder.setTax(taxOne);
-        
+     
         
         
         Order editedOrder = new Order();

@@ -1,0 +1,41 @@
+:root {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.name {
+    border: 1px solid #333;
+    display: inline-block;
+}
+
+.name .tag {
+    font-size: 85%;
+    padding: 0.5em 0.75em;
+    margin: 0.25em 0.1em;
+    display: inline-block;
+    background-color: #ff006a;
+    transition: all 0.1s linear;
+    cursor: pointer;
+}
+
+.name .tag:hover {
+    background-color: rgb(138, 138, 138);
+    color: white;
+}
+
+.name .tag .close::after {
+    content: '×';
+    font-weight: bold;
+    display: inline-block;
+    transform: scale(1.4);
+    margin-left: 0.75em;
+}
+
+.name .tag .close:hover::after {
+    color: rgb(0, 0, 0);
+}
+
+.name .main-input {
+    border: 0;
+    outline: 0;
+    padding: 0.5em 0.1em;
+}

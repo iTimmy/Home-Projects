@@ -36,7 +36,7 @@ public class VendingMachineDaoImplTest {
     
     public VendingMachineDaoImplTest() {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-        testDao = ctx.getBean("daoStub", VendingMachineDao.class);
+        testDao = ctx.getBean("dao", VendingMachineDao.class);
     }
     
     @BeforeClass
@@ -49,8 +49,6 @@ public class VendingMachineDaoImplTest {
     
     @Before
     public void setUp() throws IOException {
-        String testFile = "VendingMachineTest.txt";
-        testDao = new VendingMachineDaoImpl(testFile);
     }
     
     @After

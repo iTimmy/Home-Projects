@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Blogs</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<style>
+
+    .cover {
+        margin-top: 50px;
+    }
+
+    .black-white {
+        background-color: black;
+        color: white;
+    }
+
+</style>
+
+<body>
+    <div class="bg"></div>
+    <div class="container-fluid">
+        <div class="top row">
+            <div class="column col-lg-1" id="nav-button">
+                <div class="fa fa-bars w3-xxlarge">
+
+                </div>
+            </div>
+            <div class="column col-lg-11" id="nav-options">
+                <div class="row">
+                    <div class="domain col text-center col-lg-2">
+                        <a href="/" id="home">
+                            <h5>Home</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-center col-lg-2">
+                        <a href="blogs" id="blogs">
+                            <h5>Blogs</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-center col-lg-2">
+                        <a href="tags" id="tags">
+                            <h5>Tags</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-left col-lg-2">
+                        <a id="toggleTheme" class="btn btn-danger btn-lg">
+                            <h5 class="themeStatus" style="display:inline;color:white">Dark</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cover" style="padding-top:100px">
+            <div class="column col-lg-12">
+                <!-- <form action="createTag" method="POST">
+                    <div class="form-group row justify-content-center" style="padding-left:150px;padding-bottom:30px">
+                        <label for="title" class="col-12 col-form-label"></label>
+                        <div class="col-3">
+                            <input type="text" name="name" class="form-control" id="name" value="">
+                        </div>
+                        <div class="col-3">
+                            <button type="submit" class="btn btn-warning">Create Tag</button>
+                        </div>
+                    </div>
+                </form> -->
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="middle row black-white">
+            <div class="column col-2 tag-list">
+                <div class="row tags" th:each="tag: ${tags}" id="${tag.tagID}">
+                    <div class="column col-12">
+                        #<p class="name" style="display:inline"><span th:text="${tag.name}"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+
+        </div>
+    </div>
+</body>
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<!-- script -->
+<script src="js/main.js"></script>
+<script src="js/tags.js"></script>
+
+</html>

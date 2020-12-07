@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Blogs</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src='https://cdn.tiny.cloud/1/jm2rvv7h3zbgkcv5k9cmm7u3nsrimxtplu5gn766gmxidibf/tinymce/5/tinymce.min.js'
+        referrerpolicy="origin">
+        </script>
+    <script>
+        tinymce.init({
+            selector: '#mytextarea'
+        });
+    </script>
+</head>
+
+<!-- API KEY
+    jm2rvv7h3zbgkcv5k9cmm7u3nsrimxtplu5gn766gmxidibf -->
+
+<style>
+    body {
+        background-color: rgb(5, 5, 5);
+        color: white;
+    }
+
+    .cover {
+        padding: 100px;
+    }
+
+    .cover h3 {
+        padding: 50px;
+    }
+
+    .cover .btn {
+        margin: 50px;
+    }
+
+    .form {
+        margin: 0 auto;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    input {
+        margin: 0 auto;
+    }
+
+    .content {
+        margin: 50px;
+    }
+</style>
+
+<body>
+    <div class="bg"></div>
+    <div class="container-fluid">
+        <div class="top row">
+            <div class="column col-lg-1" id="nav-button">
+                <div class="fa fa-bars w3-xxlarge">
+
+                </div>
+            </div>
+            <div class="column col-lg-11" id="nav-options">
+                <div class="row">
+                    <div class="domain col text-center col-lg-2">
+                        <a href="/" id="home">
+                            <h5>Home</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-center col-lg-2">
+                        <a href="blogs" id="blogs">
+                            <h5>Blogs</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-center col-lg-2">
+                        <a href="tags" id="tags">
+                            <h5>Tags</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-left col-lg-2">
+                        <a id="toggleTheme" class="btn btn-danger btn-lg">
+                            <h5 class="themeStatus" style="display:inline;color:white">Dark</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br><br><br>
+
+        <div class="cover bg-color row">
+            <div class="column col-lg-12">
+                <h1><span th:text="${blog.title}"></span></h1>
+                <h3><span th:text="${blog.date}"></span></h3>
+                <p><span th:text="${blog.content}"></span></p>
+            </div>
+        </div>
+
+        <div class="middle row" style="margin:50px">
+            <div class="col-12">
+                <a href="blogs"><button type="submit" class="btn btn-danger btn-lg">Back</button></a>
+            </div>
+        </div>
+
+        <div class="footer">
+
+        </div>
+    </div>
+</body>
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<!-- script -->
+<script src="js/main.js"></script>
+<script src="js/blogs.js"></script>
+
+</html>

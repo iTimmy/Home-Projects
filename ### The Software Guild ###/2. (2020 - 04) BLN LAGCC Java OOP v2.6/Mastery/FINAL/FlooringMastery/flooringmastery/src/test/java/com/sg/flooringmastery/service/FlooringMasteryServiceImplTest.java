@@ -38,10 +38,6 @@ public class FlooringMasteryServiceImplTest {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
         serviceTest = ctx.getBean("service", FlooringMasteryService.class);
     }
-
-//    FlooringMasteryOrderDao orderDaoTest = new FlooringMasteryOrderDaoImpl();
-//    FlooringMasteryProductDao productDaoTest = new FlooringMasteryProductDaoImpl();
-//    FlooringMasteryTaxDao taxDaoTest = new FlooringMasteryTaxDaoImpl();
     MathContext mc = new MathContext(2);
     BigDecimalMath mathCalculate = new BigDecimalMath();
     

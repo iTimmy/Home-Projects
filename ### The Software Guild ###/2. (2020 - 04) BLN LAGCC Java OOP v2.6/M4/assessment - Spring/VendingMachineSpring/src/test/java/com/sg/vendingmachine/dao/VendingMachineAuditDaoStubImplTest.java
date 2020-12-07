@@ -11,6 +11,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -18,7 +20,11 @@ import static org.junit.Assert.*;
  */
 public class VendingMachineAuditDaoStubImplTest {
     
+    VendingMachineAuditDao testDao;
+    
     public VendingMachineAuditDaoStubImplTest() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        testDao = ctx.getBean("auditDao", VendingMachineAuditDao.class);
     }
     
     @BeforeClass

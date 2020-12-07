@@ -13,11 +13,12 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
 
     FlooringMasteryStorage storage = new FlooringMasteryStorage();
     // STORE TO SAVE
-    Map<Integer, Order> storeOrders = new HashMap<>();
-    // STORE TO DISPLAY
-    Map<Integer, Order> loadOrders = new HashMap<>();
-    // STORE TO COUNT CURRENT CREATED ORDERS
-    Map<Integer, Order> storeAllOrdersFromFiles = new HashMap<>();
+//    Map<Integer, Order> storeOrders = new HashMap<>();
+//    // STORE TO DISPLAY
+//    Map<Integer, Order> loadOrders = new HashMap<>();
+//    // STORE TO COUNT CURRENT CREATED ORDERS
+//    Map<Integer, Order> storeAllOrdersFromFiles = new HashMap<>();
+    Map<LocalDate, Map<Integer, Order>> allOrders = new HashMap<>();
     List<Order> activeOrders = new ArrayList<>();
     private String file;
     private File fileOrders = new File("");
@@ -27,12 +28,10 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
     @Autowired
     public FlooringMasteryOrderDaoImpl() {
         this.dataExportFile = "Backup\\DataExport.txt";
-        // this.file = file;
     }
 
-    public FlooringMasteryOrderDaoImpl(String dataExportFile/*, String file*/) {
+    public FlooringMasteryOrderDaoImpl(String dataExportFile) {
         this.dataExportFile = dataExportFile;
-        // this.file = file;
     }
 
     private int generateOrderNumber() throws NumberFormatException, Exception {
@@ -88,6 +87,9 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
     @Override
     public List<Order> getOrdersByDate(LocalDate userInputDate) throws Exception {
         loadOrders.clear();
+        Map<Integer, Order> ordersForDate = allOrders.get(userInputDate);
+        //return new ArrayList(ordersForDate.values());
+        Order specificOrder = ordersForDate.get(1);
 
         if (importFile(userInputDate) == null) {
             return null;

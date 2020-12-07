@@ -33,7 +33,7 @@ public class VendingMachineDaoStubImpl implements VendingMachineDao {
 
     @Override
     public VendingMachine getItem(String itemName) {
-        if (itemName.equals(onlyItem.getItemName())) {
+        if (onlyItem != null && itemName.equals(onlyItem.getItemName())) {
             return onlyItem;
         } else {
             return null;
@@ -53,10 +53,16 @@ public class VendingMachineDaoStubImpl implements VendingMachineDao {
     }
 
     @Override
-    public void updateItems(VendingMachine item) throws IOException {      
+    public void updateItems(VendingMachine item) throws IOException {  
+        onlyItem.setItemName(item.getItemName());
+        onlyItem.setItemCost(item.getItemCost());
+        onlyItem.setItemQuantity(item.getItemQuantity());
     }
 
     @Override
     public void removeItem(VendingMachine item) throws IOException {
+        if (item == onlyItem) {
+            onlyItem = null;
+        }
     }   
 }

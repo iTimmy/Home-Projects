@@ -27,7 +27,7 @@ public class FlooringMasteryProductDaoImplTest {
     
     public FlooringMasteryProductDaoImplTest() {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-        productDaoTest = ctx.getBean("productDaoStub", FlooringMasteryProductDao.class);
+        productDaoTest = ctx.getBean("productDao", FlooringMasteryProductDao.class);
     }
     
     @BeforeClass
@@ -51,7 +51,7 @@ public class FlooringMasteryProductDaoImplTest {
     @Test
     public void testGetAllProducts() {
         List<Product> listProducts = productDaoTest.getAllProducts();
-        assertEquals(listProducts.size(), 1);
+        assertEquals(4, listProducts.size());
     }
     
     @Test

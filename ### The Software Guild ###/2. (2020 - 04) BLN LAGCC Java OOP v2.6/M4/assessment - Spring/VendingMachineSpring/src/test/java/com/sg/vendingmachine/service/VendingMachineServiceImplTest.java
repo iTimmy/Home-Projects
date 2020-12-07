@@ -36,7 +36,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class VendingMachineServiceImplTest {
     
     VendingMachineService serviceTest;
-     VendingMachineDao daoTest;
     MathContext mc = new MathContext(2);
     BigDecimalMath mathCalculate = new BigDecimalMath();
     
@@ -58,77 +57,64 @@ public class VendingMachineServiceImplTest {
     
     @Before
     public void setUp() throws Exception {
-        String testFile = "VendingMachineTest.txt";
-        daoTest = new VendingMachineDaoImpl(testFile);
     }
     
     @After
     public void tearDown() {
     }
+    
+    
 
-    /**
-     * Test of getAllItems method, of class VendingMachineServiceImpl.
-     */
-
-
-//    @Test
-//    public void testGetItem() throws Exception {
-//        VendingMachine itemOne = new VendingMachine();
-//        itemOne.setItemName("FRIED DOG");
-//        itemOne.setItemCost(new BigDecimal(2.5).setScale(2, RoundingMode.FLOOR));
-//        itemOne.setItemQuantity(50);
-//        
-//        UserWallet userWallet = new UserWallet();
-//        userWallet.setMoney(new BigDecimal(10.0).setScale(2, RoundingMode.FLOOR));  
-//        
-//        VendingMachine matchItem = serviceTest.getItem(itemOne.getItemName());
-//        assertEquals("FRIED DOG", matchItem.getItemName());
-//    }
+    @Test
+    public void testGetItem() throws Exception {
+        List<VendingMachine> listItems = serviceTest.getAllItems();
+        VendingMachine item = listItems.get(0); 
+        assertEquals("CANDY", item.getItemName());
+    }
 
     @Test
     public void testGetAllItems() throws Exception {
-        // ARRANGE
-        VendingMachine item = new VendingMachine();
-        item.setItemName("CANDY");
-        item.setItemCost(new BigDecimal(2.5).round(mc));
-        item.setItemQuantity(5);
-
-        // ACT & ASSERT
-        assertEquals( 1, serviceTest.getAllItems().size());
+        List<VendingMachine> listItems = serviceTest.getAllItems();
+        assertEquals(1, listItems.size());
     }
     
     @Test
     public void testUpdateItems_VendingMachine() throws Exception {
-        VendingMachine itemOne = new VendingMachine();
-        itemOne.setItemName("fried dog");
-        itemOne.setItemCost(new BigDecimal(2.5).setScale(2, RoundingMode.FLOOR));
-        itemOne.setItemQuantity(50);
+        List<VendingMachine> listItems = serviceTest.getAllItems();
+        VendingMachine itemOne = listItems.get(0);
         
         UserWallet userWallet = new UserWallet();
-        userWallet.setMoney(new BigDecimal(10.0).setScale(2, RoundingMode.FLOOR));
-        
+        userWallet.setMoney(new BigDecimal(10.0).setScale(2, RoundingMode.FLOOR)); 
         CoinsReturned cr = serviceTest.updateItems(userWallet, itemOne);
         
-        assertEquals(2, cr.getQuarters());
+        assertEquals(30, cr.getQuarters());
         assertEquals(0, cr.getDimes());
         assertEquals(0, cr.getNickels());
         assertEquals(0, cr.getPennies());
     }
     
     @Test
-    public void testRemoveItem() throws Exception {
-        VendingMachine itemOne = new VendingMachine();
-        itemOne.setItemName("steak");
-        itemOne.setItemCost(new BigDecimal(2.5).setScale(2, RoundingMode.FLOOR));
-        itemOne.setItemQuantity(50);
+    public void testUpdateItem_VendingMachine() throws Exception {
+        List<VendingMachine> listItems = serviceTest.getAllItems();
+        VendingMachine itemOne = listItems.get(0);
+        
+        VendingMachine itemTwo = new VendingMachine();
+        itemTwo.setItemName("CHIPS");
+        itemTwo.setItemCost(new BigDecimal(4.34).setScale(2, RoundingMode.FLOOR));
+        itemTwo.setItemQuantity(23);
         
         UserWallet userWallet = new UserWallet();
         userWallet.setMoney(new BigDecimal(10.0).setScale(2, RoundingMode.FLOOR));
-        
-        serviceTest.updateItems(userWallet, itemOne);
+        serviceTest.updateItems(userWallet, itemTwo);      
+        assertEquals(itemTwo, listItems.get(0));
+    }
+    
+    @Test
+    public void testRemoveItem() throws Exception {
+        List<VendingMachine> listItems = serviceTest.getAllItems();
+        VendingMachine itemOne = listItems.get(0);
         serviceTest.removeItem(itemOne);
-        
-        assertEquals(null, serviceTest.getItem(itemOne.getItemName()));
+        assertNull(serviceTest.getItem(null));
     }
     
 }

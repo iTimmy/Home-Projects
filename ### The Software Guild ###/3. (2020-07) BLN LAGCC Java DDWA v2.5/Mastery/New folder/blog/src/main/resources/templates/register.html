@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Blogs</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<style>
+    body {
+        background-image: url('assets/login.jpg');
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: white;
+    }
+
+    .middle {
+        height: 500px;
+        width: 500px;
+        padding: 200px;
+        margin: 0 auto;
+        position: fixed;
+    }
+
+    /* .middle .column {
+        border: 5px solid red;
+    }
+
+    .middle .row {
+        border: 5px solid blue;
+    } */
+
+    .modal-content {
+        background-image: url("assets/login-cover.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-color: rgba(0, 0, 0, 0.568);
+        box-shadow: 0px 0px 100px black;
+        opacity: 0.88;
+        height: 80%;
+        margin: 5% auto;
+    }
+</style>
+
+<body>
+    <div class="bg"></div>
+    <div class="container-fluid">
+        <div class="top row">
+            <div class="column col-lg-1" id="nav-button">
+                <div class="fa fa-bars w3-xxlarge">
+
+                </div>
+            </div>
+            <div class="column col-lg-11" id="nav-options">
+                <div class="row">
+                    <div class="domain col text-center col-lg-1">
+                        <a href="/" id="home">
+                            <h5>Home</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-center col-lg-1">
+                        <a href="blogs" id="blogs">
+                            <h5>Blogs</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-center col-lg-1">
+                        <a href="tags" id="tags">
+                            <h5>Tags</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-left col-lg-1">
+                        <a id="toggleTheme" class="btn btn-danger btn-lg">
+                            <h5 class="themeStatus" style="display:inline;color:white">Dark</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-left col-lg-1">
+
+                    </div>
+                    <div class="domain col text-left col-lg-1">
+                        <a href="#" id="login" class="btn btn-dark">
+                            <h5>Login</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-right col-lg-1">
+                        <a href="register" id="register" class="btn btn-success">
+                            <h5>Register</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cover row">
+
+        </div>
+
+        <div class="middle row">
+            <!-- MODAL -->
+            <div class="modal row underlay">
+                <form action="register" method="POST" class="myModal modal column col-5 mx-auto modal-content">
+                    <div class="row" style="padding:30px 10px 30px 10px">
+                        <h1 style="text-align:center" class="column col-12 nx-auto">Register</h1>
+                    </div>
+                    <hr style="border-top:2.5px solid rgba(255, 255, 255, 0.507)">
+                    <div class="row firstName" style="padding:8px">
+                        <input type="text" id="firstName" name="firstName" placeholder="First Name" class="form-control column col-5 mx-auto" style="text-align:center">
+                    </div>
+                    <div class="row lastName" style="padding:8px">
+                        <input type="text" id="lastName" name="lastName" placeholder="Last Name" class="form-control column col-5 mx-auto" style="text-align:center">
+                    </div>
+                    <div class="row username" style="padding:8px">
+                        <input type="text" id="username" name="username" placeholder="Username" class="form-control column col-5 mx-auto" style="text-align:center">
+                    </div>
+                    <div class="row password" style="padding:8px">
+                        <input type="password" id="password" name="password" placeholder="Password" class="form-control column col-5 mx-auto" style="text-align:center">
+                    </div>
+                    <div class="row" style="padding:10px;margin-top:30px">
+                        <div class="column col-8 mx-auto">
+                            <button type="submit" id="register" class="btn btn-danger"
+                                style="width:100%">Register</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer">
+
+        </div>
+
+    </div>
+</body>
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<!-- script -->
+<script src="js/main.js"></script>
+
+<script>
+    // Get the modal
+    var underlay = document.querySelector(".underlay");
+    var modal = document.querySelector(".myModal");
+    underlay.style.display = "block";
+    modal.style.display = "block";
+</script>
+
+</html>

@@ -18,14 +18,13 @@
  
     <!-- Bean definitions go here -->
     <bean id="orderDao" class="com.sg.flooringmastery.dao.FlooringMasteryOrderDaoImpl">
-        <constructor-arg value="../Orders"/>
-        <!--<constructor-arg value=""/>-->
+        <constructor-arg value="src/test/java/com/sg/flooringmastery/Backup/DataExportTest.txt"/>
     </bean>
     <bean id="productDao" class="com.sg.flooringmastery.dao.FlooringMasteryProductDaoImpl">
-        <constructor-arg value="../Data/Products/ProductsTest.txt"/>
+        <constructor-arg value="src/test/java/com/sg/flooringmastery/Data/Products/ProductsTest.txt"/>
     </bean>
     <bean id="taxDao" class="com.sg.flooringmastery.dao.FlooringMasteryTaxDaoImpl">
-        <constructor-arg value="../Data/Taxes/TaxesTest.txt"/>
+        <constructor-arg value="src/test/java/com/sg/flooringmastery/Data/Taxes/TaxesTest.txt"/>
     </bean>
         
     <bean id="orderDaoStub" class="com.sg.flooringmastery.dao.FlooringMasteryOrderDaoStubImpl" />

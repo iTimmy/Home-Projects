@@ -116,7 +116,6 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
     }
     private void loadItems() throws IOException {
         Scanner scan = new Scanner(new BufferedReader(new FileReader(file)));
-        // System.out.println(file);
         while (scan.hasNextLine()) {
             String currentLine = scan.nextLine();
             VendingMachine currentItems = unmarshallItems(currentLine);

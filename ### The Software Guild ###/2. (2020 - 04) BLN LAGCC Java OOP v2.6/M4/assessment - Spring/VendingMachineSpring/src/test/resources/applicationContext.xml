@@ -18,10 +18,10 @@
  
     <!-- Bean definitions go here -->
     <bean id="dao" class="com.sg.vendingmachine.dao.VendingMachineDaoImpl">
-        <constructor-arg value="../"/>
+        <constructor-arg value="src/test/java/com/sg/vendingmachine/VendingMachineTest.txt"/>
     </bean>
     <bean id="auditDao" class="com.sg.vendingmachine.dao.VendingMachineAuditDaoImpl">
-        <constructor-arg value="../audit-log-test.txt"/>
+        <constructor-arg value="src/test/java/com/sg/vendingmachine/audit-log-test.txt"/>
     </bean>
     
     <bean id="daoStub" class="com.sg.vendingmachine.dao.VendingMachineDaoStubImpl" />

@@ -13,10 +13,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class FlooringMasteryProductDaoImpl implements FlooringMasteryProductDao {
 
-    //@Autowired
     Map<String, Product> storeProduct = new HashMap<>();
-    private String file = "Data/Products/Products.txt";
-    File fileProducts = new File(file);
+    private String file;
 
     @Autowired
     public FlooringMasteryProductDaoImpl() {
@@ -48,7 +46,7 @@ public class FlooringMasteryProductDaoImpl implements FlooringMasteryProductDao 
     }
     
     private void loadProducts() throws Exception {
-        Scanner readFile = new Scanner(new BufferedReader(new FileReader(fileProducts)));
+        Scanner readFile = new Scanner(new BufferedReader(new FileReader(file)));
         String currentLine = "";
         while(readFile.hasNextLine()) {
             currentLine = readFile.nextLine();

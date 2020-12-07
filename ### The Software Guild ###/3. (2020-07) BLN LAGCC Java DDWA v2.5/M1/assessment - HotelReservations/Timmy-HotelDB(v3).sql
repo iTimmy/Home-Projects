@@ -4,8 +4,8 @@ create database if not exists HotelReservations;
 
 use HotelReservations;
 
-create table if not exists Guest (
-GuestID int PRIMARY KEY NOT NULL auto_increment,
+create table Guest (
+GuestID int PRIMARY KEY auto_increment,
 FirstName varchar(50) NOT NULL,
 LastName varchar(50) NOT NULL,
 State char(2) NOT NULL,
@@ -15,8 +15,8 @@ Address varchar(100) NOT NULL,
 PhoneNumber char(10) NOT NULL
 );
 
-create table if not exists RoomType (
-RoomTypeID int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+create table RoomType (
+RoomTypeID int PRIMARY KEY AUTO_INCREMENT,
 RoomTypeName char(6) NOT NULL,
 StandardOccupancy int NOT NULL,
 MaximumOccupancy int NOT NULL,
@@ -24,19 +24,26 @@ ExtraPerson decimal (4,2) NULL,
 BasePrice decimal(5,2) NOT NULL
 );
 
-create table if not exists Room (
-RoomID int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+create table Room (
+RoomID int PRIMARY KEY,
 RoomTypeID int NOT NULL
 );
 
-create table if not exists Amenities (
-AmenitiesID int PRIMARY KEY NOT NULL auto_increment,
+create table Amenities (
+AmenitiesID int PRIMARY KEY AUTO_INCREMENT,
 ExtraPrice decimal(5,2) NULL,
 AmenitiesName varchar(32) NOT NULL
 );
 
-create table if not exists Reservation (
-ReservationID int PRIMARY KEY NOT NULL auto_increment,
+create table RoomAmenities (
+RoomID int NOT NULL,
+AmenitiesID int NOT NULL,
+FOREIGN KEY (RoomID) REFERENCES Room(RoomID),
+FOREIGN KEY (AmenitiesID) REFERENCES Amenities(AmenitiesID)
+);
+
+create table Reservation (
+ReservationID int PRIMARY KEY auto_increment,
 StartDate date NOT NULL,
 EndDate date NOT NULL,
 Adults int NOT NULL,

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" 
+    xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>Blogs</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!-- CSS -->
+        <link rel="stylesheet" href="css/nav.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/modal.css">
+    </head>
+
+<style>
+    body {
+        background-image: url('assets/1.jpg');
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: white;
+    }
+
+    .cover {
+        margin: 0 auto;
+        height: 500px;
+        padding: 100px;
+    }
+
+    .cover h3 {
+        padding: 50px;
+    }
+
+    .cover .btn {
+        margin: 50px;
+    }
+
+    img {
+        max-width: 100%;
+        height: 100px;
+    }
+
+    .title {
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        font-size: 20px;
+    }
+
+    .date {
+        font-size: 10px;
+    }
+
+    .tags, .blogs {
+        max-width: 100%;
+        box-shadow: 20px 50px 30px rgba(255, 0, 85, 0.089);
+        border: 1px solid rgba(247, 247, 247, 0.116);
+    }
+
+    .blogtag, .name {
+        cursor: pointer;
+        color: rgb(255, 55, 131);
+    }
+
+    .blogtag:hover, .name:hover {
+        color: red;
+    }
+
+    .black-white {
+        background-color: rgb(5, 5, 5);
+        color: white;
+    }
+
+    .content {
+        padding: 25px 0px 50px 0px;
+    }
+
+    .blog-options {
+        background-color: black;
+        height: 12%;
+    }
+
+    #deleteBlog {
+        cursor: pointer;
+    }
+    #deleteBlog:hover, #editBlog:hover {
+        color: blue;
+    }
+
+</style>
+
+<body>
+    <div class="bg"></div>
+    <div class="container-fluid">
+        <div class="top row">
+            <div class="column col-lg-1" id="nav-button">
+                <div class="fa fa-bars w3-xxlarge">
+
+                </div>
+            </div>
+            <div class="column col-lg-11" id="nav-options">
+                <div class="row">
+                    <div class="domain col text-center col-lg-1">
+                        <a href="/" id="home">
+                            <h5>Home</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-center col-lg-1">
+                        <a href="blogs" id="blogs">
+                            <h5>Blogs</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-center col-lg-1">
+                        <a href="tags" id="tags">
+                            <h5>Tags</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-left col-lg-1">
+                        <a id="toggleTheme" class="btn btn-danger btn-lg">
+                            <h5 class="themeStatus" style="display:inline;color:white">Dark</h5>
+                        </a>
+                    </div>
+                    <div class="domain col text-left col-lg-1">
+                    
+                    </div>
+                    <div sec:authorize="isAnonymous()" class="domain col text-left col-lg-1">
+                        <a href="login" id="login" class="btn btn-dark">
+                            <h5>Login</h5>
+                        </a>
+                    </div>
+                    <div sec:authorize="isAnonymous()" class="domain col text-right col-lg-1">
+                        <a href="register" id="register" class="btn btn-success">
+                            <h5>Register</h5>
+                        </a>
+                    </div>
+                    <div sec:authorize="hasRole('ADMIN')" class="domain col text-right col-lg-2">
+                        <a href="approveBlogs" id="admin" class="btn btn-dark btn-lg">
+                            <h5 th:text="${#authentication.name}"></h5>
+                        </a>
+                    </div>
+                    <div sec:authorize="hasRole('USER')" class="domain col text-right col-lg-2">
+                        <a href="myblogs" id="user" class="btn btn-dark btn-lg">
+                            <h5 th:text="${#authentication.name}"></h5>
+                        </a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()" class="domain col text-right col-lg-1">
+                        <form class="form-inline" 
+                                method="POST" 
+                                action="/logout">
+                            <!-- <input type="hidden" 
+                                    th:name="${_csrf.parameterName}" 
+                                    th:value="${_csrf.token}"/> -->
+                            <button class="btn btn-dark btn-lg" 
+                                    id="logout" 
+                                    type="submit">Logout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cover row" sec:authorize="isAuthenticated()">
+            <div class="column col-lg-12">
+                <h3 id="status"></h3>
+                <div class="btn btn-warning">
+                    <h5>
+                        <a href="writeBlog" id="writeBlog"></a>
+                    </h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="middle row">
+            <div class="column col-7 blog-list">
+                <div class="row blogs black-white" th:each="blog: ${blogs}" th:id="${blog.blogID}" style="margin:20px;padding:10px">
+                    <div class="column col-12" style="padding-top:30px">
+                        <div class="row" style="padding:20px">
+                            <div class="column col-12">
+                                <a href="/" th:href="@{/viewBlog(title=${blog.title})}"><img src="assets/103237.jpg" alt="blog-cover"></a>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row" style="padding:20px">
+                            <div class="column col-12">
+                                <a href="/" th:href="@{/viewBlog(title=${blog.title})}">
+                                    <p class="title"><span th:text="${blog.title}"></span></p>
+                                </a>
+                                <hr>
+                                <p class="date"><span th:text="${blog.date}"></span> | <span th:text="${blog.userID}"></span></p>
+                                <p class="content"><span th:text="${blog.content}"></span></p>
+                                <div th:each="blogtag: ${blog.tags}" style="display:inline">
+                                    <p class="blogtag" style="display:inline">#<strong th:text="${blogtag.name}"></strong></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MODAL -->
+                        <div class="modal row underlay">
+                            <form action="deleteBlog" method="DELETE" class="myModal modal column col-5 mx-auto modal-content">
+                                <div class="row" style="background-color:rgb(65, 65, 65);padding:10px">
+                                    <div class="close">X</div>
+                                </div>
+                                <input type="hidden" id="blogID" name="blogID" value="">
+                                <div class="row" style="padding:10px;padding-top:30px">
+                                    <h1>Type 'delete' to confirm the deletion of your blog.</h1>
+                                    <input type="text" class="form-control column col-5 mx-auto" style="text-align:center;margin-top:30px">
+                                </div>
+                                <div class="row" style="padding:10px">
+                                    <button type="submit" id="confirm-delete" class="btn btn-danger column col-8 mx-auto">Delete</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="row blog-options" sec:authorize="isAuthenticated()">
+                            <div class="column col-2">
+                                <a href="/" th:href="@{/editBlog(title=${blog.title})}"><div class="fa fa-edit w3-xlarge editBlog" id="editBlog"></div></a>
+                            </div>
+                            <div class="column col-2">
+                                <div class="fa fa-trash w3-xlarge deleteBlog" id="deleteBlog" onclick="openModal($('.blogID span')[0].textContent)">
+                                    <p class="blogID">
+                                        <span th:text="${blog.blogID}"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column col-4 tags black-white" style="margin:20px;padding:10px">
+                <p class="name" th:each="tag: ${tags}">#<span th:text="${tag.name}"></span></p>
+            </div>
+        </div>
+
+
+
+        <div class="footer">
+
+        </div>
+    </div>
+</body>
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<!-- script -->
+<script src="js/main.js"></script>
+<script src="js/blogs.js"></script>
+<script src="js/modal.js"></script>
+
+</html>

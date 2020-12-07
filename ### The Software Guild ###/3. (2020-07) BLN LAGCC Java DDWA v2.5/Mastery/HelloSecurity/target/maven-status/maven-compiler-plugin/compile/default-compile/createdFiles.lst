@@ -1,0 +1,4 @@
+com\sg\hellosecurity\controller\HomeController.class
+com\sg\hellosecurity\controller\LoginController.class
+com\sg\hellosecurity\controller\ContentController.class
+com\sg\hellosecurity\controller\AdminController.class

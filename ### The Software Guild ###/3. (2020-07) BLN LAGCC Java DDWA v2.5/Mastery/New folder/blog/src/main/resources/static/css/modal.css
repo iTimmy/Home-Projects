@@ -1,0 +1,96 @@
+/* The Modal (background) */
+.modal, .login_modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 50%; /* Full width */
+  height: 80%; /* Full height */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content h1 {
+    color: black;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 25px;
+    text-align: center;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #838383;
+  margin: 5% auto; /* 15% from the top and centered */
+  padding: 500px;
+  border: 1px solid #888;
+  width: 100%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: rgb(43, 43, 43);
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.underlay {
+    background-color: rgba(0, 0, 0, 0.562);
+    height: 100%;
+    width: 100%;
+}
+
+.myModal {
+    box-shadow: 0px 0px 500px rgba(0, 0, 0, 0.575);
+    background-color: rgb(131, 131, 131);
+    z-index: 2;
+}
+
+.loginModal {
+    box-shadow: 0px 0px 500px rgba(0, 0, 0, 0.575);
+    background-color: rgb(131, 131, 131);
+    z-index: 2;
+}
+
+/* Modal Header */
+.modal-header {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: rgb(0, 0, 0);
+}
+
+/* Modal Body */
+.modal-body {padding: 2px 16px;}
+
+/* Modal Footer */
+.modal-footer {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: rgb(0, 0, 0);
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+/* Add Animation */
+@keyframes animatetop {
+  from {top: -300px; opacity: 0}
+  to {top: 0; opacity: 1}
+}

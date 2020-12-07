@@ -16,7 +16,7 @@ PhoneNumber char(10) NOT NULL
 );
 
 create table if not exists RoomType (
-RoomTypeID int PRIMARY KEY NOT NULL auto_increment,
+RoomTypeID int PRIMARY KEY NOT NULL AUTO_INCREMENT,
 RoomTypeName char(6) NOT NULL,
 StandardOccupancy int NOT NULL,
 MaximumOccupancy int NOT NULL,
@@ -25,7 +25,7 @@ BasePrice decimal(5,2) NOT NULL
 );
 
 create table if not exists Room (
-RoomID int NOT NULL PRIMARY KEY auto_increment,
+RoomID int NOT NULL PRIMARY KEY AUTO_INCREMENT,
 RoomTypeID int NOT NULL,
 FOREIGN KEY (RoomTypeID) REFERENCES RoomType(RoomTypeID)
 );

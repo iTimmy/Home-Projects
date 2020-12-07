@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Blogs</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h3 th:if="${#request.getParameter('login_error') == '1'}">
+                Wrong id or password!</h3>
+
+        <form action="login" method="POST">
+            <div class="form-group">
+                <label for="username" class="col-md-4 control-label">Username:</label>
+                <div class="col-md-8">
+                    <input type="text" 
+                        class="form-control" 
+                        id="username"
+                        name="username" 
+                        placeholder="Username"
+                    />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="col-md-4 control-label">Password:</label>
+                <div class="col-md-8">
+                    <input type="password" 
+                        class="form-control" 
+                        id="password"
+                        name="password" 
+                        placeholder="Password"
+                    />
+                </div>
+            </div>
+            <input type="hidden"                        
+                th:name="${_csrf.parameterName}"
+                th:value="${_csrf.token}"
+            />
+            <div class="form-group">
+                <div class="col-md-offset-4 col-md-8">
+                    <button type="submit" 
+                        class="btn btn-primary" 
+                        id="search-button" 
+                        value="Sign In">Sign in
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</html>

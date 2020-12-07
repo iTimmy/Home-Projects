@@ -15,10 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class FlooringMasteryTaxDaoImpl implements FlooringMasteryTaxDao {
     
-    //@Autowired
-    Map<String, Tax> storeTax = new HashMap<>();
-    private String file = "Data/Taxes/Taxes.txt";
-    File fileTaxes = new File(file);
+    private Map<String, Tax> storeTax = new HashMap<>();
+    private String file;
     
     @Autowired
     public FlooringMasteryTaxDaoImpl() {
@@ -52,7 +50,7 @@ public class FlooringMasteryTaxDaoImpl implements FlooringMasteryTaxDao {
     }
 
     private void loadTaxes() throws Exception {
-        Scanner readFile = new Scanner(new BufferedReader(new FileReader(fileTaxes)));
+        Scanner readFile = new Scanner(new BufferedReader(new FileReader(file)));
         String currentLine = "";
         while(readFile.hasNextLine()) {
             currentLine = readFile.nextLine();

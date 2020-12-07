@@ -28,7 +28,7 @@ public class FlooringMasteryTaxDaoImplTest {
     
     public FlooringMasteryTaxDaoImplTest() {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-        taxDaoTest = ctx.getBean("taxDaoStub", FlooringMasteryTaxDao.class);
+        taxDaoTest = ctx.getBean("taxDao", FlooringMasteryTaxDao.class);
     }
     
     @BeforeClass
@@ -52,7 +52,8 @@ public class FlooringMasteryTaxDaoImplTest {
     @Test
     public void testGetAllTaxes() {
         List<Tax> listTaxes = taxDaoTest.getAllTaxes();
-        assertEquals(listTaxes.size(), 1);
+        System.out.println(listTaxes.size());
+        assertEquals(5, listTaxes.size());
     }
     
     @Test

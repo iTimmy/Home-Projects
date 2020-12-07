@@ -25,13 +25,12 @@
 
     <bean id="orderDao" class="com.sg.flooringmastery.dao.FlooringMasteryOrderDaoImpl">
         <constructor-arg value="Backup/DataExport.txt"/>
-        <!--<constructor-arg value=""/>-->
     </bean>
     <bean id="productDao" class="com.sg.flooringmastery.dao.FlooringMasteryProductDaoImpl">
-        <!-- <constructor-arg value="Data/Products/Products.txt"/> -->
+         <constructor-arg value="Data/Products/Products.txt"/> 
     </bean>
     <bean id="taxDao" class="com.sg.flooringmastery.dao.FlooringMasteryTaxDaoImpl">
-        <!-- <constructor-arg value="Data/Taxes/Taxes.txt"/> -->
+         <constructor-arg value="Data/Taxes/Taxes.txt"/> 
     </bean>
 
     <bean id="service" class="com.sg.flooringmastery.service.FlooringMasteryServiceImpl">
