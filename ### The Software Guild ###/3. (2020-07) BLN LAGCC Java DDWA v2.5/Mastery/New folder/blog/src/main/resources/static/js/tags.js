@@ -73,6 +73,12 @@ $(document).ready(function() {
         }
     })
 
+    // ADD TAG
+    $(".tag").click(function () {
+        console.log("yeag");
+        addTag($(this).text());
+    })
+
 
 
     function addTag(text) {

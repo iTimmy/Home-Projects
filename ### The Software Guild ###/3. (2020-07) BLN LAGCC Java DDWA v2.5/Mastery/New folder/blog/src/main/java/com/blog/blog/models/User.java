@@ -10,14 +10,15 @@ public class User {
     private String password;
     private Set<Role> roles;
     private boolean enabled;
+    private Profile profile;
 
     public User() {
 
     }
 
-    public User(int userID, String username) {
-        this.userID = userID;
+    public User(String username, String password) {
         this.username = username;
+        this.password = password;
     }
 
     public int getUserID() {
@@ -74,6 +75,14 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
 }

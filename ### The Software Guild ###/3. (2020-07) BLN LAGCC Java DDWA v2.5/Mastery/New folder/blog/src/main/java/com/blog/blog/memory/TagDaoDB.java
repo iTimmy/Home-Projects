@@ -2,6 +2,8 @@ package com.blog.blog.memory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import com.blog.blog.models.*;
 import org.slf4j.Logger;
@@ -23,8 +25,22 @@ public class TagDaoDB implements TagDao {
     
     @Override
     public List<Tag> getAllTags() {
-        final String sql = "SELECT tagID, name FROM Tags;";
-        return jdbcTemplate.query(sql, new TagsMapper());
+        final String sql = "SELECT * FROM Tags;";
+        List<Tag> tags = jdbcTemplate.query(sql, new TagsMapper());
+        List<String> listTagID = new ArrayList<>();
+        return cleanTags(tags, listTagID);
+    }
+
+    private List<Tag> cleanTags(List<Tag> tags, List<String> listTagID) {
+        for (Tag tag : tags) {
+            listTagID.add(String.valueOf(tag.getTagID()));
+        }
+        List<String> blogstags = jdbcTemplate.query("SELECT tagID FROM BlogsTags;", new BlogsTagsMapper());
+        listTagID.removeAll(blogstags);
+        for (String tag : listTagID) {
+            jdbcTemplate.update("DELETE FROM Tags WHERE tagID = ?;", Integer.parseInt(tag));
+        }
+        return tags;
     }
 
     private boolean doesTagExist(String tagName) {
@@ -76,7 +92,9 @@ public class TagDaoDB implements TagDao {
 
     @Override
     public void deleteTags(Tag tags) {
-        final String sql = "DELETE * " + "FROM Tags WHERE tagID = ?;";
+        final String sqlOne = "DELETE FROM BlogsTags WHERE tagID = ?;";
+        jdbcTemplate.update(sqlOne, tags.getTagID());
+        final String sql = "DELETE FROM Tags WHERE tagID = ?;";
         jdbcTemplate.update(sql, tags.getTagID());
     }
 
@@ -90,6 +108,13 @@ public class TagDaoDB implements TagDao {
             tags.setName(rs.getString("name"));
 
             return tags;
+        }
+    }
+
+    public static final class BlogsTagsMapper implements RowMapper<String> {
+        @Override
+        public String mapRow(ResultSet rs, int index) throws SQLException {
+            return String.valueOf(rs.getInt("tagID"));
         }
     }
 

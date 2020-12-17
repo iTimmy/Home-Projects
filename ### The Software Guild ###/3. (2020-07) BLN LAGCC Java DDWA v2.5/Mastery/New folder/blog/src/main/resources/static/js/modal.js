@@ -12,8 +12,7 @@ function openModal(blogID) {
 }
 
 $(".deleteBlog").click(function () {
-    console.log("delete", $(this).text().trim());
-    $("#blogID").val($(this).text().trim());
+    $("#blogID").val($(this).attr("name").trim());
     underlay.style.display = "block";
     modal.style.display = "block";
 })

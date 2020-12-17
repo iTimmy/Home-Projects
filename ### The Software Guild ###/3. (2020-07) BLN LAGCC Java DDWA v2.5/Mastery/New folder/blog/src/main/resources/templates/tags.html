@@ -35,7 +35,7 @@
 <body>
     <div class="bg"></div>
     <div class="container-fluid">
-        <div class="top row">
+      <div class="top row">
             <div class="column col-lg-1" id="nav-button">
                 <div class="fa fa-bars w3-xxlarge">
 
@@ -43,25 +43,52 @@
             </div>
             <div class="column col-lg-11" id="nav-options">
                 <div class="row">
-                    <div class="domain col text-center col-lg-2">
+                    <div class="domain col text-center col-lg-1">
                         <a href="/" id="home">
                             <h5>Home</h5>
                         </a>
                     </div>
-                    <div class="domain col text-center col-lg-2">
+                    <div class="domain col text-center col-lg-1">
                         <a href="blogs" id="blogs">
                             <h5>Blogs</h5>
                         </a>
                     </div>
-                    <div class="domain col text-center col-lg-2">
+                    <div class="domain col text-center col-lg-1">
                         <a href="tags" id="tags">
                             <h5>Tags</h5>
                         </a>
                     </div>
-                    <div class="domain col text-left col-lg-2">
+                    <div class="domain col text-left col-lg-1">
                         <a id="toggleTheme" class="btn btn-danger btn-lg">
                             <h5 class="themeStatus" style="display:inline;color:white">Dark</h5>
                         </a>
+                    </div>
+                    <div class="domain col text-left col-lg-1">
+                    
+                    </div>
+                    <div sec:authorize="isAnonymous()" class="domain col text-left col-lg-1">
+                        <a href="login" id="login" class="btn btn-dark">
+                            <h5>Login</h5>
+                        </a>
+                    </div>
+                    <div sec:authorize="isAnonymous()" class="domain col text-right col-lg-1">
+                        <a href="register" id="register" class="btn btn-success">
+                            <h5>Register</h5>
+                        </a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()" class="domain col text-right col-lg-2">
+                        <a href="myblogs" id="user" class="btn btn-dark btn-lg">
+                            <h5 th:text="${#authentication.name}"></h5>
+                        </a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()" class="domain col text-right col-lg-1">
+                        <form class="form-inline" 
+                                method="POST" 
+                                action="/logout">
+                            <button class="btn btn-dark btn-lg" 
+                                    id="logout" 
+                                    type="submit">Logout</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -107,6 +134,5 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <!-- script -->
 <script src="js/main.js"></script>
-<script src="js/tags.js"></script>
 
 </html>

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 public class FlooringMasteryController {
     private FlooringMasteryView view;
     private FlooringMasteryService service;
+    private Order newOrder = new Order();
+    private boolean doShow = false;
 
     @Autowired
     public FlooringMasteryController(FlooringMasteryView view, FlooringMasteryServiceImpl service) {
@@ -19,8 +21,7 @@ public class FlooringMasteryController {
         this.service = service;
     } 
 
-    private Order newOrder = new Order();
-    private boolean doShow = false;
+
 
     public void run() throws Exception {
         int select = 0;
@@ -61,6 +62,7 @@ public class FlooringMasteryController {
         LocalDate userInputOrderDate = view.displayExistingInputDate();
         // SERVICE \\
         List<Order> listOrders = service.getOrdersByDate(userInputOrderDate);
+
         if (listOrders == null) {
             view.displayDoesNotExist();
         } else {
@@ -75,8 +77,9 @@ public class FlooringMasteryController {
         List<Product> listProducts = service.getAllProducts();
         List<Tax> listTaxes = service.getAllTaxes();
         newOrder = view.displayAddOrder(listProducts, listTaxes);
-        
+        // SERVICE \\
         Order order = service.createOrder(newOrder); // calculations occur here so it has to go through the service layer before confirming to create
+        
         view.returnCalculations(order); 
         if (view.displayConfirmation("create") == true) {
             view.displaySaveProgress();
@@ -114,8 +117,9 @@ public class FlooringMasteryController {
 
     public void removeOrder() throws Exception {
         boolean valid = false;
+        LocalDate findOrderDate = LocalDate.now();
         while(valid != true) {
-            LocalDate findOrderDate = view.displayInputDate();
+            findOrderDate = view.displayInputDate();
             List<Order> listOrders = service.getOrdersByDate(findOrderDate);
             view.displayDisplayOrders(listOrders);
                 if (service.getOrdersByDate(findOrderDate) == null) {
@@ -126,6 +130,7 @@ public class FlooringMasteryController {
                 }
         }
         Order findOrder = view.displayRemoveOrder();
+        findOrder.setOrderDate(findOrderDate);
         if (view.displayConfirmation("delete") == true) {
             service.deleteOrder(findOrder);
         }

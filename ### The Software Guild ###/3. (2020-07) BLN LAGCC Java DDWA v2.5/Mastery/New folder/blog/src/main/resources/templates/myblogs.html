@@ -26,20 +26,6 @@
         color: white;
     }
 
-    .cover {
-        margin: 0 auto;
-        height: 100%;
-        padding: 100px;
-    }
-
-    .cover h3 {
-        padding: 50px;
-    }
-
-    .cover .btn {
-        margin: 50px;
-    }
-
     img {
         max-width: 100%;
     }
@@ -81,7 +67,6 @@
     }
 
     .blog-options {
-        background-color: black;
         height: 12%;
     }
 
@@ -95,7 +80,6 @@
     }
 
     th {
-        background-color: black;
         padding: 20px;
     }
 
@@ -105,6 +89,41 @@
 
     tr {
         background-color: rgba(255, 255, 255, 0.137);
+    }
+
+    #profile-img {
+        height: 250px;
+        border-radius: 100%;
+        padding: 50px;
+    }
+
+    /* .row {
+        border: 5px solid red;
+    }
+
+    .column {
+        border: 5px solid yellow;
+    } */
+    #cover {
+        width: 100%;
+        height: 500px;
+        z-index: -1;
+    }
+    .cover-overlay {
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+    }
+
+    input {
+        text-align: center;
+        margin: 10px 0px 10px 0px;
+    }
+    #close-edit-profile:hover {
+        background-color: grey;
+    }
+
+    table {
+        text-align: center;
     }
 </style>
 
@@ -154,17 +173,12 @@
                     </div>
                     <div sec:authorize="isAuthenticated()" class="domain col text-right col-lg-2">
                         <div class="btn btn-dark btn-lg" th:text="${#authentication.name}">
-                            <!-- <span th:text="${#authentication.name}">
-                                </span>&nbsp;&nbsp;&nbsp; -->
                         </div>
                     </div>
                     <div sec:authorize="isAuthenticated()" class="domain col text-right col-lg-1">
                         <form class="form-inline" 
                                 method="POST" 
                                 action="/logout">
-                            <!-- <input type="hidden" 
-                                    th:name="${_csrf.parameterName}" 
-                                    th:value="${_csrf.token}"/> -->
                             <button class="btn btn-dark btn-lg" 
                                     id="logout" 
                                     type="submit">Logout</button>
@@ -174,9 +188,9 @@
             </div>
         </div>
 
-        <div class="cover row">
-            <table class="column col-12 mx-auto" style="border:2px solid rgb(255, 255, 255)">
-                <tr>
+        <div sec:authorize="hasRole('USER')" class="blog-status row">
+            <table class="column col-12 mx-auto bg-color" style="border:2px solid rgb(255, 255, 255)">
+                <tr class="black-white">
                     <th>Date</th>
                     <th>Blog</th>
                     <th>Image</th>
@@ -185,19 +199,70 @@
                 <tr th:each="blog: ${blogs}">
                     <td th:text="${blog.date}" th:name="${blog.date}" th:id="${blog.date}"></td>
                     <td th:text="${blog.title}" th:name="${blog.title}" th:id="${blog.title}"></td>
-                    <td><img src="assets/1.jpg"></td>
+                    <td><img th:src="${blog.photo}" id="blog-cover" alt="blog-cover" style="height:50px;width:50px"></td>
                     <td th:text="${blog.approved}"></td>
                 </tr>
             </table>
         </div>
 
-        <div class="middle row">
-            <div class="column col-12">
-                <div class="row black-white" th:each="myblog: ${myblogs}" style="margin:20px;padding:10px">
+        <div class="cover shadow cover-overlay row" style="margin-top:10px">
+            <img th:src="${user.profile.cover}" id="cover">
+        </div>
+
+        <div class="middle row" th:each="user: ${user}">
+            <div class="column col-5">
+                <div class="row shadow black-white" style="margin:20px;padding:10px">
+                    <div class="column col-12" style="padding-top:30px;height:100%">
+                        <img th:src="${user.profile.icon}" id="profile">
+                        <hr th:text="${#authentication.name}"><hr>
+                    </div>
+                    <div class="display-user-info" style="padding:20px">
+                        <p th:text="${user.firstName}" style="display:inline"></p>
+                        <p th:text="${user.lastName}" style="display:inline"></p>
+                    </div>
+                </div>
+                <!-- Edit User -->
+                <div class="row">
+    
+                </div>
+                <div sec:authorize="hasRole('ADMIN')" class="row black-white" style="margin:20px;padding:10px">
+                    <div class="column col-12" style="height:100%">
+                        <a href="userManagement">User Management</a>
+                    </div>
+                </div>
+                <div class="row shadow black-white" style="margin:20px;padding:10px">
+                    <button type="button" id="edit-profile" class="btn btn-dark" style="width:100%">Edit Profile</button>
+                    <form action="updateUser" method="POST" style="display:none" id="edit-profile-form">
+                        <div class="row justify-content-center" id="close-edit-profile" style="cursor:pointer">
+                            Edit Profile
+                        </div>
+                        <hr>
+                        <div class="row profile justify-content-center">
+                            Profile Picture
+                            <input type="file" name="icon" id="icon" class="column col-12 mx-auto">
+                            Cover Photo
+                            <input type="file" name="user-cover" id="user-cover" class="column col-12 mx-auto">
+                            Cover Photo
+                            <input type="file" name="wallpaper" id="wallpaper" class="column col-12 mx-auto">
+                        </div>
+                        <div class="row">
+                            <div class="column col-8 mx-auto" style="padding-top:30px">
+                                <input type="text" class="form-control" th:id="${user.firstName}" id="firstname" name="firstname" th:placeholder="${user.firstName}">
+                                <input type="text" class="form-control" th:id="${user.lastName}" id="lastname" name="lastname" th:placeholder="${user.lastName}">
+                                <input type="password" class="form-control" th:id="${user.password}" id="password" name="password" placeholder="Password">
+                                <button type="submit" id="update" class="btn btn-dark" style="width:100%">Update Profile</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="column col-7">
+                <div class="row shadow blogs black-white" th:each="myblog: ${myblogs}" style="margin:20px;padding:10px">
                     <div class="column col-12" style="padding-top:30px">
                         <div class="row" style="padding:20px">
                             <div class="column col-12">
-                                <a href="/" th:href="@{/viewBlog(title=${myblog.title})}"><img src="assets/103237.jpg" alt="blog-cover"></a>
+                                <a href="/" th:href="@{/viewBlog(title=${myblog.title})}"><img th:src="${myblog.photo}" id="blog-cover" alt="blog-cover" style="height:500px;width:100%"></a>
                             </div>
                         </div>
                         <br>
@@ -208,7 +273,7 @@
                                 </a>
                                 <hr>
                                 <p class="date"><span th:text="${myblog.date}"></span> | <span th:text="${myblog.userID}"></span></p>
-                                <p class="content"><span th:text="${myblog.content}"></span></p>
+                                <p class="content"><span th:utext="${myblog.content}"></span></p>
                                 <div th:each="blogtag: ${myblog.tags}" style="display:inline">
                                     <p class="blogtag" style="display:inline">#<strong th:text="${blogtag.name}"></strong></p>
                                 </div>
@@ -242,12 +307,11 @@
                                 <div class="fa fa-trash w3-xlarge deleteBlog" id="deleteBlog"
                                     onclick="openModal($('.blogID span')[0].textContent)">
                                     <p class="blogID">
-                                        <span th:text="${myblog.blogID}"></span>
+                                        <span th:value="${myblog.blogID}"></span>
                                     </p>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -267,5 +331,16 @@
 <script src="js/main.js"></script>
 <script src="js/blogs.js"></script>
 <script src="js/modal.js"></script>
+
+<script>
+    $("#edit-profile").click(function() {
+        $(this).css({ "display": "none" });
+        $("#edit-profile-form").css({ "display": "block" });
+    })
+    $("#close-edit-profile").click(function() {
+        $("#edit-profile").css({ "display": "block" });
+        $("#edit-profile-form").css({ "display": "none" });
+    })
+</script>
 
 </html>

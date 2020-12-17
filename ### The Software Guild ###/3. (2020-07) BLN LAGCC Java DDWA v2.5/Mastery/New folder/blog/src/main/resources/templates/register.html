@@ -115,19 +115,22 @@
                     </div>
                     <hr style="border-top:2.5px solid rgba(255, 255, 255, 0.507)">
                     <div class="row firstName" style="padding:8px">
-                        <input type="text" id="firstName" name="firstName" placeholder="First Name" class="form-control column col-5 mx-auto" style="text-align:center">
+                        <input type="text" id="firstName" name="firstName" placeholder="First Name" class="form-control column col-5 mx-auto" style="text-align:center" required="required">
                     </div>
                     <div class="row lastName" style="padding:8px">
-                        <input type="text" id="lastName" name="lastName" placeholder="Last Name" class="form-control column col-5 mx-auto" style="text-align:center">
+                        <input type="text" id="lastName" name="lastName" placeholder="Last Name" class="form-control column col-5 mx-auto" style="text-align:center" required="required">
                     </div>
                     <div class="row username" style="padding:8px">
-                        <input type="text" id="username" name="username" placeholder="Username" class="form-control column col-5 mx-auto" style="text-align:center">
+                        <input type="text" id="username" name="username" placeholder="Username" class="form-control column col-5 mx-auto" style="text-align:center" required="required">
                     </div>
                     <div class="row password" style="padding:8px">
-                        <input type="password" id="password" name="password" placeholder="Password" class="form-control column col-5 mx-auto" style="text-align:center">
+                        <input type="password" id="password" name="password" placeholder="Password" class="form-control column col-5 mx-auto" style="text-align:center" required="required">
                     </div>
-                    <div class="row" style="padding:10px;margin-top:30px">
-                        <div class="column col-8 mx-auto">
+                    <div class="row icon justify-content-center" style="padding:10px;padding-left:80px">
+                        <input type="file" name="icon" id="icon" class="column col-12 mx-auto">
+                    </div>
+                    <div class="row">
+                        <div class="column col-8 mx-auto" style="padding-top:10px">
                             <button type="submit" id="register" class="btn btn-danger"
                                 style="width:100%">Register</button>
                         </div>

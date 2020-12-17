@@ -17,7 +17,7 @@
 
 <style>
     body {
-        background-image: url('assets/103237.jpg');
+        background-image: url('assets/1.jpg');
         background-attachment: fixed;
         color: white;
     }
@@ -30,12 +30,65 @@
     .cover {
         height: 500px;
     }
+
+
+
+
+
+    /* INDEX.HTML */
+    .section-1 {
+        height: 75vh;
+        position: relative;
+        background-position: 50% 50%;
+        z-index: 1;
+    }
+
+    .cover .section-2 {
+        text-align: center;
+        padding: 100px;
+    }
+
+    .cover .section-2 h3 {
+        color: rgb(0, 53, 54);
+        font-size: 20px;
+    }
+
+    .cover .section-2 p {
+        color: white;
+        font-size: 30px;
+        font-family: 'Archivo Black';
+    }
+
+    #info {
+        padding: 20px;
+        color: rgba(255, 255, 255, 0.801);
+        font-size: 25px;
+    }
+
+    .cover .section-2 .btn {
+        margin: 0 auto;
+        margin-bottom: 100px;
+        margin-top: 30px;
+        margin-left: 10px;
+        margin-right: 10px;
+        padding: 10px, 30px, 10px, 30px;
+    }
+
+    .cover .section-2 .row {
+        border: 5px solid red;
+        display: flex;
+    }
+
+    .cover .section-2 .column {
+        border: 5px solid blue;
+    }
+
 </style>
 
 <body>
     <div class="bg"></div>
     <div class="container-fluid">
-        <div class="top row">
+       <div class="top black-white row">
             <div class="column col-lg-1" id="nav-button">
                 <div class="fa fa-bars w3-xxlarge">
 
@@ -43,33 +96,83 @@
             </div>
             <div class="column col-lg-11" id="nav-options">
                 <div class="row">
-                    <div class="domain col text-center col-lg-2">
+                    <div class="domain col text-center col-lg-1">
                         <a href="/" id="home">
                             <h5>Home</h5>
                         </a>
                     </div>
-                    <div class="domain col text-center col-lg-2">
+                    <div class="domain col text-center col-lg-1">
                         <a href="blogs" id="blogs">
                             <h5>Blogs</h5>
                         </a>
                     </div>
-                    <div class="domain col text-center col-lg-2">
+                    <div class="domain col text-center col-lg-1">
                         <a href="tags" id="tags">
                             <h5>Tags</h5>
                         </a>
                     </div>
-                    <div class="domain col text-left col-lg-2">
+                    <div class="domain col text-left col-lg-1">
                         <a id="toggleTheme" class="btn btn-danger btn-lg">
                             <h5 class="themeStatus" style="display:inline;color:white">Dark</h5>
                         </a>
+                    </div>
+                    <div class="domain col text-left col-lg-1">
+                    
+                    </div>
+                    <div sec:authorize="isAnonymous()" class="domain col text-left col-lg-1">
+                        <a href="login" id="login" class="btn btn-dark">
+                            <h5>Login</h5>
+                        </a>
+                    </div>
+                    <div sec:authorize="isAnonymous()" class="domain col text-right col-lg-1">
+                        <a href="register" id="register" class="btn btn-success">
+                            <h5>Register</h5>
+                        </a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()" class="domain col text-right col-lg-2">
+                        <a href="myblogs" id="user" class="btn btn-dark btn-lg">
+                            <h5 th:text="${#authentication.name}"></h5>
+                        </a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()" class="domain col text-right col-lg-1">
+                        <form class="form-inline" 
+                                method="POST" 
+                                action="/logout">
+                            <button class="btn btn-dark btn-lg" 
+                                    id="logout" 
+                                    type="submit">Logout</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- TOP -->
         <div class="cover">
+            <div class="row black-white" style="height:10%">
+            
+            </div>
+            <div class="row bg-img" style="height:80%">
 
+            </div>
+            <div class="row black-white">
+                <p style="font-size:16px;padding:50px">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                    industry's standard
+                    dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make
+                    a
+                    type specimen
+                    book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+                    essentially
+                    unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum
+                    passages, and more
+                    recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    <br><br>
+                    Blog site.
+                </p>
+            </div>
         </div>
+        <!-- END TOP -->
 
         <div class="middle row">
 

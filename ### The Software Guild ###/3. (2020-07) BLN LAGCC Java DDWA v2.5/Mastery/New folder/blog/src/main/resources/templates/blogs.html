@@ -80,7 +80,6 @@
     }
 
     .blog-options {
-        background-color: black;
         height: 12%;
     }
 
@@ -90,6 +89,14 @@
     #deleteBlog:hover, #editBlog:hover {
         color: blue;
     }
+
+    /* .top {
+        border: 5px solid red;
+        background-color: rgb(0, 0, 0);
+        width: 100%;
+        transition-property: width;
+        transition-duration: 2000ms;
+    } */
 
 </style>
 
@@ -137,12 +144,7 @@
                             <h5>Register</h5>
                         </a>
                     </div>
-                    <div sec:authorize="hasRole('ADMIN')" class="domain col text-right col-lg-2">
-                        <a href="approveBlogs" id="admin" class="btn btn-dark btn-lg">
-                            <h5 th:text="${#authentication.name}"></h5>
-                        </a>
-                    </div>
-                    <div sec:authorize="hasRole('USER')" class="domain col text-right col-lg-2">
+                    <div sec:authorize="isAuthenticated()" class="domain col text-right col-lg-2">
                         <a href="myblogs" id="user" class="btn btn-dark btn-lg">
                             <h5 th:text="${#authentication.name}"></h5>
                         </a>
@@ -163,7 +165,7 @@
             </div>
         </div>
 
-        <div class="cover row" sec:authorize="isAuthenticated()">
+        <div class="cover row" sec:authorize="hasAnyRole('ADMIN', 'USER')">
             <div class="column col-lg-12">
                 <h3 id="status"></h3>
                 <div class="btn btn-warning">
@@ -180,7 +182,7 @@
                     <div class="column col-12" style="padding-top:30px">
                         <div class="row" style="padding:20px">
                             <div class="column col-12">
-                                <a href="/" th:href="@{/viewBlog(title=${blog.title})}"><img src="assets/103237.jpg" alt="blog-cover"></a>
+                                <a href="/" th:href="@{/viewBlog(title=${blog.title})}"><img th:src="${blog.photo}" id="blog-cover" alt="blog-cover" style="height:200px;width:300px"></a>
                             </div>
                         </div>
                         <br>
@@ -191,7 +193,7 @@
                                 </a>
                                 <hr>
                                 <p class="date"><span th:text="${blog.date}"></span> | <span th:text="${blog.userID}"></span></p>
-                                <p class="content"><span th:text="${blog.content}"></span></p>
+                                <p class="content"><span th:utext="${blog.content}"></span></p>
                                 <div th:each="blogtag: ${blog.tags}" style="display:inline">
                                     <p class="blogtag" style="display:inline">#<strong th:text="${blogtag.name}"></strong></p>
                                 </div>
@@ -215,15 +217,12 @@
                             </form>
                         </div>
                         
-                        <div class="row blog-options" sec:authorize="isAuthenticated()">
+                        <div class="row black-white blog-options" sec:authorize="hasRole('ADMIN')">
                             <div class="column col-2">
                                 <a href="/" th:href="@{/editBlog(title=${blog.title})}"><div class="fa fa-edit w3-xlarge editBlog" id="editBlog"></div></a>
                             </div>
                             <div class="column col-2">
-                                <div class="fa fa-trash w3-xlarge deleteBlog" id="deleteBlog" onclick="openModal($('.blogID span')[0].textContent)">
-                                    <p class="blogID">
-                                        <span th:text="${blog.blogID}"></span>
-                                    </p>
+                                <div class="fa fa-trash w3-xlarge deleteBlog" id="deleteBlog" th:name="${blog.blogID}">
                                 </div>
                             </div>
                         </div>
@@ -251,5 +250,7 @@
 <script src="js/main.js"></script>
 <script src="js/blogs.js"></script>
 <script src="js/modal.js"></script>
+<script src="https://cdn.tiny.cloud/1/jm2rvv7h3zbgkcv5k9cmm7u3nsrimxtplu5gn766gmxidibf/tinymce/5/tinymce.min.js"
+    referrerpolicy="origin"></script>
 
 </html>

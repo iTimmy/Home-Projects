@@ -38,24 +38,17 @@ public class FlooringMasteryOrderDaoStubImpl implements FlooringMasteryOrderDao 
 
     @Override
     public Order createOrder(Order order)
-                  throws FlooringMasteryPersistenceException {
+                  throws Exception {
         if (order.getOrderDate().equals(onlyOrder.getOrderDate())) {
             return onlyOrder;
         } else {
             return null;
         }
     }
-
-    @Override
-    public List<Order> getActiveOrders() {
-        List<Order> activeOrders = new ArrayList<>();
-        activeOrders.add(onlyOrder);
-        return activeOrders;
-    }
     
     @Override
     public List<Order> getOrdersByDate(LocalDate userInputDate)
-                 throws FlooringMasteryPersistenceException {
+                 throws Exception {
         List<Order> listOrders = new ArrayList<>();
         listOrders.add(onlyOrder);
         return listOrders;
@@ -71,7 +64,7 @@ public class FlooringMasteryOrderDaoStubImpl implements FlooringMasteryOrderDao 
     }
     
     @Override
-    public void updateOrder(Order editedOrder, Order existingOrder) throws FlooringMasteryPersistenceException {
+    public void updateOrder(Order editedOrder, Order existingOrder) throws Exception {
             existingOrder.setCustomerName(editedOrder.getCustomerName());
             existingOrder.setArea(editedOrder.getArea());
             existingOrder.setMaterialCost(editedOrder.getMaterialCost());
@@ -87,14 +80,15 @@ public class FlooringMasteryOrderDaoStubImpl implements FlooringMasteryOrderDao 
 
     @Override
     public void deleteOrder(Order order)
-                throws FlooringMasteryPersistenceException {
+                throws Exception {
         if (order.getOrderNumber() == (onlyOrder.getOrderNumber())) {
                 onlyOrder.setCustomerName("");
         }
     }   
     
     @Override
-    public boolean saveOrdersByDate() throws FlooringMasteryPersistenceException {
+    public boolean saveOrdersByDate() throws Exception {
         return false;
     }
+
 }

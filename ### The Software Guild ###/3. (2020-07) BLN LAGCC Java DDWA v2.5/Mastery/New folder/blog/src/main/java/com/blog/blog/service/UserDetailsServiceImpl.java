@@ -36,31 +36,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        logger.info("Running service...");
+        logger.info("Loading user profile...");
         com.blog.blog.models.User user = userDao.getUserByUsername(username);
         logger.info(
-            "\nfirstname: " + user.getFirstName() +
-            "\nlastname: " + user.getLastName() +
-            "\nusername: " + user.getUsername() +
-            "\npassword: " + user.getPassword() +
-            "\nrole: " + user.getRoles() +
-            "\nid: " + user.getUserID() + 
-            "\nenabled: " + user.isEnabled()
+            "\nFIRST-NAME: " + user.getFirstName() +
+            "\nLAST-NAME: " + user.getLastName() +
+            "\nUSERNAME: " + user.getUsername() +
+            "\nPASSWORD: " + user.getPassword() +
+            "\nROLE: " + user.getRoles() +
+            "\nID: " + user.getUserID() + 
+            "\nENABLED: " + user.isEnabled() +
+            "\nProfile: " + String.valueOf(user.getProfile())
         );
-        logger.info("USERNAME: " + username);
-        // UserDetails me = User.builder()
-        //     .username("timmy")
-        //     .password("password")
-        //     .roles("USER")
-        //     .build();
-        // logger.info(
-        //     "\nusername: " + me.getUsername() +
-        //     "\npassword: " + me.getPassword() +
-        //     "\nroles: " + me.getAuthorities()
-        // );
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         for (Role role : user.getRoles()) {
-            logger.info("ROLE: " + role.getRole());
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole()));
         }
 

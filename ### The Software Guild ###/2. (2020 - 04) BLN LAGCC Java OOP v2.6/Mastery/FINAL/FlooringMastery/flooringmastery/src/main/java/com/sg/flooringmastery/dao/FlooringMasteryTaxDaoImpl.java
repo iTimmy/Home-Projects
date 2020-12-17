@@ -57,6 +57,7 @@ public class FlooringMasteryTaxDaoImpl implements FlooringMasteryTaxDao {
             Tax currentTax = unmarshallTaxes(currentLine);
             storeTax.put(currentTax.getState(), currentTax);
         }
+        readFile.close();
     }
     private Tax unmarshallTaxes(String currentLine) {
         String[] taxTokens = currentLine.split(",");

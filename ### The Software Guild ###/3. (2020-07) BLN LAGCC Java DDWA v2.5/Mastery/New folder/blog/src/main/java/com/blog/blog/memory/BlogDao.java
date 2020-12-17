@@ -8,6 +8,6 @@ public interface BlogDao {
     Blog createBlog(Blog newBlog);
     Blog getBlogByTitle(String title); 
     Blog getBlogByID(int blogID);
-    void updateBlog(Blog blog);
+    boolean updateBlog(Blog blog);
     void deleteBlog(Blog blog);
 }

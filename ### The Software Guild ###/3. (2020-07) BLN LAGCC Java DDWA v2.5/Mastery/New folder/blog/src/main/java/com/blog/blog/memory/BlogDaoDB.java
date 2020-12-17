@@ -10,6 +10,7 @@ import com.blog.blog.memory.TagDaoDB.TagNamesMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -39,14 +40,31 @@ public class BlogDaoDB implements BlogDao {
         return blogs;
     }
 
+    private boolean doesTitleExist(String title) {
+        String FIND_TITLE = "SELECT COUNT(*) FROM Blogs WHERE title = ?;";
+        int status = jdbcTemplate.queryForObject(FIND_TITLE,
+            new Object[] { title }, Integer.class);
+        return status >= 1 ? true : false;
+    }
+
     @Override
     @Transactional
-    public Blog createBlog(Blog newBlog) {
-        final String INSERT_BLOG = "INSERT INTO Blogs(title, date, content, userID, approved) VALUES(?, CURRENT_TIMESTAMP, ?, ?, false);";
+    public Blog createBlog(Blog newBlog) {    
+        if (doesTitleExist(newBlog.getTitle()) == true) {
+            return null;
+        }
+
+        logger.info("POST DATE: " + newBlog.getPostDate() + " | " + "EXPIRATION DATE: " + newBlog.getExpirationDate());
+        logger.info(newBlog.getPhoto());
+
+        final String INSERT_BLOG = "INSERT INTO Blogs(title, date, content, userID, approved, postDate, expirationDate, photo) VALUES(?, CURRENT_TIMESTAMP, ?, ?, false, ?, ?, ?);";
         jdbcTemplate.update(INSERT_BLOG, 
             newBlog.getTitle(),
             newBlog.getContent(),
-            newBlog.getUserID());
+            newBlog.getUserID(),
+            newBlog.getPostDate(),
+            newBlog.getExpirationDate(),
+            "assets\\" + newBlog.getPhoto());
         int newBlogID = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
         newBlog.setBlogID(newBlogID);
 
@@ -94,11 +112,15 @@ public class BlogDaoDB implements BlogDao {
     }
 
     @Override
-    public void updateBlog(Blog blog) {
+    public boolean updateBlog(Blog blog) {
+        if (doesTitleExist(blog.getTitle()) == true) {
+            return false;
+        }
+        
         final String sql = "UPDATE Blogs " +
-            "SET title = ?, date = CURRENT_TIMESTAMP, content = ?, approved = ? " +
+            "SET title = ?, date = CURRENT_TIMESTAMP, content = ?, approved = ?, photo = ? " +
             "WHERE blogID = ?;";
-        jdbcTemplate.update(sql, blog.getTitle(), blog.getContent(), blog.isApproved(), blog.getBlogID());
+        jdbcTemplate.update(sql, blog.getTitle(), blog.getContent(), blog.isApproved(), blog.getPhoto(), blog.getBlogID());
 
         List<Tag> tags = blog.getTags();
 
@@ -110,8 +132,9 @@ public class BlogDaoDB implements BlogDao {
             jdbcTemplate.update(REPLACE_BLOGS_TAGS,
                 blog.getBlogID(),
                 tag.getTagID());
-            logger.info("TAG: " + tag.getName());
         }
+
+        return true;
     }
 
     @Override
@@ -120,14 +143,6 @@ public class BlogDaoDB implements BlogDao {
         jdbcTemplate.update(FIRST_DELETE, blog.getBlogID());
         final String SECOND_DELETE = "DELETE FROM Blogs WHERE blogID = ?;";
         jdbcTemplate.update(SECOND_DELETE, blog.getBlogID());
-    }
-
-
-
-    private void associateTagWithBlog(List<Blog> blogs) {
-        for (Blog b : blogs) {
-            // b.setTags()
-        }
     }
 
 
@@ -142,6 +157,9 @@ public class BlogDaoDB implements BlogDao {
             blogs.setDate(rs.getDate("date").toLocalDate());
             blogs.setContent(rs.getString("content"));
             blogs.setApproved(rs.getBoolean("approved"));
+            if (rs.getDate("postDate") != null) {blogs.setPostDate(rs.getDate("postDate").toLocalDate());} 
+            if (rs.getDate("expirationDate") != null) {blogs.setExpirationDate(rs.getDate("expirationDate").toLocalDate());} 
+            blogs.setPhoto(rs.getString("photo"));
             return blogs;
         }
     }

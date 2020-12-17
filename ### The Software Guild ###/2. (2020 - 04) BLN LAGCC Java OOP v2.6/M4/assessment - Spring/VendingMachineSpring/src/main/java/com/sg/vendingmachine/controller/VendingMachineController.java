@@ -63,9 +63,7 @@ public class VendingMachineController {
 
         try {
             item = service.getItem(userInputItemName);
-            CoinsReturned moneyCalculation;
-            moneyCalculation = service.updateItems(userInputMoney, item);
-            view.displayChange(moneyCalculation);
+            view.displayChange(service.updateItems(userInputMoney, item));
             displaySuccess(); //TODO: handle user feedback and exit when needed
         } catch (NullPointerException e) {
             view.displayItemDoesNotExistMSG();

@@ -18,6 +18,8 @@ public class RegistrationController {
 
     @Autowired
     UserDao userDao;
+    @Autowired
+    ProfileDao profileDao;
     private static Logger logger = LoggerFactory.getLogger(RegistrationController.class);
 
 
@@ -34,11 +36,14 @@ public class RegistrationController {
         logger.info("LAST NAME: " + request.getParameter("lastName"));
         logger.info("USERNAME: " + request.getParameter("username"));
         logger.info("PASSWORD: " + request.getParameter("password"));
+        logger.info("PROFILE: " + request.getParameter("profile"));
         User newUser = new User();
         newUser.setFirstName(request.getParameter("firstName"));
         newUser.setLastName(request.getParameter("lastName"));
         newUser.setUsername(request.getParameter("username"));
         newUser.setPassword(passwordEncode.encode(request.getParameter("password")));
+        String icon = request.getParameter("icon").equals("") ? "default-icon.jpg" : request.getParameter("icon");
+        newUser.setProfile(new Profile(icon));
         userDao.createUser(newUser);
         return "redirect:/blogs";
     }

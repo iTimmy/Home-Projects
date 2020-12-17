@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Blogs</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/tags.css">
+</head>
+
+<style>
+    body {
+        background-color: rgba(0, 0, 0, 0.74);
+        color: white;
+    }
+    .middle {
+        /* border: 5px solid cyan; */
+        height: 800px;
+    }
+    .row {
+        /* border: 5px solid red; */
+    }
+    .header {
+        height: 50px;
+        background-color: rgba(0, 0, 0, 0.932);
+    }
+    .panel {
+        background-color: rgba(0, 0, 0, 0.877);
+    }
+    .block {
+        height: 50px;
+        padding: 10px;
+        cursor: pointer;
+        transition-property: background-color;
+        transition-duration: 100ms;
+    }
+    .block:hover {
+        background-color: rgb(133, 0, 73);
+        transition-property: background-color;
+        transition-duration: 500ms;
+    }
+    .block-space {
+        height: 100px;
+    }
+    .main-block {
+        height: 50px;
+        padding: 10px;
+    }
+    #dashboard {
+        padding: 10px;
+    }
+    #edit, #delete {
+        cursor: pointer;
+    }
+    #delete:hover {
+        color: red;
+    }
+    #edit:hover {
+        color: cyan;
+    }
+
+    input, select {
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+
+    table {
+        text-align: center;
+    }
+
+
+
+    th {
+        background-color: black;
+        color: white;
+        padding: 10px;
+    }
+    .fa {
+        cursor: pointer;
+    }
+    a:hover {
+        color:rgb(255, 0, 140);
+    }
+
+    table, td, th, tr {
+        border: 1px solid rgba(255, 255, 255, 0.253);
+    }
+
+    #tag-name {
+        background-color: red;
+        margin: 10px;
+        padding: 10px;
+        cursor: pointer;
+    }
+    #tag-name:hover {
+        background-color: grey;
+    }
+</style>
+
+<body>
+    <div class="container-fluid">
+        <div class="header row">
+            <a href="myblogs"><div id="back-button" class="fa fa-angle-left w3-large" style="float:left"></div></a>
+        </div>
+
+        <div class="middle row">
+            <div class="column col-2 panel">
+                <div class="main-block row" id="dashboard">
+                    <h3>Dashboard</h3>
+                </div>
+                <hr>
+                <div class="block row" id="blogs">
+                    <h5>Blogs</h5>
+                </div>
+                <div class="block row" id="comments" style="display:none">
+                    <h5>Comments</h5>
+                </div>
+                <div class="block row" id="tags">
+                    <h5>Tags</h5>
+                </div>
+                <div class="block-space row">
+                    
+                </div>
+                <hr>
+                <!-- <div class="block row" id="settings">
+                    <h5>Settings</h5>
+                </div> -->
+                <div class="block row" id="usermanagement">
+                    <h5>User Management</h5>
+                </div>
+            </div>
+            <!-- USER MANAGEMENT: DISPLAY -->
+            <div class="column col-10">
+                <div class="usermanagement row" style="display:none">             
+                    <form action="userManagement" method="POST">
+                        <table class="user-table column col-12 mx-auto">
+                            <tr class="black-white">
+                                <th>Profile</th>
+                                <th>Role</th>
+                                <th>Username</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Password</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                            <tr class="user-row" th:each="user: ${users}" th:id="${user.userID}">
+                                <td><img th:src="${user.profile.icon}" id="ID" th:name="${user.userID}" style="width:75px;height:10%;display:block;margin-right:auto;margin-left:auto;"></td>
+                                <td>
+                                    <p id="current-role" th:each="role: ${user.roles}">
+                                        <i th:text="${role.role}"></i>
+                                    </p>
+                                    <input type="hidden" id="role" name="role" val="">
+                                    <select name="role" id="editrole" style="display:none">
+                                        <option th:each="roles: ${roles}" th:value="${roles.role}" th:text="${roles.role}">
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <p id="current-username" th:text="${user.username}"></p>
+                                    <div class="row" id="editusername" style="display:none">
+                                        <input type="text" class="form-control column col-7"
+                                            id="username" name="username"
+                                            style="font-size:12px;text-align:center;height:20px;" th:value="${user.username}">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p id="current-firstname" th:text="${user.firstName}"></p>
+                                    <div class="row" id="editfirstname" style="display:none">
+                                        <input type="text" class="form-control column col-7" style="font-size:12px;text-align:center;height:20px;"
+                                            id="firstname" name="firstname"
+                                            th:value="${user.firstName}">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p id="current-lastname" th:text="${user.lastName}"></p>
+                                    <div class="row" id="editlastname" style="display:none">
+                                        <input type="text" class="form-control column col-7" style="font-size:12px;text-align:center;height:20px;"
+                                            id="lastname" name="lastname"
+                                            th:value="${user.lastName}">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p id="current-password">--------------</p>
+                                    <div class="row" id="editpassword" style="display:none">
+                                        <input type="password" class="form-control column col-7" style="font-size:12px;text-align:center;height:20px;"
+                                            id="password" name="password">
+                                    </div>
+                                </td>
+                                <td><div class="fa fa-edit w3-xlarge editUser" id="edit" th:name="${user.userID}" value="false"></div></td>
+                                <td><div class="fa fa-trash w3-xlarge deleteUser" id="delete" th:name="${user.userID}" value="false"></div></td>
+                            </tr>
+                        </table>
+                        <hr>
+                        <input type="hidden" id="userID" name="userID" value="">
+                        <div class="confirmation row justify-content-center" id="confirmation" style="display:none;margin-right:auto;margin-left:auto;">
+                            <button type="button" id="cancel" class="btn btn-danger column col-1 col-centered">Cancel</button>
+                            <button type="submit" id="confirm" class="btn btn-success column col-1 col-centered">Confirm</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="blogs row" style="display:none">
+                    <form action="approveBlog" method="POST">
+                        <table class="users-blogs column col-12 mx-auto">
+                            <tr class="black-white">
+                                <th>User</th>
+                                <th>Date</th>
+                                <th>Blog</th>
+                                <th>Image</th>
+                                <th>Approve</th>
+                            </tr>
+                            <tr th:each="blog: ${blogs}" th:id="${blog.blogID}" name="blogID" value="1">
+                                <td th:text="${blog.userID}" th:name="${blog.userID}" th:id="${blog.userID}"></td>
+                                <td th:text="${blog.date}" th:name="${blog.date}" th:id="${blog.date}"></td>
+                                <td th:text="${blog.title}" th:name="${blog.title}" th:id="${blog.title}"></td>
+                                <td><img th:src="${blog.photo}" id="blog-cover" alt="blog-cover" style="width:75px;height:75px;display:block;margin-right:auto;margin-left:auto;"></td>
+                                <td><input type="radio" class="approve" id="approve" th:name="${blog.title}" th:id="${blog.blogID}"></td>
+                            </tr>
+                        </table>
+                        <hr>
+                        <input type="hidden" id="approved-blogs" name="approved-blogs" value="">
+                        <div class="row" style="width:100%">
+                            <button type="submit" id="submit-approval" class="btn btn-dark column col-3 mx-auto">Submit Changes</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="tags row" style="display:none">
+                    <form action="deleteTags" method="POST">
+                        <div class="form-group row" style="margin:30px;">
+                            <div th:each="tag: ${tags}">
+                                <span class="tag" id="tag-name" th:text="${tag.name}"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="tags" class="col-12 col-form-label"></label>
+                            <div class="col-5 mx-auto">
+                                <p>
+                                <div class="name" data-name="name">
+                                </div>
+                                </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row" style="width:100%">
+                            <button type="submit" class="btn btn-dark column col-3 mx-auto">Delete Tags</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+
+        </div>
+    </div>
+</body>
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<!-- script -->
+<script src="js/main.js"></script>
+<script src="js/usermanagement.js"></script>
+
+<script>
+    $("#usermanagement").click(function() {
+        $(".blogs, .tags").css({ "display": "none" });
+        $(".usermanagement").css({ "display": "block" });
+    })
+
+    $(".deleteUser").click(function() {
+        if ($(this).attr("value") == "false") {
+            $(this).attr("value", "true");
+            var del = ($(this).attr("id") == "delete") ? "delete" : "";
+            $("#confirmation").css({ "display": "block" });
+            $("#userID").val(del + ":" + $(this).attr("name"));
+        } else if ($(this).attr("value") == "true") {
+            $(this).attr("value", "false");
+            $("#confirmation").css({ "display": "none" });
+        }
+    })
+    
+    // EDIT USER \\
+    $(".editUser").click(function () {
+        console.log("YEEEEEEEEEEE: ", $(this).attr("name"));
+        let newRole = "";
+        if ($(this).attr("value") == "false") {
+            $(this).attr("value", "true");
+            var edit = ($(this).attr("id") == "edit") ? "edit" : "";
+                let parent = $(this).parent().parent();
+                let role = parent.find("#current-role i").text();
+                // console.log("ID: ", parent.attr("id"));
+                // console.log("length : ", parent.parent().find(".user-row").length);
+                // for (var i = 0; i < parent.parent().find(".user-row").length; i++) {
+                //     // console.log($("#3 ").find("#editusername").html());
+                //     // let userRow = $(".user-row").attr("id")[1];
+                //     let userRow = $(".user-row")[1].rowIndex;
+                //     console.log("USER ROW: " + userRow);
+                //     console.log("I: " + i);
+                //     // $("#" + i + " ").find("#editusername").css({ "display": "none" })
+                // }
+                // $(this).parent().parent().find("#editrole, #editusername, #editfirstname, #editlastname, #editpassword").css({ "display": "none" });
+                parent.find("option:contains(" + role + ")").prop("selected", true);
+
+                console.log(parent.find("#editusername").attr("style"));
+                parent.find("#editrole, #editusername, #editfirstname, #editlastname, #editpassword").css({ "display": "block" });
+                parent.find("#edit #current-role, #current-username, #current-firstname, #current-lastname, #current-password").css({ "display": "none" });
+                
+                parent.find("select").on("change", function() {
+                    newRole = parent.find("#editrole option:selected").val();
+                    console.log(parent.find("#editrole option:selected").val());
+                    console.log("newRole: " + newRole);
+                    $("#confirmation").css({ "display": "block" });
+                    let newUserInfo =
+                        newRole + "," +
+                        parent.find("#editusername input").val() + "," +
+                        parent.find("#editfirstname input").val() + "," +
+                        parent.find("#editlastname input").val() + "," +
+                        parent.find("#editpassword input").val()
+                        ;
+                    console.log(newUserInfo);
+                    console.log(parent.find("#edit").attr("name"));
+                    $("#userID").val(edit + ":" + parent.find("#edit").attr("name") + "," + newUserInfo);
+                });
+                console.log("newRole: " + newRole);
+                $("#confirmation").css({ "display": "block" });
+                let newUserInfo = 
+                    parent.find("#editrole option:selected").val() + "," +
+                    parent.find("#editusername input").val() + "," +
+                    parent.find("#editfirstname input").val() + "," +
+                    parent.find("#editlastname input").val() + "," +
+                    parent.find("#editpassword input").val()
+                ;
+                console.log(newUserInfo);
+                $("#userID").val(edit + ":" + $(this).attr("name") + "," + newUserInfo);
+        } else if ($(this).attr("value") == "true") {
+            $(this).attr("value", "false");
+            $(this).parent().parent().find("#editrole, #editusername, #editfirstname, #editlastname, #editpassword").css({ "display": "none" });
+            $(this).parent().parent().find("#edit #current-role, #current-username, #current-firstname, #current-lastname, #current-password").css({ "display": "block" });
+            $("#confirmation").css({ "display": "none" });
+        }
+    })
+
+    $("#cancel").click(function () {
+        $(".editUser").attr("value", "false");
+        $("#current-role, #current-username, #current-firstname, #current-lastname, #current-password").css({ "display": "block" })
+        $("#confirmation, #editrole, #editusername, #editfirstname, #editlastname, #editpassword").css({ "display": "none" });
+    })
+
+
+    $("#blogs").click(function() {
+        $(".usermanagement, .tags").css({ "display": "none" });
+        $(".blogs").css({ "display": "block" });
+    })
+
+    $("#tags").click(function() {
+        $(".usermanagement, .blogs").css({ "display": "none" });
+        $(".tags").css({ "display": "block" });
+    })
+
+
+
+    $("#submit-approval").click(function () {
+        if ($("input:checked").length != 0) {
+            var name = "";
+            $("input:checked").each(function () {
+                console.log($(this).attr("id"));
+                if ($(this).attr("class") == "approve") {
+                    name += $(this).attr("id") + ",";
+                }
+            })
+            console.log("name: " + name);
+            $("#approved-blogs").val(name);
+        } else {
+            alert("There are no blogs available to approve.");
+        }
+    })
+
+
+
+    $(".blogs").each(function () {
+        let cover = $(this).find("img").attr("src");
+        if (!cover.includes(".jpg") && !cover.includes(".jpeg") && !cover.includes(".png") && !cover.includes(".gif")) {
+            $(this).find("#blog-cover").attr("src", "https://wallpaperaccess.com/full/1963222.jpg");
+        } else {
+            $(this).find("#blog-cover").css({ "background-image": "none" });
+        }
+    })
+</script>
+
+</html>

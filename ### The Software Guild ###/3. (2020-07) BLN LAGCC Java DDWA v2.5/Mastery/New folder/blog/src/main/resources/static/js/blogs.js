@@ -28,6 +28,8 @@ $(document).ready(function() {
 
         if ($("#mytextarea").val() != "") {
             var content = $("#mytextarea").val();
+            console.log(content);
+            console.log($("body #tinymce .mce-content-body").html());
             $(".display-content").text(content);
         }
     })
@@ -67,4 +69,19 @@ $(".tags .name").click(function () {
         i++;
     })
 
+})
+
+function parseHTML(content) {
+    return content.replace(/<(?:"[^"]*"|'[^']*'|[^'">])*>/g, "");
+}
+
+
+// DISPLAYS BLOG-COVER & DOESN'T DISPLAY BLOG-COVER FOR THOSE THAT DON'T HAVE
+$(".blogs").each(function() {
+    let cover = $(this).find("img").attr("src");
+    if (!cover.includes(".jpg") && !cover.includes(".jpeg") && !cover.includes(".png") && !cover.includes(".gif")) {
+        $(this).find("#blog-cover").css({ "display": "none" });
+    } else {
+        $(this).find("#blog-cover").css({ "display": "block" });
+    }
 })

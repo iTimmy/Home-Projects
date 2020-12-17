@@ -29,7 +29,6 @@ public class VendingMachineServiceImpl implements VendingMachineService {
     }
     
     public VendingMachineServiceImpl() {
-        // so that i dont have to pass any parameters that proves unneccesary when testing this
     }
 
     @Override

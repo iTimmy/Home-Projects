@@ -19,6 +19,7 @@
     <!-- Bean definitions go here -->
     <bean id="orderDao" class="com.sg.flooringmastery.dao.FlooringMasteryOrderDaoImpl">
         <constructor-arg value="src/test/java/com/sg/flooringmastery/Backup/DataExportTest.txt"/>
+        <constructor-arg value="src/test/java/com/sg/flooringmastery/Orders/" /> 
     </bean>
     <bean id="productDao" class="com.sg.flooringmastery.dao.FlooringMasteryProductDaoImpl">
         <constructor-arg value="src/test/java/com/sg/flooringmastery/Data/Products/ProductsTest.txt"/>

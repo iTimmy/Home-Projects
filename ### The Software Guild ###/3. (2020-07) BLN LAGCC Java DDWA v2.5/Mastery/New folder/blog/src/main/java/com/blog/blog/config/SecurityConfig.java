@@ -35,15 +35,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        logger.info("b");
         http    
         .cors().and().csrf().disable()
         .authorizeRequests()
-            .antMatchers("/approveBlogs", "/approveBlog").hasRole("ADMIN")
+            .antMatchers("/approveBlog", "/userManagement", "/deleteTags").hasRole("ADMIN")
             .antMatchers("/writeBlog", "/addBlog", "/editBlog", "/deleteBlog").hasAnyRole("ADMIN", "USER")
-            .antMatchers("/", "index", "/blogs", "/register").permitAll()
+            .antMatchers("/myblogs", "/updateUser").hasAnyRole("ADMIN", "USER", "VIEWER", "GUEST")
+            .antMatchers("/", "index", "/blogs", "/register", "/tags", "/viewBlog").permitAll()
             .antMatchers("/css/*", "/js/*", "/assets/*").permitAll()
-            .anyRequest().hasRole("USER")
+            .anyRequest().permitAll()
         .and()
         .formLogin()           
             .loginPage("/login")
@@ -57,8 +57,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .deleteCookies()
             .logoutSuccessUrl("/blogs")
             .permitAll();
-        // .and()
-        // .httpBasic();         
     }
 
     @Bean

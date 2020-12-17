@@ -1,12 +1,15 @@
 package com.blog.blog.controller;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.security.Principal;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.Validator;
 
 import com.blog.blog.memory.*;
 import com.blog.blog.models.*;
@@ -14,10 +17,13 @@ import com.blog.blog.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -30,20 +36,27 @@ public class BlogController {
     @Autowired
     TagDao tagDao;
     private static Logger logger = LoggerFactory.getLogger(BlogController.class);
+    Set<ConstraintViolation<Blog>> violations = new HashSet<>();
 
 
 
     @GetMapping("blogs")
     public String getAllBlogs(Model model) {
         List<Blog> blogs = new ArrayList<>();
-
         for (Blog blog : blogDao.getAllBlogs()) {
             boolean isAdmin = false;
             for (Role role : (userDao.getUserByID(blog.getUserID())).getRoles()) {
                 isAdmin = role.getRole().equals("ROLE_ADMIN") ? true : false;
             }
             if (blog.isApproved() == true || isAdmin == true) {
-                blogs.add(blog);
+                if (blog.getPostDate() == null || blog.getExpirationDate() == null) {
+                    blogs.add(blog);
+                } else if (blog.getPostDate() != null || blog.getExpirationDate() != null) {
+                    if (LocalDate.now().isAfter(blog.getPostDate())
+                            && LocalDate.now().isBefore(blog.getExpirationDate())) {
+                        blogs.add(blog);
+                    }
+                }
             }
         }
         // DISPLAY TAGS FOR EVERY BLOG
@@ -52,9 +65,7 @@ public class BlogController {
             for (Tag t : b.getTags()) {
                 tags += t.getName() + ",";
             }
-            logger.info("BLOG " + b.getBlogID() + ": " + b.getTitle() + " | " + tags);
         }
-
         List<Tag> tags = tagDao.getAllTags();
         List<User> users = userDao.getAllUsers();
         model.addAttribute("blogs", blogs);
@@ -71,7 +82,10 @@ public class BlogController {
     }
 
     @PostMapping("addBlog")
-    public String createBlog(Authentication auth, HttpServletRequest request, Model model) {
+    public String createBlog(Authentication auth, 
+    Principal principal, HttpServletRequest request, 
+    Model model, 
+    @Valid Blog blog, BindingResult result) {
         User user = userDao.getUserByUsername(auth.getName());
         // IMPORTS TAGS
         List<Tag> tags = tagDao.getAllTags();
@@ -80,20 +94,44 @@ public class BlogController {
         Blog newBlog = new Blog();
         newBlog.setTitle(request.getParameter("title"));
         newBlog.setContent(request.getParameter("content"));
+        newBlog.setPhoto(request.getParameter("photo"));
         // GETS LIST OF TAGS FROM HTML
         String[] tagNames = (request.getParameter("name")).split(",");
         // STORED TAGS FROM HTML TO ARRAYLIST
         List<Tag> listTags = new ArrayList();
         for (String name : tagNames) {
-            tagDao.createTags(name); // CREATE TAG IF DOESN'T EXIST
-            listTags.add(tagDao.getTagByName(name));
+            if (!name.equals("")) {
+                tagDao.createTags(name); // CREATE TAG IF DOESN'T EXIST
+                listTags.add(tagDao.getTagByName(name));
+            }
         }
         // SETS TAGS AND USER ID TO NEW BLOG
         newBlog.setTags(listTags);
         newBlog.setUserID(user.getUserID());
-        // OFFICIALLY CREATES BLOG
-        blogDao.createBlog(newBlog);
-        return "redirect:/blogs";
+        //String photo = !request.getParameter("photo").equals("") ? request.getParameter("photo") : newBlog.getPhoto();
+        if (principal.getName().equals("admin")) {
+            if (!request.getParameter("post-date").equals("")) {
+                LocalDate postDate = LocalDate.parse(request.getParameter("post-date"));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
+                String text = postDate.format(formatter);
+                newBlog.setPostDate(LocalDate.parse(text, formatter));
+            }
+            if (!request.getParameter("expire-date").equals("")) {
+                LocalDate expirationDate = LocalDate.parse(request.getParameter("expire-date"));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
+                String text = expirationDate.format(formatter);
+                newBlog.setExpirationDate(LocalDate.parse(text, formatter));
+            }
+        }
+        Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
+        violations = validate.validate(newBlog);
+        if (result.hasErrors() || blogDao.createBlog(newBlog) == null) {
+            logger.info("no");
+            model.addAttribute("errors", violations);
+            return "writeBlog";
+        } else {
+            return "redirect:/blogs";
+        }
     }
 
     @GetMapping("viewBlog")
@@ -114,6 +152,11 @@ public class BlogController {
         return "editBlog";
     }
 
+    private String parseHTML(String content) {
+        return content.replaceAll("<.*?>", "");
+
+    }
+
     @PostMapping("editBlog")
     public String updateBlog(HttpServletRequest request, Model model) {
         // FETCHES SELECTED BLOG TO BE EDITED
@@ -121,18 +164,34 @@ public class BlogController {
         // SETS NEW INFO TO SELECTED BLOG
         blog.setTitle(request.getParameter("title"));
         blog.setContent(request.getParameter("content"));
+        logger.info("LOGGER: " + request.getParameter("content"));
         blog.setApproved(false);
         // GETS LIST OF TAGS FROM HTML
         String[] tagNames = (request.getParameter("name")).split(",");
         // STORED TAGS FROM HTML TO ARRAYLIST
+        logger.info("TAG NAMES: " + String.valueOf(tagNames));
         List<Tag> listTags = new ArrayList<>();
         for (String name : tagNames) {
-            tagDao.createTags(name);
-            listTags.add(tagDao.getTagByName(name));
+            if (!name.equals("")) {
+                tagDao.createTags(name);
+                listTags.add(tagDao.getTagByName(name));
+            }
         }
         blog.setTags(listTags);
-        blogDao.updateBlog(blog);
-        return "redirect:/blogs";
+        String updatedPhoto = !request.getParameter("photo").equals("") ? request.getParameter("photo") : blog.getPhoto();
+        blog.setPhoto(updatedPhoto);
+
+        if (request.getParameter("postDate") != null) {blog.setPostDate(LocalDate.parse(request.getParameter("postDate").trim()));}
+        if (request.getParameter("expirationDate") != null) {blog.setExpirationDate(LocalDate.parse(request.getParameter("expirationDate").trim()));}
+
+        Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
+        violations = validate.validate(blog);
+        if (blogDao.updateBlog(blog) == false) {
+            model.addAttribute("errors", violations);
+            return "editBlog";
+        } else {
+            return "redirect:/blogs";
+        }
     }
 
     @GetMapping("deleteBlog")
@@ -146,30 +205,13 @@ public class BlogController {
     @GetMapping("approveBlogs")
     public String approveBlogs(Authentication auth, Model model) {
         User user = userDao.getUserByUsername(auth.getName());
-        boolean isAdmin = false;
-        List<User> users = userDao.getAllUsers();
-        List<Blog> blogs = new ArrayList<>();
-        List<Blog> userblogs = new ArrayList<>();
         List<Blog> myblogs = new ArrayList<>();
-        logger.info("__________________________________");
         for (Blog blog : blogDao.getAllBlogs()) {
-            for (Role role : (userDao.getUserByID(blog.getUserID())).getRoles()) {
-                isAdmin = role.getRole().equals("ROLE_ADMIN") ? true : false;
-            }
             // DISPLAY ADMIN'S OWN BLOGS
             if (blog.getUserID() == user.getUserID()) {
-                userblogs.add(blog);
                 myblogs.add(blog);
             }
-            // DISPLAYING OTHER USERS' BLOGS
-            if (isAdmin == false && blog.isApproved() == false) {blogs.add(blog);}
         }
-        model.addAttribute("users", users);
-        model.addAttribute("blogs", blogs);
-        model.addAttribute("userblogs", userblogs);
-
-        Map<String, User> usersblogs = new HashMap<>();
-        model.addAllAttributes(usersblogs);
         model.addAttribute("myblogs", myblogs);
         return "approveBlogs";
     }

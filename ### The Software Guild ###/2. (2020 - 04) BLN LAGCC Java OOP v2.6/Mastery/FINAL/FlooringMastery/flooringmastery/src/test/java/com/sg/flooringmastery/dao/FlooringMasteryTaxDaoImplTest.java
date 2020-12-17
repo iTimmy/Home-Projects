@@ -27,8 +27,8 @@ public class FlooringMasteryTaxDaoImplTest {
     FlooringMasteryTaxDao taxDaoTest;
     
     public FlooringMasteryTaxDaoImplTest() {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-        taxDaoTest = ctx.getBean("taxDao", FlooringMasteryTaxDao.class);
+         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+         taxDaoTest = ctx.getBean("taxDao", FlooringMasteryTaxDao.class);
     }
     
     @BeforeClass

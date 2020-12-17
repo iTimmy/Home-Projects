@@ -102,11 +102,13 @@
         </div>
 
         <br><br><br>
-        <h3 th:if="${#request.getParameter('login_error') == '1'}">
-                        Wrong id or password!</h3>
 
         <div class="cover bg-color row">
             <div class="column col-lg-12">
+                <!-- <div class="col-12" th:each="error : ${errors}">
+                    <p class="alert alert-danger" th:if="${!errors.isEmpty()}" th:text="${error.message}">Error
+                        message</p>
+                </div> -->
                 <form action="editBlog" method="POST">
                     <h1 class="display-title"></h1>
 
@@ -120,13 +122,13 @@
                     <div class="form-group row">
                         <label for="title" class="col-12 col-form-label"></label>
                         <div class="col-5 mx-auto">
-                            <input type="text" name="title" class="form-control" id="title" value="">
+                            <input type="text" name="title" class="form-control" id="title" value="" required="required">
                         </div>
                     </div>
 
                     <div class="content">
                         <textarea id="mytextarea" name="content">
-                            <span th:text="${blog.content}"></span>
+                            <span th:utext="${blog.content}"></span>
                         </textarea>
                     </div>
 
@@ -158,6 +160,20 @@
                         </div>
                     </div>
 
+                    <div class="col-12 mx-auto" sec:authorize="hasRole('ADMIN')">
+                        Post Date:
+                        <input type="date" id="post-date" name="post-date">
+                        Expiration Date:
+                        <input type="date" id="expire-date" name="expire-date">
+                    </div>
+
+                    <div class="form-group row" style="padding-top:70px">
+                        <label for="file" class="column col-lg-6 col-xs-12 col-form-label">
+                            <h5>Blog Cover</h5>
+                        </label>
+                        <input type="file" name="photo" id="photo" class="column col-lg-6 col-xs-12 form-control-file">
+                    </div>
+
                     <!--submit btn-->
                     <div class="row">
                         <div class="col-12">
@@ -186,6 +202,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<!-- TINY MCE -->
+<script src="https://cdn.tiny.cloud/1/jm2rvv7h3zbgkcv5k9cmm7u3nsrimxtplu5gn766gmxidibf/tinymce/5/tinymce.min.js"
+    referrerpolicy="origin"></script>
 <!-- script -->
 <script src="js/main.js"></script>
 <script src="js/blogs.js"></script>

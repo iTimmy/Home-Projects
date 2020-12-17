@@ -38,8 +38,8 @@ public class FlooringMasteryOrderDaoImplTest {
     public FlooringMasteryOrderDaoImplTest() {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
         orderDaoTest = ctx.getBean("orderDao", FlooringMasteryOrderDao.class);
-        productDaoTest = ctx.getBean("productDao", FlooringMasteryProductDao.class);
-        taxDaoTest = ctx.getBean("taxDao", FlooringMasteryTaxDao.class);
+//        productDaoTest = ctx.getBean("productDao", FlooringMasteryProductDao.class);
+//        taxDaoTest = ctx.getBean("taxDao", FlooringMasteryTaxDao.class);
     }
     
     MathContext mc = new MathContext(2);

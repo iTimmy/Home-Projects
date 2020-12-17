@@ -5,13 +5,22 @@ USE blog;
 
 
 
+CREATE TABLE Profile (
+	profileID INT PRIMARY KEY AUTO_INCREMENT,
+    icon VARCHAR(255) NULL,
+    cover VARCHAR(255) NULL,
+    wallpaper VARCHAR(255) NULL
+);
+
 CREATE TABLE Users (
 	userID INT PRIMARY KEY AUTO_INCREMENT,
     firstName VARCHAR(12) NOT NULL,
     lastName VARCHAR(12) NOT NULL,
     username VARCHAR(20) NOT NULL,
     password VARCHAR(500) NOT NULL,
-	enabled BOOLEAN NOT NULL
+	enabled BOOLEAN NOT NULL,
+    profileID INT NOT NULL,
+    FOREIGN KEY (profileID) REFERENCES Profile(profileID)
 );
 
 CREATE TABLE Roles (
@@ -38,9 +47,11 @@ CREATE TABLE Blogs (
     date DATE NOT NULL,
     content TEXT NULL,
     userID INT NOT NULL,
-    FOREIGN KEY (userID) REFERENCES Users(userID)
---     CONSTRAINT `fk_blogs_tags` FOREIGN KEY (tagID)
---         REFERENCES Tags(tagID)
+    FOREIGN KEY (userID) REFERENCES Users(userID),
+	approved BOOLEAN NOT NULL,
+    postDate DATE NULL,
+    expirationDate DATE NULL,
+    photo VARCHAR(255) NULL
 );
 
 CREATE TABLE BlogsTags (
@@ -50,17 +61,33 @@ CREATE TABLE BlogsTags (
 	FOREIGN KEY (tagID) REFERENCES Tags(tagID)
 );
 
+
+
+
+
+
+INSERT INTO Profile (
+	profileID,
+    icon,
+    cover,
+    wallpaper
+)
+VALUES
+(1, "default-icon.jpg", "default-cover.jpg", "default-wallpaper.jpg"),
+(2, "default-icon.jpg", "default-cover.jpg", "default-wallpaper.jpg");
+
 INSERT INTO Users (
 userID,
 firstName,
 lastName,
 username,
 password,
-enabled
+enabled,
+profileID
 ) 
 VALUES
-(1, "Timothy", "Amarok", "admin", "$2a$04$N0WzLB5s3qJvAnSHWu5vhuzrX362PHXAYjciCkK7jUtf32bESN.Tu", true),
-(2, "Timothy", "Amarok", "timmy", "$2a$04$N0WzLB5s3qJvAnSHWu5vhuzrX362PHXAYjciCkK7jUtf32bESN.Tu", true);
+(1, "Timothy", "Amarok", "admin", "$2a$04$N0WzLB5s3qJvAnSHWu5vhuzrX362PHXAYjciCkK7jUtf32bESN.Tu", true, 1),
+(2, "Timothy", "Amarok", "timmy", "$2a$04$N0WzLB5s3qJvAnSHWu5vhuzrX362PHXAYjciCkK7jUtf32bESN.Tu", false, 2);
 
 INSERT INTO Roles (
 	roleID,
@@ -68,14 +95,17 @@ INSERT INTO Roles (
 ) 
 VALUES
 (1, "ROLE_ADMIN"),
-(2, "ROLE_USER");
+(2, "ROLE_USER"),
+(3, "ROLE_VIEWER"),
+(4, "ROLE_GUEST");
 
 INSERT INTO UsersRoles (
 	roleID,
     userID
 ) 
 VALUES
-(1, 1);
+(1, 1),
+(2, 2);
 
 INSERT INTO Tags(
 tagID,
@@ -91,15 +121,23 @@ blogID,
 title,
 date,
 content,
-userID
+userID,
+approved,
+postDate,
+expirationDate,
+photo
 ) 
 VALUES
-(1, "blogOne", CURRENT_TIMESTAMP, "blogOne", 1),
-(2, "blogTwo", CURRENT_TIMESTAMP, "blogTwo", 1),
-(3, "blogThree", CURRENT_TIMESTAMP, "blogThree", 1),
-(4, "blogFour", CURRENT_TIMESTAMP, "blogFour", 1);
+(1, "blogOne", CURRENT_TIMESTAMP, "blogOne", 1, true, NULL, NULL, NULL),
+(2, "blogTwo", CURRENT_TIMESTAMP, "blogTwo", 1, true, NULL, NULL, NULL),
+(3, "blogThree", CURRENT_TIMESTAMP, "blogThree", 1, true, NULL, NULL, NULL),
+(4, "blogFour", CURRENT_TIMESTAMP, "blogFour", 1, true, NULL, NULL, NULL),
+(5, "blogFive", CURRENT_TIMESTAMP, "blogFive", 2, true, NULL, NULL, NULL),
+(6, "blogSix", CURRENT_TIMESTAMP, "blogSix", 2, true, NULL, NULL, NULL),
+(7, "blogSeven", CURRENT_TIMESTAMP, "blogSeven", 2, false, NULL, NULL, NULL),
+(8, "blogEight", CURRENT_TIMESTAMP, "blogEight", 2, false, NULL, NULL, NULL);
 
-INSERT INTO BlogsTags(
+INSERT INTO BlogsTags (
 blogID,
 tagID
 ) 
@@ -110,6 +148,8 @@ VALUES
 (2, 1),
 (3, 1),
 (4, 1);
+
+
 
 
 

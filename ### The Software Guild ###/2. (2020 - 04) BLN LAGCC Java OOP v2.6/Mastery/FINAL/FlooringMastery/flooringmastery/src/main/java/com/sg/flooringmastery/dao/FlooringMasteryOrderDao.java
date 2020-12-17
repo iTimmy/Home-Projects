@@ -6,7 +6,6 @@ import com.sg.flooringmastery.dto.*;
 
 public interface FlooringMasteryOrderDao {
     Order createOrder(Order order) throws Exception;
-    List<Order> getActiveOrders() throws Exception;
     List<Order> getOrdersByDate(LocalDate userInputDate) throws Exception;
     Order getOrderByID(int orderNumber);
     void updateOrder(Order editedOrder, Order existingOrder) throws Exception;

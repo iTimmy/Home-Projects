@@ -6,6 +6,14 @@ public class Role {
     private int ID;
     private String role;
 
+    public Role() {
+
+    }
+
+    public Role(String role) {
+        this.role = role;
+    }
+
     public int getID() {
         return ID;
     }

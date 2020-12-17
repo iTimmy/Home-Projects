@@ -17,10 +17,27 @@ body {
     background-color: rgb(10, 10, 10);
 }
 
+.shadow {
+    box-shadow: 20px 50px 30px rgba(255, 0, 85, 0.089);
+    border: 1px solid rgba(247, 247, 247, 0.116);
+}
+
 .cover, .middle, .footer {
     height: 100%;
 }
 
 hr {
     border-top: 2.5px solid rgb(255, 0, 34);
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.75);
+    width: 100%;
+}
+
+.bg-img {
+    background-attachment: fixed;
+    background-image: url("assets/1.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
 }

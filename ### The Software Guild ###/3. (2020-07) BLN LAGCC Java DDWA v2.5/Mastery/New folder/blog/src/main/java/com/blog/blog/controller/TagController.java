@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 public class TagController {
@@ -24,6 +26,7 @@ public class TagController {
     TagDao dao;
     @Autowired
     BlogDao blogDao;
+    private static Logger logger = LoggerFactory.getLogger(TagController.class);
 
 
 
@@ -55,10 +58,16 @@ public class TagController {
         return "redirect:/tags";
     }
 
-    @DeleteMapping("tags/delete/{personBlogID}")
-    public String deleteTags(@PathVariable Tag tags) {
-        dao.deleteTags(tags);
-        return "redirect:/tags";
+    @PostMapping("deleteTags")
+    public String deleteTags(HttpServletRequest request) {
+        logger.info(request.getParameter("delete-tags"));
+        String[] tagNames = (request.getParameter("name")).split(",");
+        for (String name : tagNames) {
+            if (!name.equals("")) {
+                dao.deleteTags(dao.getTagByName(name));
+            }
+        }
+        return "redirect:/userManagement";
     }
 
 }

@@ -20,7 +20,7 @@ public class RoleDaoDB implements RoleDao {
     @Override
     public Role getRoleByID(int id) {
         try {
-            final String SELECT_ROLE_BY_ID = "SELECT * FROM role WHERE id = ?";
+            final String SELECT_ROLE_BY_ID = "SELECT * FROM Roles WHERE roleID = ?";
             return jdbc.queryForObject(SELECT_ROLE_BY_ID, new RoleMapper(), id);
         } catch (DataAccessException ex) {
             return null;
@@ -29,38 +29,34 @@ public class RoleDaoDB implements RoleDao {
 
     @Override
     public Role getRoleByRole(String role) {
-        try {
-            final String SELECT_ROLE_BY_ROLE = "SELECT * FROM role WHERE role = ?";
-            return jdbc.queryForObject(SELECT_ROLE_BY_ROLE, new RoleMapper(), role);
-        } catch (DataAccessException ex) {
-            return null;
-        }
+        final String SELECT_ROLE = "SELECT * FROM Roles WHERE role = ?";
+        return jdbc.queryForObject(SELECT_ROLE, new RoleMapper(), role);
     }
 
     @Override
     public List<Role> getAllRoles() {
-        final String SELECT_ALL_ROLES = "SELECT * FROM role";
+        final String SELECT_ALL_ROLES = "SELECT * FROM Roles";
         return jdbc.query(SELECT_ALL_ROLES, new RoleMapper());
     }
 
     @Override
     public void deleteRole(int id) {
-        final String DELETE_USER_ROLE = "DELETE FROM user_role WHERE role_id = ?";
-        final String DELETE_ROLE = "DELETE FROM role WHERE id = ?";
+        final String DELETE_USER_ROLE = "DELETE FROM UsersRoles WHERE roleID = ?";
+        final String DELETE_ROLE = "DELETE FROM Roles WHERE roleID = ?";
         jdbc.update(DELETE_USER_ROLE, id);
         jdbc.update(DELETE_ROLE, id);
     }
 
     @Override
     public void updateRole(Role role) {
-        final String UPDATE_ROLE = "UPDATE role SET role = ? WHERE id = ?";
+        final String UPDATE_ROLE = "UPDATE Roles SET role = ? WHERE roleID = ?";
         jdbc.update(UPDATE_ROLE, role.getRole(), role.getID());
     }
 
     @Override
     @Transactional
     public Role createRole(Role role) {
-        final String INSERT_ROLE = "INSERT INTO role(role) VALUES(?)";
+        final String INSERT_ROLE = "INSERT INTO Roles(role) VALUES(?)";
         jdbc.update(INSERT_ROLE, role.getRole());
         int newId = jdbc.queryForObject("select LAST_INSERT_ID()", Integer.class);
         role.setID(newId);

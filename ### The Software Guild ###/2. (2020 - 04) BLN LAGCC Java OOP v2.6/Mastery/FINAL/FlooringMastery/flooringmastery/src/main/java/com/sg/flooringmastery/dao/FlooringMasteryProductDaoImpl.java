@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.math.BigDecimal;
 import com.sg.flooringmastery.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component

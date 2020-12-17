@@ -12,6 +12,6 @@ public class FlooringMastery {
                 = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 
         FlooringMasteryController controller = appContext.getBean("controller", FlooringMasteryController.class);
-        controller.run();
+        controller.run(); 
     }
 }

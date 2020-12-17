@@ -107,7 +107,11 @@
 
         <div class="cover bg-color row">
             <div class="column col-lg-12">
-                <form action="addBlog" method="POST">
+                <div class="col-12"  th:each="error: ${errors}">
+                    <p class="alert alert-danger" th:text="${error.message}">Error
+                        message</p>
+                </div>
+                <form action="addBlog" method="POST" onsubmit="return validateBlogDetails()">
                     <h1 class="display-title"><span th:text="${title}"></span></h1>
                 
                     <p><span th:value="${blogID}"></span></p>
@@ -126,30 +130,48 @@
                         </textarea>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="tags" class="col-12 col-form-label"></label>
-                        <div class="col-5 mx-auto">
-                            <p>
-                                Enter some tags:
-                            </p>
-                            <p>
-                            <div class="name" data-name="name">
+                    <div class="form-group justify-content-md-center" style="height:100%">
+                        <div class="row justify-content-md-center">
+                            <div class="col-3">
+                                <p>Enter some tags: </p>
+                                <p><div class="name" data-name="name"></div></p>
                             </div>
-                            </p>
-                            <div class="col-12 mx-auto">
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-3">
                                 <select name="tag" id="tag" class="form-control">
                                     <option th:each="tag: ${tags}" th:value="${tag.tagID}" th:text="${tag.name}">
                                         Tag
                                     </option>
                                 </select>
                             </div>
-                            <button type="button" id="add-tag" class="btn btn-danger btn-lg">Add Tag</button>
+                            <div class="col-3" style="width:fit-content">
+                                <button type="button" id="add-tag" class="btn btn-danger btn-md" style="width:100%">Add Tag</button>
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="form-group row" sec:authorize="hasRole('ADMIN')">
+                        <div class="col-12 mx-auto">
+                            Post Date:
+                            <input type="date" id="post-date" name="post-date">
+                        </div>
+                        <div class="col-12 mx-auto">
+                            Expiration Date:
+                            <input type="date" id="expire-date" name="expire-date">
+                        </div>
+                    </div>
+
+                    <div class="form-group row" style="padding-top:70px">
+                        <label for="file" class="column col-lg-6 col-xs-12 col-form-label">
+                            <h5>Blog Cover</h5>
+                        </label>
+                        <input type="file" name="photo" id="photo" class="column col-lg-6 col-xs-12 form-control-file">
                     </div>
                 
                     <div class="row">
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-danger btn-lg">Submit</button>
+                        <div class="col-3">
+                            <button type="submit" class="btn btn-danger btn-lg" style="width:100%">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -174,9 +196,18 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<!-- TINY MCE -->
+<script src="https://cdn.tiny.cloud/1/jm2rvv7h3zbgkcv5k9cmm7u3nsrimxtplu5gn766gmxidibf/tinymce/5/tinymce.min.js"
+    referrerpolicy="origin"></script>
 <!-- script -->
 <script src="js/main.js"></script>
 <script src="js/blogs.js"></script>
 <script src="js/tags.js"></script>
+
+<script>
+    window.addEventListener('input', function () {
+        $("#mytextarea").text(tinyMCE.activeEditor.getContent().replace(/<[^>]*>/g, ""));
+    })
+</script>
 
 </html>
