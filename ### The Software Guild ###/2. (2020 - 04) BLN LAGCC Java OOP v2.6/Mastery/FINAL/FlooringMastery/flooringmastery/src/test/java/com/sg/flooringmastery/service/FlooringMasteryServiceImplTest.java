@@ -102,65 +102,35 @@ public class FlooringMasteryServiceImplTest {
     //     serviceTest.deleteOrder(listOrders.get(0));
     //     assertEquals(listOrders.get(0).getCustomerName(), "");
     // }
-    
-    @Test
-    public void testGetActiveOrders() throws Exception {
-//        MathContext mc = new MathContext(4);
-//        BigDecimalMath calculate = new BigDecimalMath();
-//        
-//        LocalDate date = LocalDate.of(2025, Month.DECEMBER, 3);
-//        
-//        Order order = new Order();
-//        order.setOrderDate(date);
-//        order.setCustomerName("Timmy");
-//        order.setArea(new BigDecimal(233).round(mc));
-//       
-//        Product product = new Product();
-//        product.setProductType("Tile");
-//        product.setCostPerSquareFoot(serviceTest.getProductByName(product.getProductType()).getCostPerSquareFoot());
-//        
-//        Tax tax = new Tax();
-//        tax.setState("TX");
-//    
-//        order.setProduct(product);
-//        order.setTax(tax);
-//       
-//        serviceTest.createOrder(order);
-//        assertEquals(1, activeOrders.size());
-    }
 
     @Test
-    public void testCreateOrderCalculation() throws Exception {
-        MathContext mc = new MathContext(4);
-        BigDecimalMath calculate = new BigDecimalMath();
-        
+    public void testCreateOrderCalculation() throws Exception {  
         LocalDate date = LocalDate.of(2025, Month.DECEMBER, 3);
         
         Order order = new Order();
         order.setOrderDate(date);
-        order.setCustomerName("Timmy");
+        order.setCustomerName("Ada");
         order.setArea(new BigDecimal(233).round(mc));
        
-//        Product product = new Product();
-//        product.setProductType("Tile");
-//        product.setCostPerSquareFoot(serviceTest.getProductByName(product.getProductType()).getCostPerSquareFoot());
-//        
-//        Tax tax = new Tax();
-//        tax.setState("TX");
-//    
-//        order.setProduct(product);
-//        order.setTax(tax);
-//        
-//        System.out.println(order.getOrderDate());
-//        System.out.println(order.getCustomerName());
-//        System.out.println(order.getArea());
-//        System.out.println(order.getOrderNumber());
-//        System.out.println(serviceTest.getProductByName("Tile"));
-//        System.out.println("gjhgj");
-//        System.out.println(order.getTax().getState());
-//        System.out.println(serviceTest.getTaxByState("TX"));
-//
-//        Order calculatedOrder = serviceTest.createOrder(order);
+        Product product = new Product();
+        product.setProductType("Vinyl");
+        product.setCostPerSquareFoot(serviceTest.getProductByName(product.getProductType()).getCostPerSquareFoot());
+        product.setLaborCostPerSquareFoot(serviceTest.getProductByName(product.getProductType()).getLaborCostPerSquareFoot());
+       
+        Tax tax = new Tax();
+        tax.setState("TX");
+    
+        order.setProduct(product);
+        order.setTax(tax);
+        
+        System.out.println(order.getOrderDate());
+        System.out.println(order.getCustomerName());
+        System.out.println(order.getArea());
+        System.out.println(order.getOrderNumber());
+        System.out.println(order.getProduct().getProductType());
+        System.out.println(order.getTax().getState());
+
+        Order calculatedOrder = serviceTest.createOrder(order);
 //        assertEquals(calculatedOrder.getTotalCost(), new BigDecimal(1861.77).setScale(2, RoundingMode.FLOOR));
     }
 }  

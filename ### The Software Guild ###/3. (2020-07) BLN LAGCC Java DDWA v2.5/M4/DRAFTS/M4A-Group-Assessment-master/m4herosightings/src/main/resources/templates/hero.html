@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Hero Sightings - Powers</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="index.css">
+</head>
+    <style>
+          .nav {
+        background-color: rgba(0, 0, 0, 0.5);
+        height: 80px;
+    }
+
+    .title {
+        background-size: cover;
+        background-position: 50% 50%;
+        background-attachment: fixed;
+        background-image: url("assets/cover-4.jpg");
+    }
+
+    .top {
+        background-size: cover;
+        background-position: 50% 50%;
+        background-attachment: fixed;
+        background-image: url("assets/cover-3.jpg");
+        height: 80%;
+    }
+
+    .choose {
+        margin-bottom: -10px;
+        background-color: rgb(1, 32, 1);
+        height: 50px;
+    }
+
+    .hero-form h3 {
+        background-color: black;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .database {
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 80px;
+        margin-top: -10px;
+    }
+
+    #add-hero-submit {
+        margin-bottom: -100px;
+        padding-bottom: -50px;
+    }
+
+    #hero-search-bar {
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 300px;
+    }
+    </style>
+
+<body>
+<!--Begin Body-->
+<div class="bg"></div>
+<!--Navbar-->
+<div class="container-fluid">
+    <div class="row m-4">
+        <div class="col text-left col-lg-4 col-md-3 col-sm-3 col-xs-12">
+            <a id="toggleTheme" class="btn btn-outline-info btn-lg">
+                <h5 class="themeStatus" style="display:inline;color:white">Dark</h5>
+            </a>
+        </div>
+        <div class="col text-center col-lg-2 col-md-3 col-sm-3 col-xs-12">
+            <a href="index.html" class="btn btn-outline-primary btn-lg" id="landingPage">Home</a>
+        </div>
+        <div class="col text-center col-lg-2 col-md-3 col-sm-3 col-xs-12">
+            <a href="hero" class="btn btn-outline-primary btn-lg" id="heroes">Students</a>
+        </div>
+        <div class="col text-center col-lg-2 col-md-3 col-sm-3 col-xs-12">
+            <a href="sighting" class="btn btn-outline-primary btn-lg" id="sightings">Sightings</a>
+        </div>
+        <div class="col text-center col-lg-2 col-md-3 col-sm-3 col-xs-12">
+            <a id="nav-about" class="btn btn-outline-primary btn-lg">About</a>
+        </div>
+    </div>
+    <div class="top">
+        <div class="box-1">
+            <!--search bar-->
+            <!--FIXME find out how to implement-->
+            <div class="separator"></div>
+            <div id="hero-search-bar" class="search">
+                <label for="search-hero-db">Name/Alias:</label>
+                <input id="search-hero-db" name="search-hero-db" type="text">
+
+                <button type="button" class="btn btn-success" id="search-hero-btn">Search</button>
+            </div>
+            <div class="separator"></div>
+
+            <!--hero data table-->
+            <div class="choose" id="hero-data">
+                <ul>
+                    <li>View Heroes</li>
+                    <li>Database</li>
+                </ul>
+            </div>
+            <div class="results">
+                <table class="table table-dark table-striped" id="hero-table">
+                    <thead>
+                        <tr>
+                            <th >Name/Alias</th>
+                            <th>Superpower</th>
+                            <th></th>
+                            <!--Details-->
+                            <th></th>
+                            <!--Edit-->
+                            <th></th>
+                            <!--Delete-->
+                        </tr>
+                    </thead>
+
+                    <!--Will fill dynamically from db-->
+                    <!--FIXME not working, kinda-->
+                    <tbody id="hero-content-rows">
+                        <tr th:each="hero: ${heroes}">
+                            <td th:text="${hero.name}">Hero Name</td>
+                            <td th:text="${hero.superpower.name}">Superpower Name</td>
+                            <td><a href="#" class="view-hero-btn" th:href="@{/viewHero(id=${hero.heroId})}"><i
+                                        class="far fa-eye"></i></a>
+                            </td>
+                            <td><a href="#" class="edit-hero-btn" th:href="@{/editHero(id=${hero.heroId})}"
+                                    data-toggle="modal" data-target="#edit-modal"><i class="fas fa-edit"></i></a>
+                            </td>
+                            <td><a href="#" class="delete-hero-btn" th:href="@{/deleteHero(id=${hero.heroId})}">
+                                    <i class="fas fa-trash"></i>
+                                </a></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </ul>
+            </div>
+
+            <!--view hero modal-->
+            <!--FIXME looks wild-->
+            <div class="modal fade" id="view-hero-modal" tabindex="-1" aria-labelledby="view-hero-modal" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="view-hero-modal-label">Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+
+</div>
+<!--Scripts-->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/33e502fc2c.js" crossorigin="anonymous"></script>
+<!-- <script src="main.js"></script> -->
+<script>
+    /*FIXME is there more to add here?*/
+    $(document).ready(function () {
+        $(document).on('click', '.view-hero-btn', function (e) {
+            $('#view-hero-modal').modal();
+        });
+
+        $(document).on('click', '.edit-hero-btn', function (e) {
+            $('#edit-hero-modal').modal();
+        });
+    });
+
+    var lightTheme = false;
+
+    $("#toggleTheme").on('click', function () {
+        console.log("Gfdg");
+        if (lightTheme == false) {
+            console.log(lightTheme);
+            console.log("light");
+            lightMode();
+        } else if (lightTheme == true) {
+            console.log(lightTheme);
+            console.log("dark");
+            darkMode();
+        }
+    })
+
+    function darkMode() {
+        document.querySelector("body").style.backgroundColor = 'black';
+        document.querySelector(".container-fluid").style.backgroundColor = 'black';
+        document.getElementById("toggleTheme").className = 'btn btn-outline-info btn-lg';
+        document.getElementById("landingPage").className = 'btn btn-outline-primary btn-lg';
+        document.getElementById("heroes").className = 'btn btn-outline-primary btn-lg';
+        document.getElementById("sightings").className = 'btn btn-outline-primary btn-lg';
+        document.getElementById("nav-about").className = 'btn btn-outline-primary btn-lg';
+        lightTheme = false;
+    }
+
+    function lightMode() {
+        document.querySelector("body").style.backgroundColor = 'white';
+        document.querySelector(".container-fluid").style.backgroundColor = 'white';
+
+        document.getElementById("toggleTheme").className = 'btn btn-info btn-lg';
+        document.getElementById("landingPage").className = 'btn btn-primary btn-lg';
+        document.getElementById("heroes").className = 'btn btn-primary btn-lg';
+        document.getElementById("sightings").className = 'btn btn-primary btn-lg';
+        document.getElementById("nav-about").className = 'btn btn-primary btn-lg';
+        lightTheme = true;
+    }
+</script>
+
+</body>
+</html>

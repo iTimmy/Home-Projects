@@ -99,28 +99,24 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
         StateTaxes state = new StateTaxes();
 
         // CALCULATIONS \\
-        BigDecimal laborCostPerSquareFoot = getProductByName(order.getProduct().getProductType())
-                .getLaborCostPerSquareFoot().round(mc);
+        BigDecimal laborCostPerSquareFoot = getProductByName(order.getProduct().getProductType()).getLaborCostPerSquareFoot().round(mc);
         order.getProduct().setLaborCostPerSquareFoot(laborCostPerSquareFoot);
         BigDecimal costPerSquareFoot = order.getProduct().getCostPerSquareFoot();
         String stateName = order.getTax().getState();
         Tax storedTax = getTaxByState(stateName);
-        if (storedTax == null)
-            return null;
+        if (storedTax == null) return null;
+        
+        System.out.println("sdgdfgdgfdg");
 
         // get most recent order number of the collections. make method.
         BigDecimal taxRate = storedTax.getTaxRate();
         BigDecimal taxPercentage = new BigDecimal(100);
-        BigDecimal materialCost = roundBigDecimal(
-                calculate.calculate(MathOperator.MULTIPLY, order.getArea(), costPerSquareFoot));
-        BigDecimal laborCost = roundBigDecimal(
-                calculate.calculate(MathOperator.MULTIPLY, order.getArea(), laborCostPerSquareFoot));
-        BigDecimal tax = calculate
-                .calculate(MathOperator.MULTIPLY, calculate.calculate(MathOperator.PLUS, materialCost, laborCost),
-                        calculate.calculate(MathOperator.DIVIDE, taxRate, taxPercentage))
-                .setScale(2, RoundingMode.FLOOR);
-        BigDecimal totalCost = roundBigDecimal(calculate.calculate(MathOperator.PLUS,
-                calculate.calculate(MathOperator.PLUS, materialCost, laborCost), tax));
+        BigDecimal materialCost = roundBigDecimal(calculate.calculate(MathOperator.MULTIPLY, order.getArea(), costPerSquareFoot));
+        BigDecimal laborCost = roundBigDecimal(calculate.calculate(MathOperator.MULTIPLY, order.getArea(), laborCostPerSquareFoot));
+        BigDecimal tax = calculate.calculate(MathOperator.MULTIPLY, calculate.calculate(MathOperator.PLUS, materialCost, laborCost),
+            calculate.calculate(MathOperator.DIVIDE, taxRate, taxPercentage))
+            .setScale(2, RoundingMode.FLOOR);
+        BigDecimal totalCost = roundBigDecimal(calculate.calculate(MathOperator.PLUS, calculate.calculate(MathOperator.PLUS, materialCost, laborCost), tax));
 
         order.getProduct().setCostPerSquareFoot(costPerSquareFoot);
         order.getProduct().setLaborCostPerSquareFoot(laborCostPerSquareFoot);

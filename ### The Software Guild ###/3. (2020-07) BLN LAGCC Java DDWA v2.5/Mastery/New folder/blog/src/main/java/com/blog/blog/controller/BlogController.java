@@ -84,8 +84,7 @@ public class BlogController {
     @PostMapping("addBlog")
     public String createBlog(Authentication auth, 
     Principal principal, HttpServletRequest request, 
-    Model model, 
-    @Valid Blog blog, BindingResult result) {
+    Model model) {
         User user = userDao.getUserByUsername(auth.getName());
         // IMPORTS TAGS
         List<Tag> tags = tagDao.getAllTags();
@@ -186,7 +185,8 @@ public class BlogController {
 
         Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
         violations = validate.validate(blog);
-        if (blogDao.updateBlog(blog) == false) {
+        if (result.hasErrors() || blogDao.updateBlog(blog) == false) {
+            logger.info("no");
             model.addAttribute("errors", violations);
             return "editBlog";
         } else {

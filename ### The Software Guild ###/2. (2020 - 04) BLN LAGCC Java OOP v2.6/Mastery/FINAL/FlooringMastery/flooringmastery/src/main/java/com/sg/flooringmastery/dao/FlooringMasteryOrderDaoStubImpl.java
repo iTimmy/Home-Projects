@@ -37,18 +37,12 @@ public class FlooringMasteryOrderDaoStubImpl implements FlooringMasteryOrderDao 
      }
 
     @Override
-    public Order createOrder(Order order)
-                  throws Exception {
-        if (order.getOrderDate().equals(onlyOrder.getOrderDate())) {
-            return onlyOrder;
-        } else {
-            return null;
-        }
+    public Order createOrder(Order order) throws Exception {
+        return order.getOrderDate().equals(onlyOrder.getOrderDate()) ? onlyOrder : null;
     }
     
     @Override
-    public List<Order> getOrdersByDate(LocalDate userInputDate)
-                 throws Exception {
+    public List<Order> getOrdersByDate(LocalDate userInputDate) throws Exception {
         List<Order> listOrders = new ArrayList<>();
         listOrders.add(onlyOrder);
         return listOrders;
@@ -56,31 +50,17 @@ public class FlooringMasteryOrderDaoStubImpl implements FlooringMasteryOrderDao 
 
     @Override
     public Order getOrderByID(int orderNumber) {
-        if (orderNumber == onlyOrder.getOrderNumber()) {
-            return onlyOrder;
-        } else {
-            return null;
-        }       
+        return orderNumber == onlyOrder.getOrderNumber() ? onlyOrder : null;
     }
     
     @Override
     public void updateOrder(Order editedOrder, Order existingOrder) throws Exception {
             existingOrder.setCustomerName(editedOrder.getCustomerName());
             existingOrder.setArea(editedOrder.getArea());
-            existingOrder.setMaterialCost(editedOrder.getMaterialCost());
-            existingOrder.setLaborCost(editedOrder.getLaborCost());
-            existingOrder.setOrderTax(editedOrder.getOrderTax());
-            existingOrder.setTotalCost(editedOrder.getTotalCost());
-            existingOrder.getProduct().setProductType(editedOrder.getProduct().getProductType());
-            existingOrder.getProduct().setCostPerSquareFoot(editedOrder.getProduct().getCostPerSquareFoot());
-            existingOrder.getProduct().setLaborCostPerSquareFoot(editedOrder.getProduct().getLaborCostPerSquareFoot());
-            existingOrder.getTax().setState(editedOrder.getTax().getState());
-            existingOrder.getTax().setTaxRate(editedOrder.getTax().getTaxRate());
     }
 
     @Override
-    public void deleteOrder(Order order)
-                throws Exception {
+    public void deleteOrder(Order order) throws Exception {
         if (order.getOrderNumber() == (onlyOrder.getOrderNumber())) {
                 onlyOrder.setCustomerName("");
         }
