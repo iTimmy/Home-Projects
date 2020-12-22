@@ -7,6 +7,8 @@ package com.sg.flooringmastery.dao;
 
 import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.Tax;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class FlooringMasteryProductDaoStubImpl implements FlooringMasteryProductDao {
     public Product onlyProduct;
+    MathContext mc = new MathContext(4);
 
     @Autowired
     public FlooringMasteryProductDaoStubImpl() {
         onlyProduct = new Product();
         onlyProduct.setProductType("Vinyl");
+        onlyProduct.setCostPerSquareFoot(new BigDecimal(2).round(mc));
+        onlyProduct.setLaborCostPerSquareFoot(new BigDecimal(3).round(mc));
     }
 
     public FlooringMasteryProductDaoStubImpl(Product testProduct){

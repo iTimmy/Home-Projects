@@ -7,6 +7,8 @@ package com.sg.flooringmastery.dao;
 
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Tax;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +22,13 @@ import org.springframework.stereotype.Component;
 public class FlooringMasteryTaxDaoStubImpl implements FlooringMasteryTaxDao {
     
     public Tax onlyTax;
+    MathContext mc = new MathContext(4);
 
     @Autowired
     public FlooringMasteryTaxDaoStubImpl() {
         onlyTax = new Tax();
         onlyTax.setState("TX");
+        onlyTax.setTaxRate(new BigDecimal(2.25).round(mc));
     }
 
     public FlooringMasteryTaxDaoStubImpl(Tax testTax){

@@ -106,8 +106,6 @@ public class FlooringMasteryServiceImpl implements FlooringMasteryService {
         Tax storedTax = getTaxByState(stateName);
         if (storedTax == null) return null;
         
-        System.out.println("sdgdfgdgfdg");
-
         // get most recent order number of the collections. make method.
         BigDecimal taxRate = storedTax.getTaxRate();
         BigDecimal taxPercentage = new BigDecimal(100);

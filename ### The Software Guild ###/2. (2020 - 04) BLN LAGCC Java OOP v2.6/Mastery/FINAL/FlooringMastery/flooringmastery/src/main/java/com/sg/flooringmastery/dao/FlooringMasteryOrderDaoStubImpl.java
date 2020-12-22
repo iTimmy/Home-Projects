@@ -14,12 +14,14 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FlooringMasteryOrderDaoStubImpl implements FlooringMasteryOrderDao {
     public Order onlyOrder;
+    public Order createdOrder;
     MathContext mc = new MathContext(2);
     BigDecimalMath mathCalculate = new BigDecimalMath();
 
@@ -38,7 +40,9 @@ public class FlooringMasteryOrderDaoStubImpl implements FlooringMasteryOrderDao 
 
     @Override
     public Order createOrder(Order order) throws Exception {
-        return order.getOrderDate().equals(onlyOrder.getOrderDate()) ? onlyOrder : null;
+        order.setOrderNumber(2);
+        createdOrder = order;
+        return createdOrder;
     }
     
     @Override

@@ -60,7 +60,9 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
     private void importFiles() throws Exception {
         File f = new File(path);
         for (String pathname : f.list()) {
-            loadAllOrdersFromFiles(pathname);
+            if (!pathname.equals("null")) {
+                loadAllOrdersFromFiles(pathname);
+            }
         }
         
     }
@@ -82,6 +84,7 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
                 a = currentFile;
             }
         }
+        System.out.println(formattedDate.equals(a));
         return formattedDate.equals(a);
     }
 
@@ -104,9 +107,11 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
     public Order createOrder(Order order) throws Exception {
         if (loadFile(order.getOrderDate()) == null) {
             createNewFile(order.getOrderDate());
+            allOrders.put(order.getOrderDate(), new HashMap<Integer, Order>());
         } else {
             loadOrdersFromFile();
         }
+        file = formatDateToFile(order.getOrderDate());
         order.setOrderNumber(generateOrderNumber(order));
         Map<Integer, Order> newOrder = allOrders.get(order.getOrderDate());
         newOrder.put(order.getOrderNumber(), order);
@@ -169,6 +174,8 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
         if (allOrders.isEmpty()) {
             importFiles();
             saveDataToExportData();
+        } else {
+            saveDataToExportData();
         }
         return allOrders.isEmpty() ? false : true;
     }
@@ -180,10 +187,6 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
     // DATA EXPORT \\
     private void saveDataToExportData() throws Exception {
         PrintWriter writeFile = new PrintWriter(new BufferedWriter(new FileWriter(dataExportFile)));
-//        Collection<Map<Integer, Order>> o = allOrders.values();
-//        List<Entry<Integer, Order>> list = new LinkedList<Entry>(o);
-//        Collections.sort(allOrders.values());
-        
          for (Map<Integer, Order> eachMap : allOrders.values()) {
              for (Order eachOrder : eachMap.values()) {
                  String currentOrder = marshallDataExport(eachOrder);
@@ -272,6 +275,12 @@ public class FlooringMasteryOrderDaoImpl implements FlooringMasteryOrderDao {
         String[] parts = filename.split("_|\\.");
         String dateString = parts[1].substring(4,8) + "-" + parts[1].substring(0,2) + "-" + parts[1].substring(2,4);
         return formatStringToDate(dateString);
+    }
+    
+    private String formatDateToFile(LocalDate date) {
+        String[] parts = String.valueOf(date).split("-");
+        String fileString = "Orders_" + parts[1] + parts[2] + parts[0] + ".txt";
+        return fileString;
     }
     
     private Order unmarshallData(String currentLine) {
