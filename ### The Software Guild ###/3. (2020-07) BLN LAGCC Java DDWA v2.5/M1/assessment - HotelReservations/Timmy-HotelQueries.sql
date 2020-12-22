@@ -16,8 +16,9 @@ inner join Guest on Reservation.GuestID = Guest.GuestID
 where Guest.FirstName = 'Timmy';
 
 /* Write a query that returns a list of rooms, reservation ID, and per-room cost for each reservation. The results should include all rooms, whether or not there is a reservation associated with the room. */
-select RoomID, ReservationID, TotalRoomCost from Reservation
-ORDER BY RoomID ASC;
+select Reservation.RoomID, ReservationID, TotalRoomCost from Reservation
+RIGHT JOIN Room ON Room.RoomID = Reservation.RoomID
+ORDER BY ReservationID ASC;
 
 /* Write a query that returns all the rooms accommodating at least three guests and that are reserved on any date in April 2023. */
 select Adults, Children, RoomID, FirstName, StartDate, EndDate from Reservation

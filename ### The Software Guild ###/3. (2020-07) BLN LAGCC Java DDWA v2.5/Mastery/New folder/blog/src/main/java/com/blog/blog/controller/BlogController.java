@@ -124,13 +124,13 @@ public class BlogController {
         }
         Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
         violations = validate.validate(newBlog);
-        if (result.hasErrors() || blogDao.createBlog(newBlog) == null) {
-            logger.info("no");
-            model.addAttribute("errors", violations);
-            return "writeBlog";
-        } else {
+        // if (result.hasErrors() || blogDao.createBlog(newBlog) == null) {
+        //     logger.info("no");
+        //     model.addAttribute("errors", violations);
+        //     return "writeBlog";
+        // } else {
             return "redirect:/blogs";
-        }
+        // }
     }
 
     @GetMapping("viewBlog")
@@ -185,13 +185,13 @@ public class BlogController {
 
         Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
         violations = validate.validate(blog);
-        if (result.hasErrors() || blogDao.updateBlog(blog) == false) {
-            logger.info("no");
-            model.addAttribute("errors", violations);
-            return "editBlog";
-        } else {
+        // if (result.hasErrors() || blogDao.updateBlog(blog) == false) {
+        //     logger.info("no");
+        //     model.addAttribute("errors", violations);
+        //     return "editBlog";
+        // } else {
             return "redirect:/blogs";
-        }
+        // }
     }
 
     @GetMapping("deleteBlog")
